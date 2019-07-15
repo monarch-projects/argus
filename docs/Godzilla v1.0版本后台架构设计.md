@@ -1,11 +1,11 @@
 # 一、Godzilla v1.0版本后台架构设计
 ## 1. 概览图
-![服务治理平台架构图01]()
+![服务治理平台架构图01](https://github.com/starboyate/Godzilla/blob/master/img/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86%E5%B9%B3%E5%8F%B0%E6%9E%B6%E6%9E%84%E5%9B%BE01.png)
 
 <br/>
 
 ## 2. 具体架构设计
-![服务治理平台架构图02]()
+![服务治理平台架构图02](https://github.com/starboyate/Godzilla/blob/master/img/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86%E5%B9%B3%E5%8F%B0%E6%9E%B6%E6%9E%84%E5%9B%BE02.png)
 
 <br/>
 
