@@ -79,11 +79,11 @@ Client端包含的模块
     - godzilla-storage
 - godzilla-model(服务治理web端model层)
 - godzilla-agent(服务治理client端引入，用于插桩，为后续扩展使用)
-- godzilla-assembly(服务治理server端部件，主要用于不同的注册中心做不同的处理)
-    - godzilla-assembly-eureka
-    - godzilla-assembly-zookeeper
-    - godzilla-assembly-consul
-    - godzilla-assembly-nacos
+- godzilla-discovery(服务治理server端，主要用于不同的注册中心做不同的处理)
+    - godzilla-discovery-eureka
+    - godzilla-discovery-zookeeper
+    - godzilla-discovery-consul
+    - godzilla-discovery-nacos
 - godzilla-plugin(服务治理client端使用的插件，用于服务降级、熔断、限流等处理)
     - godzilla-plugin-hystrix
     - godzilla-plugin-Sentinel
