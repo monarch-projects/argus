@@ -76,6 +76,7 @@ Client端包含的模块
 - godzilla-service(服务治理web端服务层)
     - godzilla-model
     - godzilla-assembly
+    - godzilla-storage
 - godzilla-model(服务治理web端model层)
 - godzilla-agent(服务治理client端引入，用于插桩，为后续扩展使用)
 - godzilla-assembly(服务治理server端部件，主要用于不同的注册中心做不同的处理)
@@ -86,6 +87,11 @@ Client端包含的模块
 - godzilla-plugin(服务治理client端使用的插件，用于服务降级、熔断、限流等处理)
     - godzilla-plugin-hystrix
     - godzilla-plugin-Sentinel
+- godzilla-storage
+    - godzilla-storage-mysql
+    - godzilla-storage-h2
+    - godzilla-storage-es
+   
  
  
 ## 5. 补充
