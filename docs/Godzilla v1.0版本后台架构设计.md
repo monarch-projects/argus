@@ -67,8 +67,28 @@ Client端包含的模块
 
 <br/>
 
+## 4. 模块设计划分
+- godzilla-server(服务治理web端)
+    - godzilla-service
+- godzilla-client(服务治理client端，用于代理获取服务信息)
+    - godzilla-agent
+    - godzilla-plugin
+- godzilla-service(服务治理web端服务层)
+    - godzilla-model
+    - godzilla-assembly
+- godzilla-model(服务治理web端model层)
+- godzilla-agent(服务治理client端引入，用于插桩，为后续扩展使用)
+- godzilla-assembly(服务治理server端部件，主要用于不同的注册中心做不同的处理)
+    - godzilla-assembly-eureka
+    - godzilla-assembly-zookeeper
+    - godzilla-assembly-consul
+    - godzilla-assembly-nacos
+- godzilla-plugin(服务治理client端使用的插件，用于服务降级、熔断、限流等处理)
+    - godzilla-plugin-hystrix
+    - godzilla-plugin-Sentinel
  
-## 4. 补充
+ 
+## 5. 补充
 
 大概的一个设计文档就是目前上面说的，有什么需要补充的，就在这里加上
  
