@@ -5,8 +5,8 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
 
 /**
- * 自定义随机端口生成解析类
  * @author starboyate
+ * 自定义随机端口生成解析类
  */
 @Slf4j
 public class RandomServerPortPropertySource extends PropertySource<RandomServerPort> {

@@ -29,6 +29,7 @@
         <maven.compiler-version>3.7.0</maven.compiler-version>
         <maven.resources-version>3.1.0</maven.resources-version>
         <commons-lang3-version>3.8.1</commons-lang3-version>
+        <swagger2.version>2.9.2</swagger2.version>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +40,16 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
