@@ -8,12 +8,12 @@
         <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <name>argus-plugin</name>
     <artifactId>argus-plugin</artifactId>
     <packaging>pom</packaging>
 
     <modules>
         <module>argus-plugin-hystrix</module>
-        <module>argus-plugin-feign</module>
+        <module>argus-plugin-ribbon</module>
     </modules>
 </project>

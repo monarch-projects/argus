@@ -9,6 +9,8 @@
         <version>2.1.6.RELEASE</version>
     </parent>
 
+    <name>argus</name>
+    <description>argus</description>
 
     <groupId>org.titan</groupId>
     <artifactId>argus</artifactId>
@@ -17,10 +19,16 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
         <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
         <lombok.version>1.18.8</lombok.version>
         <argus.version>1.0.0.RELEASE</argus.version>
+        <druid.version>1.1.19</druid.version>
+        <maven.source-version>3.1.0</maven.source-version>
+        <maven.compiler-version>3.7.0</maven.compiler-version>
+        <maven.resources-version>3.1.0</maven.resources-version>
+        <commons-lang3-version>3.8.1</commons-lang3-version>
     </properties>
 
     <dependencyManagement>
@@ -33,13 +41,23 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.titan</groupId>
                 <artifactId>argus-plugin-hystrix</artifactId>
                 <version>${argus.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
-                <artifactId>argus-plugin-feign</artifactId>
+                <artifactId>argus-plugin-ribbon</artifactId>
                 <version>${argus.version}</version>
             </dependency>
             <dependency>
@@ -97,14 +115,47 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven.source-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven.resources-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+           <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>${maven.compiler-version}</version>
+               <configuration>
+                   <source>${java.version}</source>
+                   <target>${java.version}</target>
+                   <encoding>${project.build.sourceEncoding}</encoding>
+                   <showWarnings>true</showWarnings>
+               </configuration>
+           </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>starboyate</name>
+            <email>starboyate1169@gmail.com</email>
+            <organization>http://starboyate.com</organization>
+        </developer>
+    </developers>
 
     <modules>
         <module>argus-server</module>
@@ -115,6 +166,7 @@
         <module>argus-discovery</module>
         <module>argus-plugin</module>
         <module>argus-storage</module>
+        <module>argus-util</module>
     </modules>
 
 

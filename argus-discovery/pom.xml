@@ -8,7 +8,7 @@
         <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <name>argus-discovery</name>
     <artifactId>argus-discovery</artifactId>
     <packaging>pom</packaging>
     <modules>
