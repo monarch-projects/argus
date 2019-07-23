@@ -1,0 +1,8 @@
+org\titan\argus\client\endpoint\ArgusMetricsEndpoint.class
+org\titan\argus\client\entities\ArgusVersion$ArgusVersionBuilder.class
+org\titan\argus\client\healthindicator\ArgusClientHealthindicator.class
+org\titan\argus\client\endpoint\ArgusVersionEndpoint.class
+META-INF\spring-autoconfigure-metadata.properties
+META-INF\spring-configuration-metadata.json
+org\titan\argus\client\entities\ArgusVersion.class
+org\titan\argus\client\config\ArgusClientAutoConfiguration.class

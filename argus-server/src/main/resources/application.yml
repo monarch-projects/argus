@@ -27,9 +27,7 @@ server:
 
 eureka:
   instance:
-    health-check-url-path: /actuator/health
     prefer-ip-address: true
   client:
-#    enabled: false
     service-url:
       defaultZone: http://localhost:8761/eureka/

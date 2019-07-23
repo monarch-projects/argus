@@ -178,6 +178,7 @@
         <module>argus-plugin</module>
         <module>argus-storage</module>
         <module>argus-util</module>
+        <module>argus-example</module>
     </modules>
 
 
