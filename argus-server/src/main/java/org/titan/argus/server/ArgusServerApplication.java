@@ -21,4 +21,6 @@ public class ArgusServerApplication {
 	public String hello() {
     	return "hello";
 	}
+
+
 }

@@ -1,6 +1,7 @@
 package org.titan.argus.discovery.eureka.repository;
 
-import com.netflix.appinfo.EurekaInstanceConfig;
+import com.netflix.discovery.EurekaClient;
+import com.netflix.discovery.shared.Applications;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -9,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ArgusEurekaRepository {
 	@Autowired
-	EurekaInstanceConfig eurekaInstanceConfig;
+	EurekaClient eurekaClient;
+
+	public void getAll() {
+		Applications applications = eurekaClient.getApplications();
+
+	}
 
 }

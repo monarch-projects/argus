@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "management.endpoint.jvm",
-      "type": "org.titan.argus.client.endpoint.ArgusMetricsEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetricsEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint"
     },
     {
       "name": "management.endpoint.version",
@@ -13,10 +13,17 @@
   ],
   "properties": [
     {
+      "name": "management.endpoint.jvm.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
       "name": "management.endpoint.jvm.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the jvm endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetricsEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
       "defaultValue": true
     },
     {
