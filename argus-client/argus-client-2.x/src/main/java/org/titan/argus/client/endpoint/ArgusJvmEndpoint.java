@@ -81,7 +81,6 @@ public class ArgusJvmEndpoint {
 				t.setMaxSize(usage.getMax());
 				t.setUsedSize(usage.getUsed());
 				t.setActualSize(usage.getCommitted());
-
 			}
 		}
 		return t;

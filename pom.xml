@@ -30,6 +30,7 @@
         <maven.resources-version>3.1.0</maven.resources-version>
         <commons-lang3-version>3.8.1</commons-lang3-version>
         <swagger2.version>2.9.2</swagger2.version>
+        <guava.version>28.0-jre</guava.version>
     </properties>
 
     <dependencyManagement>
@@ -40,6 +41,11 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -178,7 +184,6 @@
         <module>argus-plugin</module>
         <module>argus-storage</module>
         <module>argus-util</module>
-        <module>argus-example</module>
     </modules>
 
 

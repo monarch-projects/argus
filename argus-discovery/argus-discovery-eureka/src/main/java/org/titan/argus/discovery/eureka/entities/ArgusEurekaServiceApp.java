@@ -5,19 +5,12 @@ import lombok.Data;
 
 /**
  * @author starboyate
+ *
  */
 @Data
 @Builder
-public class ArgusEurekaInstance {
-	private String instanceId;
-
+public class ArgusEurekaServiceApp {
 	private String appName;
 
-	private String appGroup;
-
-	private String host;
-
-	private Integer port;
-
-	private String status;
+	private Integer size;
 }
