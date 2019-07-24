@@ -1,6 +1,7 @@
 package org.titan.argus.client.endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.titan.argus.client.entities.ArgusJvmInfo;
 import org.titan.argus.client.entities.ArgusThreadInfo;
 import org.titan.argus.client.entities.BaseMemoryInfo;
@@ -47,6 +48,7 @@ public class ArgusJvmEndpoint {
 
 
 
+
 	private ArgusHeapInfo getHeapInfo() {
 		ArgusEdenSpaceInfo argusEdenSpaceInfo = getT(new ArgusEdenSpaceInfo(), ArgusJvmEnum.EDEN.getName());
 		ArgusSurvivorSpaceInfo argusSurvivorSpaceInfo = getT(new ArgusSurvivorSpaceInfo(), ArgusJvmEnum.SURVIVOR.getName());
@@ -85,6 +87,8 @@ public class ArgusJvmEndpoint {
 		}
 		return t;
 	}
+
+
 
 }
 

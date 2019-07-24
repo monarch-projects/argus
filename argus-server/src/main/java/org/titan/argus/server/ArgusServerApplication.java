@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.titan.argus.server.config.RandomServerPortPropertySource;
 import org.titan.argus.server.listener.RandomServerPortListener;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.util.Arrays;
+import java.util.Map;
+
 @SpringBootApplication
 @ComponentScan("org.titan.argus.*")
 public class ArgusServerApplication {
@@ -16,7 +21,8 @@ public class ArgusServerApplication {
         SpringApplication application = new SpringApplication(ArgusServerApplication.class);
         application.addListeners(new RandomServerPortListener());
         application.run(args);
-    }
+
+	}
 
 
 
