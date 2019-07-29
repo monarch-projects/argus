@@ -1,11 +1,15 @@
 package org.titan.argus.client.entities;
 
+import com.sun.management.VMOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.titan.argus.client.entities.args.ArgusJvmArgsInfo;
 import org.titan.argus.client.entities.heap.ArgusHeapInfo;
 import org.titan.argus.client.entities.nonheap.ArgusNonHeapInfo;
+
+import java.util.List;
 
 /**
  * @author starboyate
@@ -21,5 +25,7 @@ public class ArgusJvmInfo {
 	private ArgusNonHeapInfo argusNonHeapInfo;
 
 	private ArgusThreadInfo argusThreadInfo;
+
+	private List<ArgusJvmArgsInfo> argusJvmArgsInfos;
 
 }

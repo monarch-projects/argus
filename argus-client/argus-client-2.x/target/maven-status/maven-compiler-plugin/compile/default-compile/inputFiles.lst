@@ -15,3 +15,4 @@ D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\nonheap\ArgusMetaSpaceInfo.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\heap\ArgusHeapInfo.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\config\ArgusClientAutoConfiguration.java
+D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\args\ArgusJvmArgsInfo.java

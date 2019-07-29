@@ -1,10 +1,14 @@
 package org.titan.argus.client.endpoint;
-import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
+import com.sun.management.HotSpotDiagnosticMXBean;
+import com.sun.management.VMOption;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.entities.ArgusJvmInfo;
 import org.titan.argus.client.entities.ArgusThreadInfo;
 import org.titan.argus.client.entities.BaseMemoryInfo;
+import org.titan.argus.client.entities.args.ArgusJvmArgsInfo;
 import org.titan.argus.client.entities.heap.ArgusEdenSpaceInfo;
 import org.titan.argus.client.entities.heap.ArgusHeapInfo;
 import org.titan.argus.client.entities.heap.ArgusOldGenInfo;
@@ -14,6 +18,7 @@ import org.titan.argus.client.entities.nonheap.ArgusCompressedClassSpaceInfo;
 import org.titan.argus.client.entities.nonheap.ArgusMetaSpaceInfo;
 import org.titan.argus.client.entities.nonheap.ArgusNonHeapInfo;
 import org.titan.argus.client.enums.ArgusJvmEnum;
+import sun.management.HotSpotDiagnostic;
 
 import java.lang.management.*;
 import java.util.*;
@@ -23,7 +28,7 @@ import java.util.*;
  * @author starboyate
  *	jvm endpoint
  */
-@Endpoint(id = "jvm")
+@RestControllerEndpoint(id = "jvm")
 public class ArgusJvmEndpoint {
 	private MemoryMXBean memoryMXBean;
 
@@ -31,22 +36,34 @@ public class ArgusJvmEndpoint {
 
 	private ThreadMXBean threadMXBean;
 
+	private HotSpotDiagnosticMXBean hotSpotDiagnosticMXBean;
+
 	public void init() {
 		this.memoryMXBean = ManagementFactory.getMemoryMXBean();
 		this.memoryPoolMXBeans = ManagementFactory.getMemoryPoolMXBeans();
 		this.threadMXBean = ManagementFactory.getThreadMXBean();
+		this.hotSpotDiagnosticMXBean = new HotSpotDiagnostic();
 	}
 
-	@ReadOperation
+	@GetMapping
 	public ArgusJvmInfo getJvmInfo() {
 		return ArgusJvmInfo.builder()
 				.argusHeapInfo(getHeapInfo())
 				.argusThreadInfo(getThreadInfo())
 				.argusNonHeapInfo(getNonHeapInfo())
+				.argusJvmArgsInfos(getDiagnosticOptions())
 				.build();
 	}
 
-
+	@PostMapping("/args")
+	public ArgusJvmArgsInfo updateJvmOption(@RequestParam(name = "name")String name, @RequestParam(name = "value")String value) {
+		try {
+			this.hotSpotDiagnosticMXBean.setVMOption(name, value);
+			return ArgusJvmArgsInfo.builder().name(name).value(value).build();
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 
 
 	private ArgusHeapInfo getHeapInfo() {
@@ -75,6 +92,15 @@ public class ArgusJvmEndpoint {
 				.build();
 	}
 
+	private List<ArgusJvmArgsInfo> getDiagnosticOptions() {
+		List<VMOption> diagnosticOptions = this.hotSpotDiagnosticMXBean.getDiagnosticOptions();
+		List<ArgusJvmArgsInfo> argusJvmArgsInfos = new ArrayList<>(diagnosticOptions.size());
+		diagnosticOptions.forEach(item -> {
+			argusJvmArgsInfos.add(ArgusJvmArgsInfo.builder().name(item.getName()).value(item.getValue()).build());
+		});
+		return argusJvmArgsInfos;
+	}
+
 	private <T extends BaseMemoryInfo>T getT(T t, String name) {
 		for (MemoryPoolMXBean poolMXBean : memoryPoolMXBeans) {
 			if (poolMXBean.getName().equals(name)) {
@@ -87,6 +113,8 @@ public class ArgusJvmEndpoint {
 		}
 		return t;
 	}
+
+
 
 
 
