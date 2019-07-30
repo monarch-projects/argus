@@ -1,36 +1,36 @@
 {
   "groups": [
     {
+      "name": "management.endpoint.dependency",
+      "type": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint"
+    },
+    {
       "name": "management.endpoint.jvm",
       "type": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
       "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint"
-    },
-    {
-      "name": "management.endpoint.version",
-      "type": "org.titan.argus.client.endpoint.ArgusVersionEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusVersionEndpoint"
     }
   ],
   "properties": [
+    {
+      "name": "management.endpoint.dependency.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.dependency.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the dependency endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint",
+      "defaultValue": true
+    },
     {
       "name": "management.endpoint.jvm.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the jvm endpoint.",
       "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
-      "defaultValue": true
-    },
-    {
-      "name": "management.endpoint.version.cache.time-to-live",
-      "type": "java.time.Duration",
-      "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusVersionEndpoint",
-      "defaultValue": "0ms"
-    },
-    {
-      "name": "management.endpoint.version.enabled",
-      "type": "java.lang.Boolean",
-      "description": "Whether to enable the version endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusVersionEndpoint",
       "defaultValue": true
     }
   ],

@@ -61,6 +61,20 @@
             <artifactId>maven-model</artifactId>
             <version>3.6.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-invoker</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.whitesource</groupId>
+            <artifactId>maven-dependency-tree-parser</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
