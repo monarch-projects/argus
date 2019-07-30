@@ -3,6 +3,7 @@ package org.titan.argus.client.pom.dependency;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.shared.invoker.*;
 import org.titan.argus.client.constant.ArgusClientConstant;
+import org.titan.argus.client.pom.ArgusPomPath;
 
 import java.io.File;
 import java.util.Collections;
@@ -22,7 +23,7 @@ public class ArgusDependencyHelper {
 			properties.setProperty("outputFile", ArgusClientConstant.DEPENDENCY_FILE_PATH);
 			properties.setProperty("outputAbsoluteArtifactFilename", "true");
 			properties.setProperty("includeScope", "runtime");
-			request.setPomFile(new File("D:\\git-project\\argus\\argus-server\\pom.xml"));
+			request.setPomFile(ArgusPomPath.getPomPath());
 			request.setGoals(Collections.singletonList("dependency:tree"));
 			request.setProperties(properties);
 			invoke(request);

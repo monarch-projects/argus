@@ -4,7 +4,6 @@ D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\ArgusJvmInfo.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\enums\ArgusJvmEnum.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\pom\ArgusPomPath.java
-D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusMetaDataEndpoint.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\ArgusThreadInfo.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\boot\ArgusClient.java
 D:\git-project\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\nonheap\ArgusMetaSpaceInfo.java
