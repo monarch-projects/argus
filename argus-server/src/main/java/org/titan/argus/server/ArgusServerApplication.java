@@ -1,7 +1,9 @@
 package org.titan.argus.server;
 
+import org.argus.discovery.common.listener.ArgusDiscoveryListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,11 @@ public class ArgusServerApplication {
         application.addListeners(new RandomServerPortListener());
         application.run(args);
 
+	}
+
+	@Bean
+	public ArgusDiscoveryListener argusDiscoveryListener() {
+    	return new ArgusDiscoveryListener();
 	}
 
 

@@ -3,7 +3,7 @@ import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.titan.argus.discovery.eureka.entities.ArgusEurekaServiceApp;
+import org.argus.discovery.common.entities.ArgusServiceApp;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,15 +16,16 @@ import java.util.Map;
 @Component
 public class ArgusEurekaAppRepository {
 	@Autowired
-	private EurekaClient eurekaClient;
+	private EurekaClient client;
 
 
 
-	public Map<String, ArgusEurekaServiceApp> getAllApp() {
-		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
-		Map<String, ArgusEurekaServiceApp> map = new HashMap<>(applications.size());
+	public Map<String, ArgusServiceApp> getAllApp() {
+
+		List<Application> applications = client.getApplications().getRegisteredApplications();
+		Map<String, ArgusServiceApp> map = new HashMap<>(applications.size());
 		applications.forEach(item -> {
-			map.put(item.getName(), ArgusEurekaServiceApp.builder().appName(item.getName()).size(item.size()).build());
+			map.put(item.getName(), ArgusServiceApp.builder().appName(item.getName()).size(item.size()).build());
 		});
 		return map;
 	}

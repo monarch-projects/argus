@@ -58,6 +58,11 @@
             <artifactId>argus-client-2.x</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

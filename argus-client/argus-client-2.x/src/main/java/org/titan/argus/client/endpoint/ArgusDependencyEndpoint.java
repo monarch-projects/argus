@@ -1,19 +1,24 @@
 package org.titan.argus.client.endpoint;
 
 import fr.dutra.tools.maven.deptree.core.Node;
-import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.titan.argus.client.pom.dependency.ArgusDependencyAnalyer;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.titan.argus.client.entities.dependency.PomInfo;
+import org.titan.argus.client.pom.Analyzer;
+import org.titan.argus.client.pom.dependency.ArgusDependencyAnalyzer;
+
+import java.util.List;
 
 
 /**
  * @author starboyate
  */
-@Endpoint(id = "dependency")
+@RestControllerEndpoint(id = "dependency")
 public class ArgusDependencyEndpoint {
 
-	@ReadOperation
+	@GetMapping
 	public Node getAllDependencies() {
-		return ArgusDependencyAnalyer.analysis();
+
+		return ArgusDependencyAnalyzer.analysis();
 	}
 }

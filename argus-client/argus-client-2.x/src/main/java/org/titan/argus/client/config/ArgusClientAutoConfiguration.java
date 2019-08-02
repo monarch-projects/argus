@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.titan.argus.client.endpoint.ArgusDependencyEndpoint;
 import org.titan.argus.client.endpoint.ArgusJvmEndpoint;
-import org.titan.argus.client.event.ArgusClientEvent;
-//import org.titan.argus.client.endpoint.ArgusMetaDataEndpoint;
 
 /**
  * @author starboyate
@@ -22,8 +20,4 @@ public class ArgusClientAutoConfiguration {
 	@Bean(initMethod = "init")
 	public ArgusJvmEndpoint argusJvmEndpoint() {return new ArgusJvmEndpoint();}
 
-	@Bean
-	public ArgusClientEvent argusClientEvent() {
-		return new ArgusClientEvent();
-	}
 }

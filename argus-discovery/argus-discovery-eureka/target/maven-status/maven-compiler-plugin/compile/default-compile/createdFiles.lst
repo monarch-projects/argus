@@ -1,7 +1,2 @@
-org\titan\argus\discovery\eureka\entities\ArgusEurekaInstance$ArgusEurekaInstanceBuilder.class
-org\titan\argus\discovery\eureka\entities\ArgusEurekaServiceApp$ArgusEurekaServiceAppBuilder.class
-org\titan\argus\discovery\eureka\entities\ArgusEurekaInstance.class
-org\titan\argus\discovery\eureka\Main.class
-org\titan\argus\discovery\eureka\entities\ArgusEurekaServiceApp.class
 org\titan\argus\discovery\eureka\repository\ArgusEurekaAppRepository.class
 org\titan\argus\discovery\eureka\repository\ArgusEurekaInstanceRepository.class

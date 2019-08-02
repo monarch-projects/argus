@@ -69,9 +69,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.whitesource</groupId>
-            <artifactId>maven-dependency-tree-parser</artifactId>
-            <version>1.0.5</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
 

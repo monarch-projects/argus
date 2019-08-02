@@ -84,11 +84,6 @@
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
-                <artifactId>argus-discovery-eureka</artifactId>
-                <version>${argus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.titan</groupId>
                 <artifactId>argus-agent</artifactId>
                 <version>${argus.version}</version>
             </dependency>
@@ -99,7 +94,7 @@
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
-                <artifactId>argus-discovery</artifactId>
+                <artifactId>argus-discovery-eureka</artifactId>
                 <version>${argus.version}</version>
             </dependency>
             <dependency>
@@ -120,6 +115,11 @@
             <dependency>
                 <groupId>org.titan</groupId>
                 <artifactId>argus-plugin</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-discovery-common</artifactId>
                 <version>${argus.version}</version>
             </dependency>
             <dependency>
@@ -184,6 +184,7 @@
         <module>argus-plugin</module>
         <module>argus-storage</module>
         <module>argus-util</module>
+        <module>argus-example</module>
     </modules>
 
 

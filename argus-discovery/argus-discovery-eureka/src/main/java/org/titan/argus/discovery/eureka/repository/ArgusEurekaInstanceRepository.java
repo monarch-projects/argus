@@ -6,7 +6,7 @@ import com.netflix.discovery.shared.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.titan.argus.discovery.eureka.entities.ArgusEurekaInstance;
+import org.argus.discovery.common.entities.ArgusInstance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,14 +31,14 @@ public class ArgusEurekaInstanceRepository {
 	 * get all instances
 	 * @return Map<String, List<ArgusEurekaInstance>>
 	 */
-	public Map<String, List<ArgusEurekaInstance>> getAllInstances() {
+	public Map<String, List<ArgusInstance>> getAllInstances() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
-		Map<String, List<ArgusEurekaInstance>> map = new HashMap<>(applications.size());
+		Map<String, List<ArgusInstance>> map = new HashMap<>(applications.size());
 		applications.forEach(application -> {
-			List<ArgusEurekaInstance> argusEurekaInstances = new ArrayList<>(application.size());
+			List<ArgusInstance> argusEurekaInstances = new ArrayList<>(application.size());
 			application.getInstances().forEach(item -> {
 				argusEurekaInstances.add(
-						ArgusEurekaInstance.builder()
+						ArgusInstance.builder()
 						.appName(item.getAppName())
 						.appGroup(item.getAppGroupName())
 						.host(item.getHostName())
@@ -59,13 +59,13 @@ public class ArgusEurekaInstanceRepository {
 	 * @return List<ArgusEurekaInstance>
 	 * @throws ExecutionException
 	 */
-	public List<ArgusEurekaInstance> getInstanceByAppName(String appName) throws ExecutionException {
+	public List<ArgusInstance> getInstanceByAppName(String appName) throws ExecutionException {
 		Assert.notNull(appName, "app name must be not null");
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
 		for (Application application : applications) {
 			if (application.getName().equals(appName)) {
 				return application.getInstances().stream()
-						.map(item -> ArgusEurekaInstance.builder().appName(item.getAppName())
+						.map(item -> ArgusInstance.builder().appName(item.getAppName())
 								.appGroup(item.getAppGroupName()).host(item.getHostName()).port(item.getPort())
 								.status(item.getStatus().name()).instanceId(item.getId()).build())
 						.collect(Collectors.toList());
@@ -74,10 +74,19 @@ public class ArgusEurekaInstanceRepository {
 		return null;
 	}
 
+	/**
+	 * remove instance
+	 * @param appName
+	 * @param instanceId
+	 */
 	public void removeInstance(String appName, String instanceId) {
 		Application application = eurekaClient.getApplication(appName);
 		InstanceInfo instanceInfo = application.getByInstanceId(instanceId);
 		application.removeInstance(instanceInfo);
+	}
+
+	public void register() {
+
 	}
 
 
