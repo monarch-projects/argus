@@ -3,17 +3,20 @@ package org.titan.argus.discovery.eureka.repository;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
+import org.titan.argus.discovery.common.enums.DiscoveryEventEnum;
+import org.titan.argus.discovery.common.event.ArgusInstanceCanceledEvent;
+import org.titan.argus.discovery.common.event.ArgusInstanceRegisteredEvent;
+import org.titan.argus.discovery.common.repository.InstanceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import org.argus.discovery.common.entities.ArgusInstance;
+import org.titan.argus.discovery.common.entities.ArgusInstance;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 
 /**
@@ -21,37 +24,93 @@ import java.util.stream.Collectors;
  *
  */
 @Component
-public class ArgusEurekaInstanceRepository {
+public class ArgusEurekaInstanceRepository extends InstanceRepository {
+	private static final Logger logger = LoggerFactory.getLogger(ArgusEurekaInstanceRepository.class);
 	@Autowired
 	private EurekaClient eurekaClient;
 
+	private ConcurrentHashMap<String, List<ArgusInstance>> allInstances;
+
+	private ConcurrentHashMap<String, Map<Long, String>> eventMap;
+
+	private final long INTELVAL_NOTIFY_TIME = 60 * 1000;
+
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
 
-	/**
-	 * get all instances
-	 * @return Map<String, List<ArgusEurekaInstance>>
-	 */
-	public Map<String, List<ArgusInstance>> getAllInstances() {
+	public void init() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
-		Map<String, List<ArgusInstance>> map = new HashMap<>(applications.size());
+		this.allInstances = new ConcurrentHashMap<>(applications.size());
+		this.eventMap = new ConcurrentHashMap<>(applications.size());
+		loadCache(applications);
+	}
+
+	private void loadCache(List<Application> applications) {
 		applications.forEach(application -> {
 			List<ArgusInstance> argusEurekaInstances = new ArrayList<>(application.size());
-			application.getInstances().forEach(item -> {
-				argusEurekaInstances.add(
-						ArgusInstance.builder()
-						.appName(item.getAppName())
-						.appGroup(item.getAppGroupName())
-						.host(item.getHostName())
-						.port(item.getPort())
-						.instanceId(item.getId())
-						.status(item.getStatus().name())
-						.build()
-				);
+			application.getInstancesAsIsFromEureka().forEach(item -> {
+				setEvent(item);
+				Map<Long, String> temp = this.eventMap.get(item.getId());
+				argusEurekaInstances.add(ArgusInstance.builder().id(item.getId()).appName(item.getAppName()).host(item.getHostName()).port(item.getPort()).status(item.getStatus().name())
+						.eventMap(temp).build());
 			});
-			map.put(application.getName(), argusEurekaInstances);
+			this.allInstances.put(application.getName(), argusEurekaInstances);
 		});
-		return map;
 	}
+
+	public void update() {
+		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
+		loadCache(applications);
+	}
+
+
+
+	private void setEvent(InstanceInfo info) {
+		Map<Long, String> map = new HashMap<>();
+		long currentIntervalTime = System.currentTimeMillis() - info.getLastUpdatedTimestamp();
+		Map<Long, String> eventTempMap = null;
+		if ((eventTempMap = this.eventMap.get(info.getId())) == null || eventTempMap.get(info.getLastUpdatedTimestamp()) == null) {
+			String eventName = null;
+			switch (info.getStatus().name().toLowerCase()) {
+				case "up":
+					eventName = DiscoveryEventEnum.REGISTER.getName();
+					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
+						this.publisher.publishEvent(new ArgusInstanceRegisteredEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.REGISTER.getName(), info.getLastUpdatedTimestamp()));
+					}
+					break;
+				case "down":
+					eventName = DiscoveryEventEnum.OFFLINE.getName();
+					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
+						this.publisher.publishEvent(new ArgusInstanceCanceledEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.OFFLINE.getName(), info.getLastUpdatedTimestamp()));
+					}
+					break;
+				default:
+					eventName = DiscoveryEventEnum.UNKNOWN.getName();
+					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
+						this.publisher.publishEvent(new ArgusInstanceRegisteredEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.UNKNOWN.getName(), info.getLastUpdatedTimestamp()));
+					}
+					break;
+			}
+			map.put(info.getLastUpdatedTimestamp(), eventName);
+			if (this.eventMap.get(info.getId()) != null) {
+				Map<Long, String> tempMap = this.eventMap.get(info.getId());
+				tempMap.putAll(map);
+			} else {
+				this.eventMap.put(info.getId(), map);
+			}
+		}
+	}
+
+
+	@Override
+	public Map<String, List<ArgusInstance>> findAll() {
+		if (allInstances == null || allInstances.isEmpty()) {
+			init();
+		}
+		return allInstances;
+	}
+
 
 	/**
 	 * get instance by app name
@@ -59,38 +118,23 @@ public class ArgusEurekaInstanceRepository {
 	 * @return List<ArgusEurekaInstance>
 	 * @throws ExecutionException
 	 */
-	public List<ArgusInstance> getInstanceByAppName(String appName) throws ExecutionException {
-		Assert.notNull(appName, "app name must be not null");
-		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
-		for (Application application : applications) {
-			if (application.getName().equals(appName)) {
-				return application.getInstances().stream()
-						.map(item -> ArgusInstance.builder().appName(item.getAppName())
-								.appGroup(item.getAppGroupName()).host(item.getHostName()).port(item.getPort())
-								.status(item.getStatus().name()).instanceId(item.getId()).build())
-						.collect(Collectors.toList());
-			}
+	public List<ArgusInstance> getInstanceByAppName(String appName) {
+		if (this.allInstances == null || this.allInstances.isEmpty()) {
+			init();
 		}
-		return null;
+		return this.allInstances.get(appName);
 	}
 
 	/**
 	 * remove instance
 	 * @param appName
-	 * @param instanceId
+	 * @param id
 	 */
-	public void removeInstance(String appName, String instanceId) {
+	public void removeInstance(String appName, String id) {
 		Application application = eurekaClient.getApplication(appName);
-		InstanceInfo instanceInfo = application.getByInstanceId(instanceId);
+		InstanceInfo instanceInfo = application.getByInstanceId(id);
 		application.removeInstance(instanceInfo);
 	}
-
-	public void register() {
-
-	}
-
-
-
 
 
 }

@@ -38,12 +38,4 @@ public class TestArgusPomPath {
 		return pomFile;
 	}
 
-//	public static InputStream pomInputStream() {
-//		String path = getClassResourcePath();
-//
-//	}
-//
-//	private static InputStream analysis(File file) {
-//
-//	}
 }

@@ -17,6 +17,6 @@ public class HelloController {
 
 	@GetMapping("/hello")
 	public Map hello() {
-		return repository.getAllInstances();
+		return repository.findAll();
 	}
 }

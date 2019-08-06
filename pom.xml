@@ -31,6 +31,8 @@
         <commons-lang3-version>3.8.1</commons-lang3-version>
         <swagger2.version>2.9.2</swagger2.version>
         <guava.version>28.0-jre</guava.version>
+        <httpclient.version>4.5.9</httpclient.version>
+        <fastjson.version>1.2.55</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +43,21 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-network-httpclient</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -119,6 +136,11 @@
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
+                <artifactId>argus-network</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
                 <artifactId>argus-discovery-common</artifactId>
                 <version>${argus.version}</version>
             </dependency>
@@ -185,6 +207,7 @@
         <module>argus-storage</module>
         <module>argus-util</module>
         <module>argus-example</module>
+        <module>argus-network</module>
     </modules>
 
 

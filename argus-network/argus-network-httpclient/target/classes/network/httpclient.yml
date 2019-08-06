@@ -1,0 +1,7 @@
+http-pool:
+  max-total: 100
+  default-max-per-route: 100
+  connect-timeout: 3000
+  connection-request-timeout: 2000
+  socket-timeout: 10000
+  validate-after-inactivity: 2000

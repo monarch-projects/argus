@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.qq.com
+    username: 3135205134
+    password: naocvsuitmapdcdb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
   application:
     name: argus-server
   datasource:
@@ -28,6 +39,14 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
   client:
+    region: guangzhou
+    availability-zones:
+      guangzhou: zone-1,zone-2
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      zone-1: http://localhost:8761/eureka/
+      zone-2: http://localhost:8761/eureka/
+
+
+
