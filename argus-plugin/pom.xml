@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>argus-plugin-hystrix</module>
-        <module>argus-plugin-ribbon</module>
+        <module>argus-plugin-route</module>
     </modules>
 </project>

@@ -9,6 +9,31 @@
       "name": "management.endpoint.jvm",
       "type": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
       "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint"
+    },
+    {
+      "name": "management.endpoint.route",
+      "type": "org.titan.argus.client.endpoint.ArgusRouteEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusRouteEndpoint"
+    },
+    {
+      "name": "management.endpoint.traces",
+      "type": "org.titan.argus.client.endpoint.ArgusHttpTraceEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusHttpTraceEndpoint"
+    },
+    {
+      "name": "management.endpoint.url-mappings",
+      "type": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint"
+    },
+    {
+      "name": "management.endpoint.url-mappings",
+      "type": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint"
+    },
+    {
+      "name": "management.trace.http",
+      "type": "org.titan.argus.client.config.ArgusHttpTraceProperties",
+      "sourceType": "org.titan.argus.client.config.ArgusHttpTraceProperties"
     }
   ],
   "properties": [
@@ -25,6 +50,61 @@
       "description": "Whether to enable the jvm endpoint.",
       "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
       "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.route.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the route endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusRouteEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.traces.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusHttpTraceEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.traces.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the traces endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusHttpTraceEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.url-mappings.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.url-mappings.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.url-mappings.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the urlMappings endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.url-mappings.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the urlMappings endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.trace.http.include",
+      "type": "java.util.Set<org.titan.argus.client.web.trace.http.ArgusInclude>",
+      "description": "Items to be included in the trace. Defaults to request headers (excluding Authorization but including Cookie), response headers (including Set-Cookie), and time taken.",
+      "sourceType": "org.titan.argus.client.config.ArgusHttpTraceProperties"
     }
   ],
   "hints": []

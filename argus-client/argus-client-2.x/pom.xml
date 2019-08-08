@@ -33,14 +33,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.titan</groupId>
-            <artifactId>argus-plugin-ribbon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.titan</groupId>
-            <artifactId>argus-plugin-hystrix</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
@@ -48,6 +40,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -72,6 +70,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-route-spring-cloud-gateway</artifactId>
         </dependency>
 
 

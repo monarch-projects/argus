@@ -4,6 +4,7 @@ import com.netflix.discovery.shared.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.titan.argus.discovery.common.entities.ArgusServiceApp;
+import org.titan.argus.discovery.common.repository.AppRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.Map;
  * @author starboyate
  */
 @Component
-public class ArgusEurekaAppRepository {
+public class ArgusEurekaAppRepository implements AppRepository {
 	@Autowired
 	private EurekaClient client;
 
 
-	public Map<String, ArgusServiceApp> getAllApp() {
-
+	@Override
+	public Map<String, ArgusServiceApp> findAll() {
 		List<Application> applications = client.getApplications().getRegisteredApplications();
 		Map<String, ArgusServiceApp> map = new HashMap<>(applications.size());
 		applications.forEach(item -> {
@@ -28,7 +29,4 @@ public class ArgusEurekaAppRepository {
 		});
 		return map;
 	}
-
-
-
 }

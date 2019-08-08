@@ -20,12 +20,12 @@ public class TestArgusDependencyHelper {
 
 
 	public static void generateDependencyFile() {
-		String dependencyPath = TestArgusPomPath.getClassResourcePath() + "/src/main/resources" + File.separator + "dependency.txt";
+		String dependencyPath = TestArgusPomPath.getClassResourcePath() + "src/main/resources" + File.separator + "dependency.txt";
 		File file = new File(dependencyPath);
-		if (! file.exists()) {
+		if (file.exists()) {
 			InvocationRequest request = new DefaultInvocationRequest();
 			Properties properties = new Properties();
-			properties.setProperty("outputFile", dependencyPath);
+			properties.setProperty("outputFile", file.getPath());
 			properties.setProperty("outputAbsoluteArtifactFilename", "true");
 			properties.setProperty("includeScope", "runtime");
 			request.setPomFile(TestArgusPomPath.getPomFile());

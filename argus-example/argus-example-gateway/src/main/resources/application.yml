@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: argus-example-eureka-client
+          uri: lb://argus-example-eureka-client
+          predicates:
+            - Path=/client/**
+          filters:
+            - StripPrefix=1
+  application:
+    name: argus-example-gateway-server
+  jmx:
+    default-domain: argus-example-gateway-server
+server:
+  port: 8049

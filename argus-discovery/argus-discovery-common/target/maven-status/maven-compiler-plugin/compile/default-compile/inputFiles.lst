@@ -1,5 +1,6 @@
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\handler\ArgusInstanceRegisterHandler.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\handler\send\SenderHolder.java
+D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\repository\AppRepository.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\repository\InstanceRepository.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\entities\ArgusServiceApp.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\handler\Handler.java

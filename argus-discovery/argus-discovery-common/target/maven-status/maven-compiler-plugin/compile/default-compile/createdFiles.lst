@@ -1,3 +1,4 @@
+org\titan\argus\discovery\common\repository\AppRepository.class
 org\titan\argus\discovery\common\handler\ArgusInstanceOfflineHandler.class
 org\titan\argus\discovery\common\entities\ArgusServiceApp.class
 org\titan\argus\discovery\common\handler\Handler.class

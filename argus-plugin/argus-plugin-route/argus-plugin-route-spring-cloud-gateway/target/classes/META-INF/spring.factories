@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.titan.argus.plugin.route.gateway.config.ArgusGatewayConfig

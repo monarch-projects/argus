@@ -55,6 +55,16 @@
                 <version>${httpclient.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-plugin-route-common</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-plugin-route-spring-cloud-gateway</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
@@ -83,16 +93,6 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.titan</groupId>
-                <artifactId>argus-plugin-hystrix</artifactId>
-                <version>${argus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.titan</groupId>
-                <artifactId>argus-plugin-ribbon</artifactId>
-                <version>${argus.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
