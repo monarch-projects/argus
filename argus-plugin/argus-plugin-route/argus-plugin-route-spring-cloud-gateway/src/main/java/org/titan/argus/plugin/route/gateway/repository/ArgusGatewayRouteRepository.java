@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
@@ -42,18 +43,20 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository{
 
 
 
+	private final String routePrefix = "CompositeDiscoveryClient_";
+
 
 	@Override
 	public List<ArgusRoute> getRoutes() {
 		List<ArgusRoute> list = new ArrayList<>();
-		locator.getRouteDefinitions().map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
+		locator.getRouteDefinitions().filter(item -> !item.getId().startsWith(routePrefix)).map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
 		return list;
 	}
 
 	@Override
 	public ArgusRoute getRouteById(String id) {
 		List<ArgusRoute> list = new ArrayList<>(1);
-		locator.getRouteDefinitions().filter(definition -> definition.getId().equals(id)).map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
+		locator.getRouteDefinitions().filter(definition -> definition.getId().equals(id) && !definition.getId().startsWith(routePrefix)).map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
 		return list.get(0);
 	}
 
@@ -65,7 +68,7 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository{
 						.filter(item -> item.getId().equals(id))
 						.subscribe(d -> list.add(d));
 			RouteDefinition routeDefinition = list.get(0);
-			this.writer.delete(Mono.just(routeDefinition.getId()));
+//			this.writer.delete(Mono.just(routeDefinition.getId()));
 			this.writer.save(Mono.just(updateRouteDefinition(routeDefinition, route))).subscribe();
 			this.publisher.publishEvent(new RefreshRoutesEvent(this));
 			return route;
