@@ -2,14 +2,18 @@ package org.titan.argus.plugin.route.gateway.repository;
 
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
+import org.springframework.context.ApplicationEventPublisher;
 import org.titan.argus.plugin.route.core.ArgusRouteRepository;
 import org.titan.argus.plugin.route.entities.ArgusRoute;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -26,33 +30,31 @@ import java.util.stream.Collectors;
 /**
  * @author starboyate
  */
-public class ArgusGatewayRouteRepository implements ArgusRouteRepository {
+public class ArgusGatewayRouteRepository implements ArgusRouteRepository{
 	@Autowired
 	private RouteDefinitionLocator locator;
 
 	@Autowired
 	private RouteDefinitionWriter writer;
 
-	private ConcurrentHashMap<String, ArgusRoute> routeCache;
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
-	@PostConstruct
-	public void init() {
-		List<ArgusRoute> list = new ArrayList<>();
-		locator.getRouteDefinitions()
-				.map(item -> convertToArgusRoute(item))
-				.subscribe(item -> list.add(item));
-		this.routeCache = new ConcurrentHashMap<>(list.size());
-		list.forEach(item -> this.routeCache.put(item.getId(), item));
-	}
+
+
 
 	@Override
-	public Map<String, ArgusRoute> getRoutes() {
-		return routeCache;
+	public List<ArgusRoute> getRoutes() {
+		List<ArgusRoute> list = new ArrayList<>();
+		locator.getRouteDefinitions().map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
+		return list;
 	}
 
 	@Override
 	public ArgusRoute getRouteById(String id) {
-		return this.routeCache.get(id);
+		List<ArgusRoute> list = new ArrayList<>(1);
+		locator.getRouteDefinitions().filter(definition -> definition.getId().equals(id)).map(item -> convertToArgusRoute(item)).subscribe(item -> list.add(item));
+		return list.get(0);
 	}
 
 	@Override
@@ -64,9 +66,8 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository {
 						.subscribe(d -> list.add(d));
 			RouteDefinition routeDefinition = list.get(0);
 			this.writer.delete(Mono.just(routeDefinition.getId()));
-			this.routeCache.remove(id);
 			this.writer.save(Mono.just(updateRouteDefinition(routeDefinition, route))).subscribe();
-			this.routeCache.put(route.getId(), route);
+			this.publisher.publishEvent(new RefreshRoutesEvent(this));
 			return route;
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("update route error: " + ex.getMessage());
@@ -95,11 +96,10 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository {
 	}
 
 	@Override
-	public ArgusRoute deleteRouteById(String id) {
-		this.writer.delete(Mono.just(id));
-		ArgusRoute temp = this.routeCache.get(id);
-		this.routeCache.remove(id);
-		return temp;
+	public boolean deleteRouteById(String id) {
+		Disposable subscribe = this.writer.delete(Mono.just(id)).subscribe();
+		this.publisher.publishEvent(new RefreshRoutesEvent(this));
+		return subscribe.isDisposed();
 	}
 
 	private ArgusRoute convertToArgusRoute(RouteDefinition definition) {

@@ -47,6 +47,7 @@ public class ArgusJvmEndpoint {
 
 	@GetMapping
 	public ArgusJvmInfo getJvmInfo() {
+
 		return ArgusJvmInfo.builder()
 				.argusHeapInfo(getHeapInfo())
 				.argusThreadInfo(getThreadInfo())

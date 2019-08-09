@@ -1,5 +1,3 @@
-org\titan\argus\plugin\route\core\ArgusRefreshRouteEventHolder.class
-org\titan\argus\plugin\route\entities\ArgusRoute.class
 org\titan\argus\plugin\route\core\ArgusRouteRepository.class
 org\titan\argus\plugin\route\entities\ArgusRoute$ArgusRouteBuilder.class
-org\titan\argus\plugin\route\Main.class
+org\titan\argus\plugin\route\entities\ArgusRoute.class
