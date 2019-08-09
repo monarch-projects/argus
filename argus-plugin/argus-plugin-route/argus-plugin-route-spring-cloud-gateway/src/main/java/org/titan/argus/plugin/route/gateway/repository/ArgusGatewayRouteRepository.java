@@ -10,12 +10,16 @@ import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
 import org.titan.argus.plugin.route.core.ArgusRouteRepository;
 import org.titan.argus.plugin.route.entities.ArgusRoute;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -33,10 +37,12 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository {
 
 	@PostConstruct
 	public void init() {
-		List<ArgusRoute> collect = locator.getRouteDefinitions().toStream().map(item -> convertToArgusRoute(item))
-				.collect(Collectors.toList());
-		this.routeCache = new ConcurrentHashMap<>(collect.size());
-		collect.forEach(item -> this.routeCache.put(item.getId(), item));
+		List<ArgusRoute> list = new ArrayList<>();
+		locator.getRouteDefinitions()
+				.map(item -> convertToArgusRoute(item))
+				.subscribe(item -> list.add(item));
+		this.routeCache = new ConcurrentHashMap<>(list.size());
+		list.forEach(item -> this.routeCache.put(item.getId(), item));
 	}
 
 	@Override
@@ -52,19 +58,19 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository {
 	@Override
 	public ArgusRoute updateRoute(@NonNull String id, @NonNull ArgusRoute route) {
 		try {
-			RouteDefinition routeDefinition = this.locator.getRouteDefinitions()
-					.toStream()
-					.filter(item -> item.getId().equals(id))
-					.findFirst()
-					.orElse(null);
+			List<RouteDefinition> list = new ArrayList<>(1);
+			this.locator.getRouteDefinitions()
+						.filter(item -> item.getId().equals(id))
+						.subscribe(d -> list.add(d));
+			RouteDefinition routeDefinition = list.get(0);
 			this.writer.delete(Mono.just(routeDefinition.getId()));
+			this.routeCache.remove(id);
 			this.writer.save(Mono.just(updateRouteDefinition(routeDefinition, route))).subscribe();
+			this.routeCache.put(route.getId(), route);
+			return route;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			throw new IllegalArgumentException("update route error: " + ex.getMessage());
 		}
-		this.routeCache.remove(id);
-		this.routeCache.put(route.getId(), route);
-		return route;
 	}
 
 	private RouteDefinition updateRouteDefinition(@NonNull RouteDefinition definition, @NonNull ArgusRoute route)

@@ -16,7 +16,6 @@
 
 package org.titan.argus.client.web.reactive;
 
-import org.springframework.boot.actuate.trace.http.TraceableRequest;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import org.titan.argus.client.web.trace.http.ArgusTraceableRequest;
