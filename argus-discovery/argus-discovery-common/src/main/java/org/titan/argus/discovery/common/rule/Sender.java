@@ -1,10 +1,10 @@
-package org.titan.argus.discovery.common.handler.send;
+package org.titan.argus.discovery.common.rule;
 
 import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
 
 /**
  * @author starboyate
  */
-public interface Send {
+public interface Sender {
 	void send(ArgusDiscoveryEventInfo info);
 }

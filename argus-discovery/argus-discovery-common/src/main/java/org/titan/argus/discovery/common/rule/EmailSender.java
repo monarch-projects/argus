@@ -1,14 +1,14 @@
-package org.titan.argus.discovery.common.handler.send;
+package org.titan.argus.discovery.common.rule;
 
 import com.alibaba.fastjson.JSON;
-import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
 
 /**
  * @author starboyate
  */
-public class EmailSender implements Send {
+public class EmailSender implements Sender {
 	private JavaMailSender sender;
 
 	public EmailSender(JavaMailSender sender) {

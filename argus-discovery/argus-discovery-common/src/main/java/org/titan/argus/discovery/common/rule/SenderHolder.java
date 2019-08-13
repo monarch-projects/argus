@@ -1,4 +1,4 @@
-package org.titan.argus.discovery.common.handler.send;
+package org.titan.argus.discovery.common.rule;
 
 import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
 
@@ -6,13 +6,13 @@ import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
  * @author starboyate
  */
 public class SenderHolder {
-	private Send send;
+	private Sender sender;
 
-	public SenderHolder(Send send) {
-		this.send = send;
+	public SenderHolder(Sender sender) {
+		this.sender = sender;
 	}
 
 	public void send(ArgusDiscoveryEventInfo info) {
-		this.send.send(info);
+		this.sender.send(info);
 	}
 }

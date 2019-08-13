@@ -1,5 +1,6 @@
 package org.titan.argus.discovery.eureka.config;
 
+
 import org.titan.argus.discovery.common.listener.ArgusDiscoveryListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,4 +15,5 @@ public class DiscoveryEurekaConfig {
 	public ArgusDiscoveryListener listener(@Autowired ArgusEurekaInstanceRepository repository) {
 		return new ArgusDiscoveryListener(repository);
 	}
+
 }

@@ -3,14 +3,15 @@ package org.titan.argus.discovery.eureka.repository;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
+import org.titan.argus.discovery.common.disruptor.event.ArgusInstanceOfflineEvent;
+import org.titan.argus.discovery.common.disruptor.event.ArgusInstanceRegisteredEvent;
+import org.titan.argus.discovery.common.disruptor.event.ArgusInstanceUnknownEvent;
+import org.titan.argus.discovery.common.disruptor.producer.InstanceEventProducer;
 import org.titan.argus.discovery.common.enums.DiscoveryEventEnum;
-import org.titan.argus.discovery.common.event.ArgusInstanceCanceledEvent;
-import org.titan.argus.discovery.common.event.ArgusInstanceRegisteredEvent;
 import org.titan.argus.discovery.common.repository.InstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 
@@ -36,7 +37,7 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	private final long INTELVAL_NOTIFY_TIME = 60 * 1000;
 
 	@Autowired
-	private ApplicationEventPublisher publisher;
+	private InstanceEventProducer producer;
 
 
 	public void init() {
@@ -76,19 +77,19 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 				case "up":
 					eventName = DiscoveryEventEnum.REGISTER.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						this.publisher.publishEvent(new ArgusInstanceRegisteredEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.REGISTER.getName(), info.getLastUpdatedTimestamp()));
+						producer.onData(new ArgusInstanceRegisteredEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.REGISTER.getName(), info.getLastUpdatedTimestamp()));
 					}
 					break;
 				case "down":
 					eventName = DiscoveryEventEnum.OFFLINE.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						this.publisher.publishEvent(new ArgusInstanceCanceledEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.OFFLINE.getName(), info.getLastUpdatedTimestamp()));
+						producer.onData(new ArgusInstanceOfflineEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.OFFLINE.getName(), info.getLastUpdatedTimestamp()));
 					}
 					break;
 				default:
 					eventName = DiscoveryEventEnum.UNKNOWN.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						this.publisher.publishEvent(new ArgusInstanceRegisteredEvent(this, info.getId(), info.getAppName(), DiscoveryEventEnum.UNKNOWN.getName(), info.getLastUpdatedTimestamp()));
+						producer.onData(new ArgusInstanceUnknownEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.UNKNOWN.getName(), info.getLastUpdatedTimestamp()));
 					}
 					break;
 			}

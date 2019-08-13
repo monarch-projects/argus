@@ -34,14 +34,4 @@ public class ArgusDependencyAnalyzer {
 		return node;
 	}
 
-//	private static Node analysis(String path) {
-//		boolean insideJar = path.indexOf("!") > -1;
-//		if (insideJar) {
-//			String str = path.substring(path.indexOf(""))
-//		}
-//	}
-
-	public static void main(String[] args) {
-		ArgusDependencyAnalyzer.analysis();
-	}
 }

@@ -68,8 +68,7 @@ public class ArgusGatewayRouteRepository implements ArgusRouteRepository{
 						.filter(item -> item.getId().equals(id))
 						.subscribe(d -> list.add(d));
 			RouteDefinition routeDefinition = list.get(0);
-//			this.writer.delete(Mono.just(routeDefinition.getId()));
-			this.writer.save(Mono.just(updateRouteDefinition(routeDefinition, route))).subscribe();
+			this.writer.save(Mono.just(updateRouteDefinition(routeDefinition, route)));
 			this.publisher.publishEvent(new RefreshRoutesEvent(this));
 			return route;
 		} catch (Exception ex) {
