@@ -102,6 +102,7 @@ public class ArgusJvmEndpoint {
 		return argusJvmArgsInfos;
 	}
 
+
 	private <T extends BaseMemoryInfo>T getT(T t, String name) {
 		for (MemoryPoolMXBean poolMXBean : memoryPoolMXBeans) {
 			if (poolMXBean.getName().equals(name)) {
