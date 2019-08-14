@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 @Data
 public class ArgusDiscoveryEventInfo {
-	private long time;
+	private String createTime;
 
 	private String event;
 

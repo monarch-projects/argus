@@ -17,5 +17,6 @@ public class InstanceEvent {
 
 	private String eventType;
 
-	private long updateTime;
+	private String updateTime;
+
 }
