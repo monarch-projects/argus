@@ -4,6 +4,7 @@ import com.lmax.disruptor.ExceptionHandler;
 
 /**
  * @author starboyate
+ * TODO: Handling exceptions generated from consumption data in the disruptor
  */
 public class InstanceExceptionHandler implements ExceptionHandler<Object> {
 	@Override

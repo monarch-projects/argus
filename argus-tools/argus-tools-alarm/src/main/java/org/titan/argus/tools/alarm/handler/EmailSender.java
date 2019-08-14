@@ -1,9 +1,11 @@
-package org.titan.argus.discovery.common.rule;
+package org.titan.argus.tools.alarm.handler;
+
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
+import org.titan.argus.tools.alarm.entities.Alarm;
+import org.titan.argus.tools.alarm.entities.MailAlarm;
 
 /**
  * @author starboyate
@@ -15,12 +17,13 @@ public class EmailSender implements Sender {
 		this.sender = sender;
 	}
 	@Override
-	public void send(ArgusDiscoveryEventInfo info) {
+	public void send(Alarm alarm) {
+		MailAlarm mailAlarm = (MailAlarm) alarm;
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("3135205134@qq.com");
-		message.setTo("2925776766@qq.com");
-		message.setSubject("主题：服务下线");
-		message.setText(JSON.toJSONString(info));
+		message.setFrom(mailAlarm.getFrom());
+		message.setTo(mailAlarm.getTo());
+		message.setSubject(mailAlarm.getSubject());
+		message.setText(JSON.toJSONString(mailAlarm.getBody()));
 		sender.send(message);
 	}
 }

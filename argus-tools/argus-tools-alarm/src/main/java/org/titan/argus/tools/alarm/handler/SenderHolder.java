@@ -1,6 +1,7 @@
-package org.titan.argus.discovery.common.rule;
+package org.titan.argus.tools.alarm.handler;
 
-import org.titan.argus.discovery.common.entities.ArgusDiscoveryEventInfo;
+
+import org.titan.argus.tools.alarm.entities.Alarm;
 
 /**
  * @author starboyate
@@ -12,7 +13,7 @@ public class SenderHolder {
 		this.sender = sender;
 	}
 
-	public void send(ArgusDiscoveryEventInfo info) {
+	public void send(Alarm info) {
 		this.sender.send(info);
 	}
 }

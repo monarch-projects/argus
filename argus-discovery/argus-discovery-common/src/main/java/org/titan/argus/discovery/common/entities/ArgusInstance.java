@@ -22,5 +22,5 @@ public class ArgusInstance {
 
 	private String status;
 
-	private Map<Long, String> eventMap;
+	private Map<String, String> eventMap;
 }

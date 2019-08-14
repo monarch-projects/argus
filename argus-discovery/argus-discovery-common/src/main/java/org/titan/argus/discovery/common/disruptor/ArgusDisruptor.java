@@ -8,6 +8,7 @@ import org.titan.argus.discovery.common.disruptor.event.InstanceEventFactory;
 import org.titan.argus.discovery.common.disruptor.handler.InstanceEventHandler;
 import org.titan.argus.discovery.common.disruptor.handler.InstanceExceptionHandler;
 import org.titan.argus.discovery.common.disruptor.message.DisruptorMessage;
+import org.titan.argus.tools.alarm.config.AlarmHolder;
 
 /**
  * @author starboyate
@@ -17,15 +18,18 @@ public class ArgusDisruptor {
 	private Disruptor<DisruptorMessage> disruptor;
 
 	private final JavaMailSender sender;
-	public ArgusDisruptor(JavaMailSender sender) {
+
+	private final AlarmHolder alarmHolder;
+	public ArgusDisruptor(JavaMailSender sender, AlarmHolder alarmHolder) {
 		this.sender = sender;
+		this.alarmHolder = alarmHolder;
 	}
 
 	public void init() {
 		InstanceEventFactory factory = new InstanceEventFactory();
 		this.disruptor = new Disruptor<>(factory, 1024, DaemonThreadFactory.INSTANCE);
 		this.disruptor.setDefaultExceptionHandler(new InstanceExceptionHandler());
-		this.disruptor.handleEventsWith(new InstanceEventHandler(sender));
+		this.disruptor.handleEventsWith(new InstanceEventHandler(sender, alarmHolder));
 		this.disruptor.start();
 	}
 

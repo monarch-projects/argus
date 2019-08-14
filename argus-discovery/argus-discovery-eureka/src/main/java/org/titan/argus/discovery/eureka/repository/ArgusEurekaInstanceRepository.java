@@ -33,7 +33,7 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 
 	private ConcurrentHashMap<String, List<ArgusInstance>> allInstances;
 
-	private ConcurrentHashMap<String, Map<Long, String>> eventMap;
+	private ConcurrentHashMap<String, Map<String, String>> eventMap;
 
 	private final long INTELVAL_NOTIFY_TIME = 60 * 1000;
 
@@ -55,7 +55,7 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 			List<ArgusInstance> argusEurekaInstances = new ArrayList<>(application.size());
 			application.getInstancesAsIsFromEureka().forEach(item -> {
 				setEvent(item);
-				Map<Long, String> temp = this.eventMap.get(item.getId());
+				Map<String, String> temp = this.eventMap.get(item.getId());
 				argusEurekaInstances.add(ArgusInstance.builder().id(item.getId()).appName(item.getAppName()).host(item.getHostName()).port(item.getPort()).status(item.getStatus().name())
 						.eventMap(temp).build());
 			});
@@ -71,9 +71,9 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 
 
 	private void setEvent(InstanceInfo info) {
-		Map<Long, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		long currentIntervalTime = System.currentTimeMillis() - info.getLastUpdatedTimestamp();
-		Map<Long, String> eventTempMap = null;
+		Map<String, String> eventTempMap = null;
 		if ((eventTempMap = this.eventMap.get(info.getId())) == null || eventTempMap.get(info.getLastUpdatedTimestamp()) == null) {
 			String eventName = null;
 			String time = DateFormatUtils.format(new Date(info.getLastUpdatedTimestamp()), DATE_PATTERN);
@@ -81,25 +81,25 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 				case "up":
 					eventName = DiscoveryEventEnum.REGISTER.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						producer.onData(new ArgusInstanceRegisteredEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.REGISTER.getName(), time));
+						producer.publish(new ArgusInstanceRegisteredEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.REGISTER.getName(), time));
 					}
 					break;
 				case "down":
 					eventName = DiscoveryEventEnum.OFFLINE.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						producer.onData(new ArgusInstanceOfflineEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.OFFLINE.getName(), time));
+						producer.publish(new ArgusInstanceOfflineEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.OFFLINE.getName(), time));
 					}
 					break;
 				default:
 					eventName = DiscoveryEventEnum.UNKNOWN.getName();
 					if (currentIntervalTime <= INTELVAL_NOTIFY_TIME) {
-						producer.onData(new ArgusInstanceUnknownEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.UNKNOWN.getName(), time));
+						producer.publish(new ArgusInstanceUnknownEvent(info.getId(), info.getAppName(), DiscoveryEventEnum.UNKNOWN.getName(), time));
 					}
 					break;
 			}
-			map.put(info.getLastUpdatedTimestamp(), eventName);
+			map.put(time, eventName);
 			if (this.eventMap.get(info.getId()) != null) {
-				Map<Long, String> tempMap = this.eventMap.get(info.getId());
+				Map<String, String> tempMap = this.eventMap.get(info.getId());
 				tempMap.putAll(map);
 			} else {
 				this.eventMap.put(info.getId(), map);

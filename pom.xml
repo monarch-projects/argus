@@ -46,6 +46,11 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-tools-alarm</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
@@ -214,6 +219,7 @@
         <module>argus-util</module>
         <module>argus-example</module>
         <module>argus-network</module>
+        <module>argus-tools</module>
     </modules>
 
 

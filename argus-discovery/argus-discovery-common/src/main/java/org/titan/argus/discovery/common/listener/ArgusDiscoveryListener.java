@@ -34,16 +34,5 @@ public class ArgusDiscoveryListener {
 		eventNotify.statusChange();
 	}
 
-//	@EventListener
-//	public void notifyOnArgusInstanceRegistered(ArgusInstanceRegisteredEvent event) {
-//		logger.info("notify registered, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
-//		registerHandler.invoke(event.getId(), event.getAppName(), event.getEventType(), event.getUpdateTime());
-//	}
-//
-//	@EventListener
-//	public void notifyOnArgusInstanceOffline(ArgusInstanceCanceledEvent event) {
-//		logger.info("notify offline, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
-//		offlineHandler.invoke(event.getId(), event.getAppName(), event.getEventType(), event.getUpdateTime());
-//	}
 
 }

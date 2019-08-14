@@ -6,7 +6,8 @@ D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\ti
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\event\InstanceEventNotify.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\entities\ArgusServiceApp.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\rule\EmailSender.java
-D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\config\DisruptorConfig.java
+D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\config\ArgusDiscoveryCommonConfig.java
+D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\ArgusDisruptor.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\event\ArgusInstanceUnknownEvent.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\entities\ArgusDiscoveryEventInfo.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\rule\SenderHolder.java
@@ -17,4 +18,5 @@ D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\ti
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\event\ArgusInstanceOfflineEvent.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\handler\InstanceEventHandler.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\enums\DiscoveryEventEnum.java
+D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\message\DisruptorMessage.java
 D:\git-project\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\listener\ArgusDiscoveryListener.java
