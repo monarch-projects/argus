@@ -45,5 +45,12 @@
             <version>0.9.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-fallback-hystrix</artifactId>
+        </dependency>
+
+
+
     </dependencies>
 </project>

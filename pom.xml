@@ -51,6 +51,16 @@
                 <version>${argus.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-plugin-fallback-common</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-plugin-fallback-hystrix</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
