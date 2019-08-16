@@ -1,7 +1,9 @@
 package org.titan.argus.plugin.fallback.common.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author starboyate
@@ -9,6 +11,8 @@ import lombok.Data;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArgusUrlMapping<T> {
 	private String methodName;
 

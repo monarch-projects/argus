@@ -48,6 +48,11 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusReactiveUrlMappingEndpoint();
 	}
 
+	@Bean
+	public ArgusFallbackEndpoint argusFallbackEndpoint() {
+		return new ArgusFallbackEndpoint();
+	}
+
 
 
 

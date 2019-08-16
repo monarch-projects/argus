@@ -3,10 +3,11 @@ package org.titan.argus.plugin.fallback.hystrix.web.servlet;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
-import com.netflix.hystrix.HystrixCommandProperties;
-import com.netflix.hystrix.HystrixInvokable;
+import com.netflix.hystrix.*;
 import com.netflix.hystrix.contrib.javanica.annotation.*;
-import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.collapser.CommandCollapser;
 import com.netflix.hystrix.contrib.javanica.command.*;
 import com.netflix.hystrix.contrib.javanica.exception.CommandActionExecutionException;
 import com.netflix.hystrix.contrib.javanica.exception.FallbackInvocationException;
@@ -15,35 +16,31 @@ import com.netflix.hystrix.contrib.javanica.utils.FallbackMethod;
 import com.netflix.hystrix.contrib.javanica.utils.MethodProvider;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.ConstPool;
-import javassist.bytecode.MethodInfo;
-import javassist.bytecode.annotation.Annotation;
-import javassist.bytecode.annotation.StringMemberValue;
+import com.netflix.hystrix.strategy.properties.HystrixPropertiesFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandHolder;
+import org.titan.argus.plugin.fallback.common.entities.ArgusUrlMapping;
+import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommand;
+import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandBuilderFactory;
+import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandConvert;
+import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixProperties;
+import org.titan.argus.plugin.fallback.hystrix.repository.mvc.ArgusHystrixUrlMappingsRepository;
 import rx.Observable;
 import rx.functions.Func1;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Future;
 
 import static com.netflix.hystrix.contrib.javanica.utils.AopUtils.*;
@@ -52,14 +49,14 @@ import static com.netflix.hystrix.contrib.javanica.utils.ajc.AjcUtils.getAjcMeth
 
 /**
  * @author starboyate
- * Rewrite HystrixCommandAspect{@link HystrixCommandAspect}
  */
 @Aspect
 public class ArgusHystrixCommandAspect {
 	private static final Map<HystrixPointcutType, MetaHolderFactory> META_HOLDER_FACTORY_MAP;
 
 	@Autowired
-	private ArgusHystrixCommandHolder hystrixCommandHolder;
+	private ArgusHystrixUrlMappingsRepository repository;
+
 
 	static {
 		META_HOLDER_FACTORY_MAP = ImmutableMap.<HystrixPointcutType, MetaHolderFactory>builder()
@@ -68,33 +65,73 @@ public class ArgusHystrixCommandAspect {
 				.build();
 	}
 
-	@Pointcut("@annotation(com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand)")
-	public void hystrixCommandAnnotationPointcut() {
+	@Pointcut("@annotation(org.titan.argus.plugin.fallback.hystrix.annotation.HystrixFallback)")
+	public void getAllHystrixFallback() {
 	}
 
+	@Pointcut("@annotation(com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand)")
+
+	public void hystrixCommandAnnotationPointcut() {
+	}
 
 	@Pointcut("@annotation(com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser)")
 	public void hystrixCollapserAnnotationPointcut() {
 	}
 
+
+
+	@Before("getAllHystrixFallback()")
+	public void setHystrixFallbackProperties(final JoinPoint joinPoint) throws Throwable {
+		Set<ArgusUrlMapping<ArgusHystrixProperties>> fallbackCache = this.repository.getFallbackCache();
+		for (ArgusUrlMapping<ArgusHystrixProperties> argusUrlMapping : fallbackCache) {
+			Class<?> aClass = Class.forName(argusUrlMapping.getClassName());
+			Method method = aClass.getMethod(argusUrlMapping.getMethodName());
+			HystrixCommand hystrixCommand = method.getAnnotation(HystrixCommand.class);
+			String groupKey = hystrixCommand.groupKey();
+			String commandKey = hystrixCommand.commandKey();
+			String threadPoolKey = hystrixCommand.threadPoolKey();
+			List<HystrixProperty> commandProperties = new ArrayList<>( hystrixCommand.commandProperties().length);
+			List<HystrixProperty> threadPoolProperties = new ArrayList<>(hystrixCommand.threadPoolProperties().length);
+			Collections.addAll(commandProperties, hystrixCommand.commandProperties());
+			Collections.addAll(threadPoolProperties, hystrixCommand.threadPoolProperties());
+			GenericSetterBuilder build = GenericSetterBuilder.builder()
+					.groupKey(StringUtils.isBlank(groupKey) ? aClass.getSimpleName() : groupKey)
+					.threadPoolKey(threadPoolKey)
+					.commandKey(StringUtils.isBlank(commandKey) ? method.getName() : commandKey)
+					.commandProperties(commandProperties).threadPoolProperties(threadPoolProperties).build();
+			ExecutionType type = ExecutionType.getExecutionType(method.getReturnType());
+			HystrixCommandBuilder hystrixCommandBuilder = HystrixCommandBuilder.builder().setterBuilder(build).executionType(type)
+					.build();
+			GenericCommand genericCommand = new GenericCommand(hystrixCommandBuilder);
+			HystrixThreadPoolProperties hystrixThreadPoolProperties = HystrixPropertiesFactory
+					.getThreadPoolProperties(genericCommand.getThreadPoolKey(), null);
+			this.repository.setFallbackProperties(ArgusHystrixCommandConvert.convert(genericCommand.getProperties(), hystrixThreadPoolProperties), argusUrlMapping.getMethodName());
+		}
+	}
+
 	@Around("hystrixCommandAnnotationPointcut() || hystrixCollapserAnnotationPointcut()")
 	public Object methodsAnnotatedWithHystrixCommand(final ProceedingJoinPoint joinPoint) throws Throwable {
 		Method method = getMethodFromTarget(joinPoint);
-		dynamicChangeHystrixCommand(method);
 		Validate.notNull(method, "failed to get method from joinPoint: %s", joinPoint);
 		if (method.isAnnotationPresent(HystrixCommand.class) && method.isAnnotationPresent(HystrixCollapser.class)) {
 			throw new IllegalStateException("method cannot be annotated with HystrixCommand and HystrixCollapser " +
 					"annotations at the same time");
 		}
+		ArgusHystrixProperties argusHystrixProperties = dynamicChangeHystrixCommand(method);
 		MetaHolderFactory metaHolderFactory = META_HOLDER_FACTORY_MAP.get(HystrixPointcutType.of(method));
-		MetaHolder metaHolder = metaHolderFactory.create(joinPoint);
-		HystrixInvokable invokable = HystrixCommandFactory.getInstance().create(metaHolder);
-		GenericCommand command = (GenericCommand) invokable;
+		MetaHolder metaHolder = metaHolderFactory.create(joinPoint, method);
+		HystrixInvokable invokable = create(metaHolder, argusHystrixProperties);
+		ArgusHystrixCommand command = (ArgusHystrixCommand) invokable;
 		HystrixCommandProperties properties = command.getProperties();
-		this.hystrixCommandHolder.setProperties(properties);
+		HystrixThreadPoolProperties hystrixThreadPoolProperties = HystrixPropertiesFactory
+				.getThreadPoolProperties(command.getThreadPoolKey(), null);
+		ArgusHystrixProperties allHystrixProperties = ArgusHystrixCommandConvert.convert(properties, hystrixThreadPoolProperties);
+		if (!Objects.isNull(argusHystrixProperties)) {
+			this.repository.setFallbackProperties(allHystrixProperties, method.getName());
+			return allHystrixProperties;
+		}
 		ExecutionType executionType = metaHolder.isCollapserAnnotationPresent() ?
 				metaHolder.getCollapserExecutionType() : metaHolder.getExecutionType();
-
 		Object result;
 		try {
 			if (!metaHolder.isObservable()) {
@@ -110,31 +147,34 @@ public class ArgusHystrixCommandAspect {
 		return result;
 	}
 
+	private HystrixInvokable create(MetaHolder metaHolder, ArgusHystrixProperties argusHystrixProperties) {
+		HystrixInvokable executable;
+		if (metaHolder.isCollapserAnnotationPresent()) {
+			executable = new CommandCollapser(metaHolder);
+		} else if (metaHolder.isObservable()) {
+			executable = new GenericObservableCommand(HystrixCommandBuilderFactory.getInstance().create(metaHolder));
+		} else {
+			executable = new ArgusHystrixCommand(ArgusHystrixCommandBuilderFactory.getInstance().create(metaHolder, argusHystrixProperties));
+		}
+		return executable;
+	}
 
-	private void dynamicChangeHystrixCommand(Method method) throws NotFoundException {
+	private ArgusHystrixProperties dynamicChangeHystrixCommand(Method method) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = attributes.getRequest();
 		BodyReaderHttpServletRequestWrapper wrapper = null;
+		ArgusHystrixProperties argusHystrixProperties = null;
 		if (request instanceof BodyReaderHttpServletRequestWrapper) {
 			wrapper = (BodyReaderHttpServletRequestWrapper) request;
 		}
 		if (Objects.nonNull(wrapper) && Objects.nonNull(wrapper.getBody()) && wrapper.getBody().length > 0) {
 			String body = new String(wrapper.getBody());
-			Map<String, String> map = JSON.parseObject(body, Map.class);
-			ClassPool pool = ClassPool.getDefault();
-			CtClass ctClass = pool.get(method.getDeclaringClass().getName());
-			CtMethod declaredMethod = ctClass.getDeclaredMethod(method.getName());
-			MethodInfo methodInfo = declaredMethod.getMethodInfo();
-			ConstPool constPool = methodInfo.getConstPool();
-			AnnotationsAttribute annotationsAttribute = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);
-			Annotation annotation = new Annotation(HystrixCommand.class.getName(), constPool);
-			map.forEach((k, v) -> {
-				annotation.addMemberValue(k, new StringMemberValue(v, constPool));
-			});
-			annotationsAttribute.addAnnotation(annotation);
-			methodInfo.addAttribute(annotationsAttribute);
+			argusHystrixProperties = JSON.parseObject(body, ArgusHystrixProperties.class);
 		}
+		return argusHystrixProperties;
 	}
+
+
 
 	private Observable executeObservable(HystrixInvokable invokable, ExecutionType executionType, final MetaHolder metaHolder) {
 		return ((Observable) CommandExecutor.execute(invokable, executionType, metaHolder))
@@ -184,8 +224,7 @@ public class ArgusHystrixCommandAspect {
 	 * A factory to create MetaHolder depending on {@link HystrixPointcutType}.
 	 */
 	private static abstract class MetaHolderFactory {
-		public MetaHolder create(final ProceedingJoinPoint joinPoint) {
-			Method method = getMethodFromTarget(joinPoint);
+		public MetaHolder create(final ProceedingJoinPoint joinPoint, Method method) {
 			Object obj = joinPoint.getTarget();
 			Object[] args = joinPoint.getArgs();
 			Object proxy = joinPoint.getThis();

@@ -17,11 +17,11 @@ import java.io.InputStreamReader;
 public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	private final byte[] body;
 
-	public byte[] getBody() {
+	byte[] getBody() {
 		return this.body;
 	}
 
-	public BodyReaderHttpServletRequestWrapper(HttpServletRequest request)throws IOException {
+	BodyReaderHttpServletRequestWrapper(HttpServletRequest request)throws IOException {
 		super(request);
 		body = StreamUtil.readBytes(request.getReader(), "UTF-8");
 	}

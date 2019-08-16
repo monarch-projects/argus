@@ -1,6 +1,9 @@
 package org.titan.argus.plugin.fallback.hystrix.repository.mvc;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
@@ -9,22 +12,27 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.titan.argus.plugin.fallback.common.core.ArgusUrlMappingsRepository;
 import org.titan.argus.plugin.fallback.common.entities.ArgusUrlMapping;
+import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixProperties;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author starboyate
  */
-public class ArgusHystrixUrlMappingsRepository implements ArgusUrlMappingsRepository {
+public class ArgusHystrixUrlMappingsRepository implements ArgusUrlMappingsRepository<ArgusHystrixProperties> {
 	@Autowired
 	private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-	@Override
-	public Set<ArgusUrlMapping> getAllUrlMappings() {
-		Set<ArgusUrlMapping> argusUrlMappingSet = new HashSet<>();
-		String tempClassName = null;
+	private Map<String, ArgusUrlMapping<ArgusHystrixProperties>> cache;
+
+	private Set<ArgusUrlMapping<ArgusHystrixProperties>> fallbackCache;
+
+	public void init() {
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
+		this.cache = new ConcurrentHashMap<>(map.size());
+		this.fallbackCache = new HashSet<>();
 		for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
 			RequestMappingInfo info = m.getKey();
 			HandlerMethod method = m.getValue();
@@ -39,17 +47,35 @@ public class ArgusHystrixUrlMappingsRepository implements ArgusUrlMappingsReposi
 				type = type.substring(1, type.length() - 1);
 			}
 			Method item  = method.getMethod();
-			if (tempClassName == null || !tempClassName.equals(item.getDeclaringClass().getName())) {
-				argusUrlMappingSet.add(ArgusUrlMapping.builder()
-						.methodName(item.toString())
-						.className(item.getDeclaringClass().getName())
-						.type(type)
-						.url(url)
-						.isFallback(item.getAnnotation(HystrixCommand.class) != null)
-						.build());
+			boolean isFallback = item.getAnnotation(HystrixCommand.class) != null || item.getAnnotation(HystrixCollapser.class) != null;
+			if (!StringUtils.isBlank(type)) {
+				ArgusUrlMapping<ArgusHystrixProperties> build = ArgusUrlMapping.<ArgusHystrixProperties>builder()
+						.methodName(item.getName()).className(item.getDeclaringClass().getName()).type(type).url(url)
+						.isFallback(isFallback).build();
+				this.cache.put(item.getName(), build);
+				if (isFallback) {
+					this.fallbackCache.add(build);
+				}
 			}
-			tempClassName = item.getDeclaringClass().getName();
 		}
-		return argusUrlMappingSet;
 	}
+
+	@Override
+	public Map<String, ArgusUrlMapping<ArgusHystrixProperties>> getAllUrlMappings() {
+		return this.cache;
+	}
+
+	@Override
+	public ArgusHystrixProperties setFallbackProperties(ArgusHystrixProperties argusHystrixCommandProperties, String methodName) {
+		ArgusUrlMapping<ArgusHystrixProperties> urlMapping = this.cache
+				.get(methodName);
+		Validate.notNull(urlMapping, "failed to get ArgusUrlMapping from key: %s", methodName);
+		urlMapping.setFallbackProperties(argusHystrixCommandProperties);
+		return argusHystrixCommandProperties;
+	}
+
+	public Set<ArgusUrlMapping<ArgusHystrixProperties>> getFallbackCache() {
+		return this.fallbackCache;
+	}
+
 }

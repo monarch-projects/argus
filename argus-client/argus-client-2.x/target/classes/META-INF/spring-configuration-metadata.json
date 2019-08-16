@@ -6,6 +6,11 @@
       "sourceType": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint"
     },
     {
+      "name": "management.endpoint.fallback",
+      "type": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint"
+    },
+    {
       "name": "management.endpoint.jvm",
       "type": "org.titan.argus.client.endpoint.ArgusJvmEndpoint",
       "sourceType": "org.titan.argus.client.endpoint.ArgusJvmEndpoint"
@@ -42,6 +47,13 @@
       "type": "java.lang.Boolean",
       "description": "Whether to enable the dependency endpoint.",
       "sourceType": "org.titan.argus.client.endpoint.ArgusDependencyEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.fallback.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the fallback endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint",
       "defaultValue": true
     },
     {

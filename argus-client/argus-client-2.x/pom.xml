@@ -77,6 +77,10 @@
             <artifactId>argus-plugin-route-spring-cloud-gateway</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-fallback-hystrix</artifactId>
+        </dependency>
 
 
     </dependencies>
