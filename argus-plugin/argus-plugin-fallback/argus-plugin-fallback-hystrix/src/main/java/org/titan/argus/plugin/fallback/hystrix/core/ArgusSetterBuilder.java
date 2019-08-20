@@ -4,6 +4,7 @@ import com.netflix.hystrix.*;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.conf.HystrixPropertiesManager;
 import com.netflix.hystrix.contrib.javanica.exception.HystrixPropertyException;
+import com.netflix.hystrix.strategy.properties.HystrixPropertiesFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -41,6 +42,14 @@ public class ArgusSetterBuilder {
 		return new ArgusSetterBuilder.Builder();
 	}
 
+	public void setProperties(ArgusHystrixProperties properties) {
+		this.properties = properties;
+	}
+
+	public ArgusHystrixProperties getProperties() {
+		return this.properties;
+	}
+
 
 	/**
 	 * Creates instance of {@link HystrixCommand.Setter}.
@@ -56,13 +65,20 @@ public class ArgusSetterBuilder {
 		}
 		try {
 			setter.andThreadPoolPropertiesDefaults(HystrixPropertiesManager.initializeThreadPoolProperties(threadPoolProperties));
-			setter.andThreadPoolPropertiesDefaults(ArgusHystrixCommandConvert.convertToHystrixThreadPoolProperties(this.properties));
+			if (this.properties != null) {
+				setter.andThreadPoolPropertiesDefaults(ArgusHystrixCommandConvert.convertToHystrixThreadPoolProperties(this.properties));
+				ArgusHystrixCacheUtil.threadPoolsCacheRemove(this.commandKey);
+			}
 		} catch (IllegalArgumentException e) {
 			throw new HystrixPropertyException("Failed to set Thread Pool properties. " + getInfo(), e);
 		}
 		try {
 			setter.andCommandPropertiesDefaults(HystrixPropertiesManager.initializeCommandProperties(commandProperties));
-			setter.andCommandPropertiesDefaults(ArgusHystrixCommandConvert.convertToHystrixCommandProperties(this.properties));
+			if (this.properties != null) {
+				setter.andCommandPropertiesDefaults(ArgusHystrixCommandConvert.convertToHystrixCommandProperties(this.properties));
+				ArgusHystrixCacheUtil.propertiesCacheReset();
+				ArgusHystrixCacheUtil.circuitBreakerCacheReset();
+			}
 		} catch (IllegalArgumentException e) {
 			throw new HystrixPropertyException("Failed to set Command properties. " + getInfo(), e);
 		}

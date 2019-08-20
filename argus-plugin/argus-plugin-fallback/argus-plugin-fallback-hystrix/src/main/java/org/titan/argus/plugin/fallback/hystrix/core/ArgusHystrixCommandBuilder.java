@@ -18,7 +18,7 @@ import java.util.List;
  * @author starboyate
  */
 public class ArgusHystrixCommandBuilder {
-	private final ArgusSetterBuilder setterBuilder;
+	private ArgusSetterBuilder setterBuilder;
 	private final CommandActions commandActions;
 	private final CacheInvocationContext<CacheResult> cacheResultInvocationContext;
 	private final CacheInvocationContext<CacheRemove> cacheRemoveInvocationContext;
@@ -34,6 +34,11 @@ public class ArgusHystrixCommandBuilder {
 		this.collapsedRequests = builder.collapsedRequests;
 		this.ignoreExceptions = builder.ignoreExceptions;
 		this.executionType = builder.executionType;
+	}
+
+	protected ArgusSetterBuilder setSetterBuilder(ArgusSetterBuilder setterBuilder) {
+		ArgusHystrixCommandConvert.copyProperties(this.setterBuilder.getProperties(), setterBuilder.getProperties());
+		return this.setterBuilder;
 	}
 
 	public static <ResponseType> ArgusHystrixCommandBuilder.Builder builder() {

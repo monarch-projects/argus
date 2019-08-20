@@ -34,6 +34,7 @@
         <httpclient.version>4.5.9</httpclient.version>
         <fastjson.version>1.2.55</fastjson.version>
         <disruptor.version>3.4.2</disruptor.version>
+        <common-io.version>2.6</common-io.version>
     </properties>
 
     <dependencyManagement>
@@ -44,6 +45,11 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${common-io.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>

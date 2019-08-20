@@ -12,7 +12,9 @@ import reactor.core.publisher.Mono;
 public class ArgusReactiveFilter implements WebFilter {
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-		ServerHttpRequest request = exchange.getRequest();
-		return chain.filter(exchange);
+		PartnerServerWebExchangeDecorator exchangeDecorator = new PartnerServerWebExchangeDecorator(exchange);
+		ServerHttpRequest request = exchangeDecorator.getRequest();
+		ReactiveRequestContext.set(request);
+		return chain.filter(exchangeDecorator);
 	}
 }

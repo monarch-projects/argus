@@ -20,7 +20,7 @@ public class ArgusUrlMappingEndpoint {
 
 	@HystrixFallback
 	@ReadOperation
-	public Map<String, ArgusUrlMapping> getAllMappings() {
+	public Map getAllMappings() {
 		return this.argusUrlMappingsRepository.getAllUrlMappings();
 	}
 

@@ -9,6 +9,9 @@ import static com.netflix.hystrix.contrib.javanica.exception.ExceptionUtils.unwr
 import static com.netflix.hystrix.contrib.javanica.utils.CommonUtils.createArgsForFallback;
 
 
+/**
+ * @author starboyate
+ */
 public class ArgusHystrixCommand extends ArgusAbstractHystrixCommand<Object> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GenericCommand.class);
 

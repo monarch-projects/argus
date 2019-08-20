@@ -20,6 +20,9 @@ public class ArgusUrlMapping<T> {
 
 	private String type;
 
+
+	private Class[] parameterTypes;
+
 	private String url;
 
 	private Boolean isFallback;

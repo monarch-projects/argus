@@ -63,6 +63,7 @@ org\titan\argus\client\entities\heap\ArgusHeapInfo.class
 org\titan\argus\client\entities\ArgusThreadInfo.class
 org\titan\argus\client\endpoint\ArgusDependencyEndpoint.class
 org\titan\argus\client\entities\BaseMemoryInfo.class
+org\titan\argus\client\endpoint\ArgusFallbackEndpoint.class
 org\titan\argus\client\web\trace\http\ArgusInMemoryHttpTraceRepository.class
 org\titan\argus\client\web\trace\http\ArgusHttpExchangeTracer.class
 org\titan\argus\client\enums\ArgusJvmEnum.class

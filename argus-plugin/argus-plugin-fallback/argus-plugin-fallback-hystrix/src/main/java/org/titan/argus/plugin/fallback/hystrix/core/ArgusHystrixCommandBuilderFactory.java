@@ -34,12 +34,15 @@ public class ArgusHystrixCommandBuilderFactory {
 	}
 
 	public ArgusHystrixCommandBuilder create(MetaHolder metaHolder, ArgusHystrixProperties argusHystrixProperties) {
-		ArgusHystrixCommandBuilder hystrixCommandBuilder = cache.get(metaHolder.getCommandKey());
-		if (Objects.nonNull(hystrixCommandBuilder) && Objects.isNull(argusHystrixProperties)) {
-			return hystrixCommandBuilder;
+		ArgusHystrixCommandBuilder temp = cache.get(metaHolder.getCommandKey());
+		if (Objects.nonNull(temp) && Objects.isNull(argusHystrixProperties)) {
+			return temp;
 		}
-		hystrixCommandBuilder = create(metaHolder,
+		ArgusHystrixCommandBuilder hystrixCommandBuilder = create(metaHolder,
 				Collections.<HystrixCollapser.CollapsedRequest<Object, Object>>emptyList(), argusHystrixProperties);
+		if (temp != null) {
+			hystrixCommandBuilder.setSetterBuilder(temp.getSetterBuilder());
+		}
 		cache.put(metaHolder.getCommandKey(), hystrixCommandBuilder);
 		return hystrixCommandBuilder;
 	}

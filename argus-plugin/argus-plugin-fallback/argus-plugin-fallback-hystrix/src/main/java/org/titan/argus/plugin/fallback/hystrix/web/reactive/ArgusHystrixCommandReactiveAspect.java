@@ -1,12 +1,12 @@
-package org.titan.argus.plugin.fallback.hystrix.web.servlet;
+package org.titan.argus.plugin.fallback.hystrix.web.reactive;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
-import com.netflix.hystrix.*;
+import com.netflix.hystrix.HystrixCommandProperties;
+import com.netflix.hystrix.HystrixInvokable;
+import com.netflix.hystrix.HystrixThreadPoolProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.*;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.collapser.CommandCollapser;
 import com.netflix.hystrix.contrib.javanica.command.*;
 import com.netflix.hystrix.contrib.javanica.exception.CommandActionExecutionException;
@@ -28,19 +28,19 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.titan.argus.plugin.fallback.common.entities.ArgusUrlMapping;
 import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommand;
 import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandBuilderFactory;
 import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandConvert;
 import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixProperties;
-import org.titan.argus.plugin.fallback.hystrix.repository.mvc.ArgusHystrixUrlMappingsRepository;
+import org.titan.argus.plugin.fallback.hystrix.repository.reactive.ArgusHystrixReactiveUrlMappingsRepository;
+import reactor.core.publisher.Mono;
 import rx.Observable;
 import rx.functions.Func1;
-
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.Future;
 
@@ -53,11 +53,11 @@ import static com.netflix.hystrix.contrib.javanica.utils.ajc.AjcUtils.getAjcMeth
  */
 @Order(1)
 @Aspect
-public class ArgusHystrixCommandAspect {
+public class ArgusHystrixCommandReactiveAspect {
 	private static final Map<HystrixPointcutType, MetaHolderFactory> META_HOLDER_FACTORY_MAP;
 
 	@Autowired
-	private ArgusHystrixUrlMappingsRepository repository;
+	private ArgusHystrixReactiveUrlMappingsRepository repository;
 
 
 	static {
@@ -122,6 +122,7 @@ public class ArgusHystrixCommandAspect {
 		ArgusHystrixProperties argusHystrixProperties = dynamicChangeHystrixCommand();
 		MetaHolderFactory metaHolderFactory = META_HOLDER_FACTORY_MAP.get(HystrixPointcutType.of(method));
 		MetaHolder metaHolder = metaHolderFactory.create(joinPoint, method);
+		List<HystrixInvokable> invokables = new ArrayList<>(1);
 		HystrixInvokable invokable = create(metaHolder, argusHystrixProperties);
 		ArgusHystrixCommand command = (ArgusHystrixCommand) invokable;
 		HystrixCommandProperties properties = command.getProperties();
@@ -130,7 +131,7 @@ public class ArgusHystrixCommandAspect {
 		ArgusHystrixProperties allHystrixProperties = ArgusHystrixCommandConvert.convert(properties, hystrixThreadPoolProperties);
 		if (Objects.nonNull(argusHystrixProperties)) {
 			this.repository.setFallbackProperties(allHystrixProperties, method.getName());
-			return "success";
+			return Mono.justOrEmpty("success");
 		}
 		ExecutionType executionType = metaHolder.isCollapserAnnotationPresent() ?
 				metaHolder.getCollapserExecutionType() : metaHolder.getExecutionType();
@@ -162,17 +163,16 @@ public class ArgusHystrixCommandAspect {
 	}
 
 	private ArgusHystrixProperties dynamicChangeHystrixCommand() {
-		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		HttpServletRequest request = attributes.getRequest();
-		BodyReaderHttpServletRequestWrapper wrapper = null;
+		List<ArgusHystrixProperties> properties = new ArrayList<>(1);
 		ArgusHystrixProperties argusHystrixProperties = null;
-		if (request instanceof BodyReaderHttpServletRequestWrapper) {
-			wrapper = (BodyReaderHttpServletRequestWrapper) request;
+		ServerHttpRequest request = ReactiveRequestContext.getRequest();
+		PartnerServerHttpRequestDecorator decorator = null;
+		if (request instanceof PartnerServerHttpRequestDecorator) {
+			decorator = (PartnerServerHttpRequestDecorator) request;
 		}
-		if (Objects.nonNull(wrapper) && Objects.nonNull(wrapper.getBody()) && wrapper.getBody().length > 0) {
-			String body = new String(wrapper.getBody());
-			argusHystrixProperties = JSON.parseObject(body, ArgusHystrixProperties.class);
-		}
+		byte[] bytes = decorator.getBytes();
+		String body = new String(bytes);
+		argusHystrixProperties = JSON.parseObject(body, ArgusHystrixProperties.class);
 		return argusHystrixProperties;
 	}
 

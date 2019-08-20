@@ -5,17 +5,22 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.cloud.netflix.hystrix.HystrixCircuitBreakerConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.titan.argus.plugin.fallback.hystrix.core.ArgusHystrixCommandConvert;
 import org.titan.argus.plugin.fallback.hystrix.repository.mvc.ArgusHystrixUrlMappingsRepository;
+import org.titan.argus.plugin.fallback.hystrix.repository.reactive.ArgusHystrixReactiveUrlMappingsRepository;
+import org.titan.argus.plugin.fallback.hystrix.web.reactive.ArgusHystrixCommandReactiveAspect;
+import org.titan.argus.plugin.fallback.hystrix.web.reactive.ArgusReactiveFilter;
 import org.titan.argus.plugin.fallback.hystrix.web.servlet.ArgusFilter;
+import org.titan.argus.plugin.fallback.hystrix.web.servlet.ArgusHystrixCommandAspect;
 
+import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.REACTIVE;
 import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.SERVLET;
 
 /**
  * @author starboyate
  */
 @Configuration
-@AutoConfigureAfter({HystrixCircuitBreakerConfiguration.class})
 public class ArgusHystrixAutoConfig {
 
 
@@ -34,11 +39,32 @@ public class ArgusHystrixAutoConfig {
 		}
 
 
-//		@Bean
-//		@Order(Integer.MIN_VALUE)
-//		public ArgusHystrixCommandAspect argusHystrixCommandAspect(){
-//			return new ArgusHystrixCommandAspect();
-//		}
+		@Bean
+		public ArgusHystrixCommandAspect argusHystrixCommandAspect(){
+			return new ArgusHystrixCommandAspect();
+		}
+
+	}
+
+	@Configuration
+	@ConditionalOnWebApplication(type = REACTIVE)
+	protected static class HystrixReactiveAutoConfiguration {
+
+		@Bean(initMethod = "init")
+		public ArgusHystrixReactiveUrlMappingsRepository argusHystrixReactiveUrlMappingsRepository() {
+			return new ArgusHystrixReactiveUrlMappingsRepository();
+		}
+
+		@Bean
+		public ArgusReactiveFilter argusReactiveFilter() {
+			return new ArgusReactiveFilter();
+		}
+
+
+		@Bean
+		public ArgusHystrixCommandReactiveAspect argusHystrixCommandReactiveAspect(){
+			return new ArgusHystrixCommandReactiveAspect();
+		}
 
 	}
 
