@@ -18,3 +18,4 @@ OALLexer.tokens
 .vscode 
 .checkstyle
 .externalToolBuilders
+**/target/
