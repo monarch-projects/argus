@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.titan.argus.discovery.common.entities.ArgusServiceApp;
 import org.titan.argus.discovery.common.repository.AppRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,12 @@ public class ArgusEurekaAppRepository implements AppRepository {
 
 
 	@Override
-	public Map<String, ArgusServiceApp> findAll() {
+	public List<ArgusServiceApp> findAll() {
 		List<Application> applications = client.getApplications().getRegisteredApplications();
-		Map<String, ArgusServiceApp> map = new HashMap<>(applications.size());
+		List<ArgusServiceApp> list = new ArrayList<>(applications.size());
 		applications.forEach(item -> {
-			map.put(item.getName(), ArgusServiceApp.builder().appName(item.getName()).size(item.size()).build());
+			list.add(ArgusServiceApp.builder().appName(item.getName()).size(item.size()).build());
 		});
-		return map;
+		return list;
 	}
 }

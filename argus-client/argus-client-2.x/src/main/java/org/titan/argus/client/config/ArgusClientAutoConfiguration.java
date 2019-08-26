@@ -4,13 +4,19 @@ package org.titan.argus.client.config;
 
 import org.springframework.boot.actuate.autoconfigure.trace.http.HttpTraceAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.titan.argus.client.endpoint.*;
 import org.titan.argus.plugin.route.gateway.config.ArgusGatewayConfig;
+
+import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.REACTIVE;
+import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.SERVLET;
 
 /**
  * @author starboyate
@@ -31,29 +37,52 @@ public class ArgusClientAutoConfiguration {
 	public ArgusJvmEndpoint argusJvmEndpoint() {return new ArgusJvmEndpoint();}
 
 	@Bean
-	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-	public ArgusRouteEndpoint argusRouteEndpoint() {
-		return new ArgusRouteEndpoint();
-	}
-
-	@Bean
-	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-	public ArgusUrlMappingEndpoint urlMappingEndpoint() {
-		return new ArgusUrlMappingEndpoint();
-	}
-
-	@Bean
-	@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-	public ArgusReactiveUrlMappingEndpoint argusReactiveUrlMappingEndpoint() {
-		return new ArgusReactiveUrlMappingEndpoint();
-	}
-
-	@Bean
 	public ArgusFallbackEndpoint argusFallbackEndpoint() {
 		return new ArgusFallbackEndpoint();
 	}
 
+	@ConditionalOnClass(name = "org.springframework.data.redis.core.RedisTemplate")
+	@Bean
+	public ArgusRedisEndpoint argusRedisEndpoint() {
+		return new ArgusRedisEndpoint();
+	}
 
+
+
+	@Configuration
+	@ConditionalOnWebApplication(type = SERVLET)
+	protected static class ArgusClientServletAutoConfiguration {
+		@Bean
+		public ArgusUrlMappingEndpoint urlMappingEndpoint() {
+			return new ArgusUrlMappingEndpoint();
+		}
+
+		@Bean
+		public ArgusMetaInfoMvcEndpoint argusMetaInfoMvcEndpoint() {
+			return new ArgusMetaInfoMvcEndpoint();
+		}
+
+	}
+
+
+	@Configuration
+	@ConditionalOnWebApplication(type = REACTIVE)
+	protected static class ArgusClientReactiveAutoConfiguration {
+		@Bean
+		public ArgusRouteEndpoint argusRouteEndpoint() {
+			return new ArgusRouteEndpoint();
+		}
+
+		@Bean
+		public ArgusReactiveUrlMappingEndpoint argusReactiveUrlMappingEndpoint() {
+			return new ArgusReactiveUrlMappingEndpoint();
+		}
+
+		@Bean
+		public ArgusMetaInfoReactiveEndpoint argusMetaInfoReactiveEndpoint() {
+			return new ArgusMetaInfoReactiveEndpoint();
+		}
+	}
 
 
 }

@@ -4,6 +4,7 @@ package org.titan.argus.client.test;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * @author starboyate

@@ -1,23 +1,31 @@
 package org.titan.argus.server.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.titan.argus.discovery.common.entities.ArgusServiceApp;
+import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.service.AppService;
 
-import java.util.Map;
 
 /**
  * @author starboyate
  */
 @RestController
+@RequestMapping("/apps")
+@Api(value = "注册中心app接口", tags = {"注册中心app接口"})
 public class AppController {
-	@Autowired
-	private AppService appService;
+	private final AppService appService;
 
-	@GetMapping("/app")
-	public Map<String, ArgusServiceApp> findAll() {
-		return appService.findAll();
+	public AppController(AppService appService) {
+		this.appService = appService;
+	}
+
+
+	@GetMapping
+	@ApiOperation(value = "获取注册中心所有的app", notes = "根据使用的注册中心进行获取所有注册的application")
+	public BaseResponse findAll() {
+		return BaseResponse.success(appService.findAll());
 	}
 }

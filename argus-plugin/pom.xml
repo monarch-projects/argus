@@ -15,5 +15,6 @@
     <modules>
         <module>argus-plugin-route</module>
         <module>argus-plugin-fallback</module>
+        <module>argus-plugin-redis</module>
     </modules>
 </project>

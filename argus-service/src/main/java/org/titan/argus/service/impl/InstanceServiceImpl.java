@@ -8,6 +8,7 @@ import org.titan.argus.service.InstanceService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author starboyate
@@ -16,13 +17,20 @@ import java.util.Map;
 public class InstanceServiceImpl implements InstanceService {
 	@Autowired
 	private InstanceRepository repository;
-	@Override
-	public Map<String, List<ArgusInstance>> findAll() {
-		return repository.findAll();
-	}
 
 	@Override
 	public List<ArgusInstance> getInstanceByAppName(String appName) {
 		return repository.getInstanceByAppName(appName);
 	}
+
+	@Override
+	public ArgusInstance getInstanceById(String id) {
+		return this.repository.getInstanceById(id);
+	}
+
+	@Override
+	public Set<ArgusInstance> findAll() {
+		return this.repository.findAll();
+	}
+
 }

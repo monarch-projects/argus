@@ -2,8 +2,9 @@ package org.titan.argus.discovery.common.repository;
 
 import org.titan.argus.discovery.common.entities.ArgusServiceApp;
 
-import java.util.Map;
+import java.util.List;
 
 public interface AppRepository {
-	Map<String, ArgusServiceApp> findAll();
+	List<ArgusServiceApp> findAll();
+
 }
