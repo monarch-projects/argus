@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>argus</artifactId>
+        <artifactId>argus-plugin-ratelimit</artifactId>
         <groupId>org.titan</groupId>
         <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>argus-plugin</name>
-    <artifactId>argus-plugin</artifactId>
-    <packaging>pom</packaging>
 
-    <modules>
-        <module>argus-plugin-route</module>
-        <module>argus-plugin-fallback</module>
-        <module>argus-plugin-ratelimit</module>
-    </modules>
+    <artifactId>argus-plugin-ratelimit-commons</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
