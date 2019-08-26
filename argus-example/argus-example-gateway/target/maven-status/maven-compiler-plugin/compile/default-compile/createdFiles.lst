@@ -1,2 +1,2 @@
-org\titan\argus\example\gateway\ArgusGatewayApp.class
-org\titan\argus\example\gateway\HelloController.class
+org/titan/argus/example/gateway/HelloController.class
+org/titan/argus/example/gateway/ArgusGatewayApp.class
