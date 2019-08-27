@@ -19,3 +19,4 @@ OALLexer.tokens
 .checkstyle
 .externalToolBuilders
 **/target/
+*.lst
