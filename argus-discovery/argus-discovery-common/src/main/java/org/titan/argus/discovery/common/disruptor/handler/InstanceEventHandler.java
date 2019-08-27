@@ -39,10 +39,10 @@ public class InstanceEventHandler implements EventHandler<DisruptorMessage> {
 				.createTime(event.getUpdateTime())
 				.build();
 		if (event instanceof ArgusInstanceOfflineEvent) {
-			logger.info("notify registered, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
+			logger.info("notify offline, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
 			offline(info);
 		} else if (event instanceof ArgusInstanceRegisteredEvent) {
-			logger.info("notify offline, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
+			logger.info("notify registered, appName: {}, eventType: {}, updateTime: {}, instanceId: {}", event.getAppName(), event.getEventType(), event.getUpdateTime(), event.getId());
 			register(info);
 		}
 	}

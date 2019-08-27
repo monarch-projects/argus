@@ -6,6 +6,7 @@ import org.titan.argus.discovery.common.entities.ArgusServiceApp;
 import org.titan.argus.discovery.common.repository.AppRepository;
 import org.titan.argus.service.AppService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public class AppServiceImpl implements AppService {
 	private AppRepository repository;
 
 	@Override
-	public Map<String, ArgusServiceApp> findAll() {
+	public List<ArgusServiceApp> findAll() {
 		return repository.findAll();
 	}
 }

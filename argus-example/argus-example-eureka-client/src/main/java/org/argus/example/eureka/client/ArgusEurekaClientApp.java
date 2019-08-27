@@ -13,6 +13,7 @@ public class ArgusEurekaClientApp {
 		SpringApplication.run(ArgusEurekaClientApp.class, args);
 	}
 
+
 //	@Bean
 //	public ArgusHystrixCommandAspect argusHystrixCommandAspect() {
 //		return new ArgusHystrixCommandAspect();

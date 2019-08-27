@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -35,6 +33,7 @@
         <fastjson.version>1.2.55</fastjson.version>
         <disruptor.version>3.4.2</disruptor.version>
         <common-io.version>2.6</common-io.version>
+        <jedis.version>3.1.0</jedis.version>
     </properties>
 
     <dependencyManagement>
@@ -45,6 +44,11 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -236,7 +240,9 @@
         <module>argus-example</module>
         <module>argus-network</module>
         <module>argus-tools</module>
-    </modules>
+  </modules>
+
+
 
 
 </project>

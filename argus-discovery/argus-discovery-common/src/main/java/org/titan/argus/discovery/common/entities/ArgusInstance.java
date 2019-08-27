@@ -2,6 +2,7 @@ package org.titan.argus.discovery.common.entities;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
  */
 @Data
 @Builder
+@EqualsAndHashCode
 public class ArgusInstance {
 	private String id;
 
@@ -22,5 +24,9 @@ public class ArgusInstance {
 
 	private String status;
 
+	private String homePageUrl;
+
 	private Map<String, String> eventMap;
+
+
 }

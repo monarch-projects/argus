@@ -1,6 +1,9 @@
 server:
   port: 7777
 spring:
+  redis:
+    host: localhost
+    port: 6379
   application:
     name: argus-example-eureka-client
 
@@ -19,4 +22,5 @@ hystrix:
       coreSize: 10
       maxQueueSize: 15
       queueSizeRejectionThreshold: 2000
+
 

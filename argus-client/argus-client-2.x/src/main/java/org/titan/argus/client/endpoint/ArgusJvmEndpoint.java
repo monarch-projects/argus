@@ -1,9 +1,12 @@
 package org.titan.argus.client.endpoint;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import com.sun.management.VMOption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.entities.ArgusJvmInfo;
 import org.titan.argus.client.entities.ArgusThreadInfo;
@@ -30,6 +33,8 @@ import java.util.*;
  */
 @RestControllerEndpoint(id = "jvm")
 public class ArgusJvmEndpoint {
+	private Logger logger = LoggerFactory.getLogger(ArgusJvmEndpoint.class);
+
 	private MemoryMXBean memoryMXBean;
 
 	private List<MemoryPoolMXBean> memoryPoolMXBeans;
@@ -57,13 +62,17 @@ public class ArgusJvmEndpoint {
 	}
 
 	@PostMapping("/args")
-	public ArgusJvmArgsInfo updateJvmOption(@RequestParam(name = "name")String name, @RequestParam(name = "value")String value) {
-		try {
-			this.hotSpotDiagnosticMXBean.setVMOption(name, value);
-			return ArgusJvmArgsInfo.builder().name(name).value(value).build();
-		} catch (Exception ex) {
-			return null;
-		}
+	public Map updateJvmOption(@RequestBody Map<String, String> map) {
+		Map<String, String> responseMap = new HashMap<>(map);
+		map.forEach((k, v) -> {
+			try {
+				this.hotSpotDiagnosticMXBean.setVMOption(k, v);
+			} catch (Exception ex) {
+				logger.error("Dynamic modification of jvm argus failed：{}", ex.getMessage());
+				responseMap.remove(k);
+			}
+		});
+		return responseMap;
 	}
 
 

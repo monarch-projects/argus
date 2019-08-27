@@ -32,12 +32,18 @@ public class BaseResponse {
 				.message(StatusCode.NOT_FOUNT.getMessage())
 				.build();
 	}
-
-	public static BaseResponse error(Object data) {
+	public static BaseResponse error(Object data, String message) {
 		return BaseResponse.builder()
 				.code(StatusCode.ERROR.getCode())
 				.data(data)
-				.message(StatusCode.ERROR.getMessage())
+				.message(message)
 				.build();
+	}
+	public static BaseResponse error(Object data) {
+		return error(data, StatusCode.ERROR.getMessage());
+	}
+
+	public static BaseResponse error(String message) {
+		return error(null, message);
 	}
 }

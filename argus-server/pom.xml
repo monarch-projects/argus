@@ -60,9 +60,16 @@
         </dependency>
 
         <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-network-httpclient</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
+
     </dependencies>
 
     <build>

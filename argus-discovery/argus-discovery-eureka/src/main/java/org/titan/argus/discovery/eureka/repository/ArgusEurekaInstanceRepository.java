@@ -1,5 +1,6 @@
 package org.titan.argus.discovery.eureka.repository;
 
+import com.google.common.collect.Sets;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
@@ -31,9 +32,11 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	@Autowired
 	private EurekaClient eurekaClient;
 
-	private ConcurrentHashMap<String, List<ArgusInstance>> allInstances;
+	private ConcurrentHashMap<String, List<ArgusInstance>> ALL_INSTANCES;
 
-	private ConcurrentHashMap<String, Map<String, String>> eventMap;
+	private ConcurrentHashMap<String, Map<String, String>> EVENT_MAP;
+
+	private Set<ArgusInstance> ALL_INSTANCE_SET;
 
 	private final long INTELVAL_NOTIFY_TIME = 60 * 1000;
 
@@ -45,8 +48,9 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 
 	public void init() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
-		this.allInstances = new ConcurrentHashMap<>(applications.size());
-		this.eventMap = new ConcurrentHashMap<>(applications.size());
+		this.ALL_INSTANCES = new ConcurrentHashMap<>(applications.size());
+		this.EVENT_MAP = new ConcurrentHashMap<>(applications.size());
+		this.ALL_INSTANCE_SET = Sets.newConcurrentHashSet();
 		loadCache(applications);
 	}
 
@@ -55,13 +59,17 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 			List<ArgusInstance> argusEurekaInstances = new ArrayList<>(application.size());
 			application.getInstancesAsIsFromEureka().forEach(item -> {
 				setEvent(item);
-				Map<String, String> temp = this.eventMap.get(item.getId());
-				argusEurekaInstances.add(ArgusInstance.builder().id(item.getId()).appName(item.getAppName()).host(item.getHostName()).port(item.getPort()).status(item.getStatus().name())
-						.eventMap(temp).build());
+				Map<String, String> temp = this.EVENT_MAP.get(item.getId());
+				ArgusInstance build = ArgusInstance.builder().id(item.getId()).appName(item.getAppName())
+						.host(item.getIPAddr()).homePageUrl(item.getHomePageUrl()).port(item.getPort()).status(item.getStatus().name()).eventMap(temp)
+						.build();
+				argusEurekaInstances.add(build);
+				this.ALL_INSTANCE_SET.add(build);
 			});
-			this.allInstances.put(application.getName(), argusEurekaInstances);
+			this.ALL_INSTANCES.put(application.getName(), argusEurekaInstances);
 		});
 	}
+
 
 	public void update() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
@@ -73,10 +81,10 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	private void setEvent(InstanceInfo info) {
 		Map<String, String> map = new HashMap<>();
 		long currentIntervalTime = System.currentTimeMillis() - info.getLastUpdatedTimestamp();
-		Map<String, String> eventTempMap = null;
-		if ((eventTempMap = this.eventMap.get(info.getId())) == null || eventTempMap.get(info.getLastUpdatedTimestamp()) == null) {
-			String eventName = null;
-			String time = DateFormatUtils.format(new Date(info.getLastUpdatedTimestamp()), DATE_PATTERN);
+		Map<String, String> eventTempMap;
+		String time = DateFormatUtils.format(new Date(info.getLastUpdatedTimestamp()), DATE_PATTERN);
+		if ((eventTempMap = this.EVENT_MAP.get(info.getId())) == null || eventTempMap.get(time) == null) {
+			String eventName;
 			switch (info.getStatus().name().toLowerCase()) {
 				case "up":
 					eventName = DiscoveryEventEnum.REGISTER.getName();
@@ -98,23 +106,16 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 					break;
 			}
 			map.put(time, eventName);
-			if (this.eventMap.get(info.getId()) != null) {
-				Map<String, String> tempMap = this.eventMap.get(info.getId());
+			Map<String, String> tempMap;
+			if ((tempMap = this.EVENT_MAP.get(info.getId())) != null) {
 				tempMap.putAll(map);
 			} else {
-				this.eventMap.put(info.getId(), map);
+				this.EVENT_MAP.put(info.getId(), map);
 			}
 		}
 	}
 
 
-	@Override
-	public Map<String, List<ArgusInstance>> findAll() {
-		if (allInstances == null || allInstances.isEmpty()) {
-			init();
-		}
-		return allInstances;
-	}
 
 
 	/**
@@ -124,11 +125,22 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	 * @throws ExecutionException
 	 */
 	public List<ArgusInstance> getInstanceByAppName(String appName) {
-		if (this.allInstances == null || this.allInstances.isEmpty()) {
+		if (this.ALL_INSTANCES == null || this.ALL_INSTANCES.isEmpty()) {
 			init();
 		}
-		return this.allInstances.get(appName);
+		return this.ALL_INSTANCES.get(appName);
 	}
+
+	@Override
+	public ArgusInstance getInstanceById(String id) {
+		return this.ALL_INSTANCE_SET.stream().filter(instance -> instance.getId().equals(id)).findFirst().orElse(null);
+	}
+
+	@Override
+	public Set<ArgusInstance>  findAll() {
+		return this.ALL_INSTANCE_SET;
+	}
+
 
 	/**
 	 * remove instance
