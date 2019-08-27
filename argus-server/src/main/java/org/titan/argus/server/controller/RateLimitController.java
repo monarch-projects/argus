@@ -72,8 +72,11 @@ public class RateLimitController {
                                                                        @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                                                        @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
 
+        if (Strings.isNullOrEmpty(appName))
+            throw new BusinessException("参数异常");
+
         return new ObjectCollectionResponse<>(this.infoService.page(new Page<>(page, size), new LambdaQueryWrapper<RateLimitInfo>()
-                .select(RateLimitInfo::getClzName, RateLimitInfo::getMethodName, RateLimitInfo::getLimit, RateLimitInfo::getWaitTime)
+                .select(RateLimitInfo::getId, RateLimitInfo::getClzName, RateLimitInfo::getMethodName, RateLimitInfo::getLimit, RateLimitInfo::getWaitTime)
                 .eq(RateLimitInfo::getAppName, appName)));
     }
 }
