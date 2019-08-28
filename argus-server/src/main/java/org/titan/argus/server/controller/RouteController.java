@@ -31,10 +31,10 @@ public class RouteController extends BaseController {
 
 	@ApiOperation(value = "动态修改网关的路由规则", notes = "动态修改网关的路由规则")
 	@ApiImplicitParam(name = "routeVO", value = "修改的路由信息", required = true, paramType = "query", dataType = "RouteVO")
-	@PostMapping("/{id}")
+	@PutMapping("/{id}")
 	public BaseResponse updateRoute(@PathVariable String id, @RequestBody RouteVO routeVO) {
 		before();
-		return proxyPost(ArgusActuatorConstant.ROUTE + id, metadata.getId(), routeVO);
+		return proxyPut(ArgusActuatorConstant.ROUTE + id, metadata.getId(), routeVO);
 	}
 
 	private void before() {

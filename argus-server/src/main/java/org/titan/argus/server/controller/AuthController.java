@@ -14,7 +14,7 @@ import org.titan.argus.service.AuthService;
  */
 @RestController
 @Api(value = "认证授权操作接口", tags = {"认证授权操作接口"})
-public class AuthController {
+public class AuthController extends BaseController {
 	private final AuthService authService;
 
 	public AuthController(AuthService authService) {

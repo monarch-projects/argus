@@ -1,6 +1,7 @@
 package org.titan.argus.discovery.common.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -20,9 +21,12 @@ public class ArgusDiscoveryCommonConfig {
 	@Autowired
 	private AlarmHolder holder;
 
+	@Autowired
+	private ApplicationEventPublisher publisher;
+
 	@Bean(initMethod = "init", destroyMethod = "destroy")
 	public ArgusDisruptor disruptor() {
-		return new ArgusDisruptor(sender, holder);
+		return new ArgusDisruptor(sender, holder, publisher);
 	}
 
 	@Bean

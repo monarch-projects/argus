@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class ArgusRedisEndpoint {
 		return redisTemplate.execute((RedisCallback)con -> con.getConfig("*"));
 	}
 
-	@PostMapping("/config")
+	@PutMapping("/config")
 	public Object changeRedisConfigArgs(@RequestBody Map<String, String> map) {
 		Map<String, String> temp = new HashMap<>(map);
 		return redisTemplate.execute((RedisCallback) con -> {

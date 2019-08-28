@@ -14,6 +14,7 @@ org\titan\argus\discovery\common\enums\DiscoveryEventEnum.class
 org\titan\argus\discovery\common\disruptor\message\DisruptorMessage$DisruptorMessageBuilder.class
 org\titan\argus\discovery\common\disruptor\handler\InstanceExceptionHandler.class
 org\titan\argus\discovery\common\entities\ArgusDiscoveryEventInfo$ArgusDiscoveryEventInfoBuilder.class
+org\titan\argus\discovery\common\event\AlarmLogEvent.class
 org\titan\argus\discovery\common\config\ArgusDiscoveryCommonConfig.class
 org\titan\argus\discovery\common\disruptor\message\DisruptorMessage.class
 org\titan\argus\discovery\common\entities\ArgusInstance.class

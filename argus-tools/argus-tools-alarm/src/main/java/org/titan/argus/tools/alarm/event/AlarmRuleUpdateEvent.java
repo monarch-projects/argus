@@ -2,7 +2,7 @@ package org.titan.argus.tools.alarm.event;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-import org.titan.argus.tools.alarm.entities.Alarm;
+import org.titan.argus.model.entities.Alarm;
 
 /**
  * @author starboyate

@@ -7,6 +7,8 @@ fr\dutra\tools\maven\deptree\core\InputType$1.class
 org\titan\argus\client\config\ArgusHttpTraceEndpointAutoConfiguration.class
 org\titan\argus\client\entities\metadata\ArgusClientMetadataInfo$ArgusClientMetadataInfoBuilder.class
 org\titan\argus\client\web\reactive\ServerWebExchangeTraceableRequest.class
+org\titan\argus\client\endpoint\ArgusHystrixFallbackEndpoint.class
+org\titan\argus\client\endpoint\ArgusMongdbEndpoint.class
 META-INF\spring-configuration-metadata.json
 org\titan\argus\client\config\ArgusClientAutoConfiguration.class
 org\titan\argus\client\entities\nonheap\ArgusMetaSpaceInfo.class
@@ -69,7 +71,6 @@ org\titan\argus\client\entities\heap\ArgusHeapInfo.class
 org\titan\argus\client\entities\ArgusThreadInfo.class
 org\titan\argus\client\endpoint\ArgusDependencyEndpoint.class
 org\titan\argus\client\entities\BaseMemoryInfo.class
-org\titan\argus\client\endpoint\ArgusFallbackEndpoint.class
 org\titan\argus\client\web\trace\http\ArgusInMemoryHttpTraceRepository.class
 org\titan\argus\client\web\trace\http\ArgusHttpExchangeTracer.class
 org\titan\argus\client\enums\ArgusJvmEnum.class

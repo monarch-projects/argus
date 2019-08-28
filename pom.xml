@@ -67,6 +67,11 @@
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
+                <artifactId>argus-plugin-mongodb</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
                 <artifactId>argus-plugin-fallback-hystrix</artifactId>
                 <version>${argus.version}</version>
             </dependency>

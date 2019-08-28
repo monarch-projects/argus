@@ -33,5 +33,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-model</artifactId>
+        </dependency>
+
+
     </dependencies>
 </project>

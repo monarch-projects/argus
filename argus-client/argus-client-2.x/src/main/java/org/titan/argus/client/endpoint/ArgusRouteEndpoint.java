@@ -27,7 +27,7 @@ public class ArgusRouteEndpoint {
 		return this.routeRepository.getRoutes();
 	}
 
-	@PostMapping("/{id}")
+	@PutMapping("/{id}")
 	public ArgusRoute updateRoute(@PathVariable String id, @RequestBody ArgusRoute route) {
 		ArgusRoute argusRoute = this.routeRepository.updateRoute(id, route);
 		return argusRoute;

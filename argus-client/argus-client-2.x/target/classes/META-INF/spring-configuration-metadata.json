@@ -7,8 +7,8 @@
     },
     {
       "name": "management.endpoint.fallback",
-      "type": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusHystrixFallbackEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusHystrixFallbackEndpoint"
     },
     {
       "name": "management.endpoint.jvm",
@@ -24,6 +24,11 @@
       "name": "management.endpoint.meta-info",
       "type": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
       "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint"
+    },
+    {
+      "name": "management.endpoint.mongodb",
+      "type": "org.titan.argus.client.endpoint.ArgusMongdbEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMongdbEndpoint"
     },
     {
       "name": "management.endpoint.redis",
@@ -68,7 +73,7 @@
       "name": "management.endpoint.fallback.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the fallback endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusFallbackEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusHystrixFallbackEndpoint",
       "defaultValue": true
     },
     {
@@ -104,6 +109,13 @@
       "type": "java.lang.Boolean",
       "description": "Whether to enable the metaInfo endpoint.",
       "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
+      "defaultValue": true
+    },
+    {
+      "name": "management.endpoint.mongodb.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the mongodb endpoint.",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMongdbEndpoint",
       "defaultValue": true
     },
     {

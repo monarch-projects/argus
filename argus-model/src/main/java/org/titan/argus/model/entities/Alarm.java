@@ -3,14 +3,20 @@ package org.titan.argus.model.entities;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * @author starboyate
  */
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("alarm")
 public class Alarm implements Serializable {
 	@TableId
@@ -22,25 +28,16 @@ public class Alarm implements Serializable {
 	@TableField(value = "event_type")
 	private String eventType;
 
-	@TableField(value = "from")
-	private String from;
-
-	@TableField(value = "to")
+	@TableField(value = "`to`")
 	private String to;
 
 	@TableField(value = "account")
 	private String account;
 
-	@TableField(value = "key")
+	@TableField(value = "`key`")
 	private String key;
 
-	@TableField(value = "subject")
-	private String subject;
-
-	@TableField(value = "body")
-	private String body;
-
-	@TableField(value = "host")
+	@TableField(value = "`host`")
 	private String host;
 
 	@TableField(value = "create_time")
@@ -51,4 +48,20 @@ public class Alarm implements Serializable {
 
 	@TableField(value = "is_deleted")
 	private Boolean isDeleted;
+
+	public AlarmLog convert() {
+		long time = System.currentTimeMillis();
+		return AlarmLog.builder()
+				.id(this.id)
+				.account(this.account)
+				.alarmType(this.alarmType)
+				.eventType(this.eventType)
+				.host(this.host)
+				.key(this.key)
+				.to(this.to)
+				.createTime(time)
+				.updateTime(time)
+				.build();
+	}
+
 }

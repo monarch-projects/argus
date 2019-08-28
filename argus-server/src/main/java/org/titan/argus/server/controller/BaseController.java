@@ -59,6 +59,31 @@ public abstract class BaseController {
 		return BaseResponse.success(JSON.parseObject(httpResponse.getBody(), Object.class));
 	}
 
+	BaseResponse proxyPut(String suffix, String id, Object requestBody) {
+		ArgusInstance instance = this.instanceService.getInstanceById(id);
+		String url = getUrl(instance.getHomePageUrl(), suffix);
+		ArgusHttpClient.HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.doPut(url, requestBody);
+		} catch (Exception ex) {
+			return BaseResponse.error(null);
+		}
+		return BaseResponse.success(JSON.parseObject(httpResponse.getBody(), Object.class));
+	}
+
+	BaseResponse proxyDelete(String suffix, String id, Object requestBody) {
+		ArgusInstance instance = this.instanceService.getInstanceById(id);
+		String url = getUrl(instance.getHomePageUrl(), suffix);
+		String entity;
+		try {
+			entity = httpClient.doDelete(url);
+		} catch (Exception ex) {
+			return BaseResponse.error(null);
+		}
+
+		return BaseResponse.success(JSON.parseObject(entity, Object.class));
+	}
+
 	String getUrl(String prefix, String suffix) {
 		return prefix + suffix;
 	}

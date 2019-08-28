@@ -2,7 +2,7 @@ package org.titan.argus.tools.alarm.helper;
 
 import lombok.Builder;
 import lombok.Data;
-import org.titan.argus.tools.alarm.entities.Alarm;
+import org.titan.argus.model.entities.Alarm;
 
 /**
  * @author starboyate

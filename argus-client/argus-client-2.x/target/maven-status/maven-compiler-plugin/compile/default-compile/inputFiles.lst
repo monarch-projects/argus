@@ -10,6 +10,7 @@ D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\clien
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusMetaInfoReactiveEndpoint.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusMetaInfoMvcEndpoint.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\metadata\ArgusServiceMetadataInfo.java
+D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusMongdbEndpoint.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\enums\ArgusJvmEnum.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\fr\dutra\tools\maven\deptree\core\InputType.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\fr\dutra\tools\maven\deptree\core\Node.java
@@ -34,7 +35,6 @@ D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\clien
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\trace\http\ArgusTraceableResponse.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\args\ArgusJvmArgsInfo.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\ArgusJvmInfo.java
-D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusFallbackEndpoint.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\trace\http\ArgusHttpTrace.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\servlet\ArgusHttpTraceWebMvcFilter.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusRedisEndpoint.java
@@ -46,6 +46,7 @@ D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\clien
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\fr\dutra\tools\maven\deptree\core\ParseException.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\trace\http\ArgusHttpTraceRepository.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusHttpTraceEndpoint.java
+D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\endpoint\ArgusHystrixFallbackEndpoint.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\entities\nonheap\ArgusCodeCacheInfo.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\reactive\TraceableServerHttpResponse.java
 D:\titan\argus\argus-client\argus-client-2.x\src\main\java\org\titan\argus\client\web\servlet\TraceableHttpServletRequest.java

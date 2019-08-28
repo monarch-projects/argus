@@ -1,7 +1,7 @@
 package org.titan.argus.tools.alarm.handler;
 
 
-import org.titan.argus.tools.alarm.entities.Alarm;
+import org.titan.argus.model.entities.AlarmLog;
 
 /**
  * @author starboyate
@@ -13,7 +13,7 @@ public class SenderHolder {
 		this.sender = sender;
 	}
 
-	public void send(Alarm info) {
+	public void send(AlarmLog info) {
 		this.sender.send(info);
 	}
 }

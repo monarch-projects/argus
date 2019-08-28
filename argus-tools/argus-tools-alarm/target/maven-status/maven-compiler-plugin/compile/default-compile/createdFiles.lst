@@ -4,13 +4,11 @@ org\titan\argus\tools\alarm\helper\AlarmHelper.class
 org\titan\argus\tools\alarm\event\AlarmRuleUpdateEvent.class
 org\titan\argus\tools\alarm\helper\SenderHelper.class
 org\titan\argus\tools\alarm\util\ArgusSenderUtil.class
-org\titan\argus\tools\alarm\entities\Alarm.class
 org\titan\argus\tools\alarm\config\AlarmAutoConfiguration.class
 org\titan\argus\tools\alarm\helper\AlarmHelper$AlarmHelperBuilder.class
 org\titan\argus\tools\alarm\enums\AlarmTypeEnum.class
+org\titan\argus\tools\alarm\event\AlarmInitEvent.class
 org\titan\argus\tools\alarm\handler\SenderHolder.class
-org\titan\argus\tools\alarm\entities\MailAlarm$MailAlarmBuilder.class
 org\titan\argus\tools\alarm\helper\SenderHelper$SenderHelperBuilder.class
 org\titan\argus\tools\alarm\handler\Sender.class
-org\titan\argus\tools\alarm\entities\MailAlarm.class
 org\titan\argus\tools\alarm\listener\AlarmListener.class

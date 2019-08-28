@@ -51,10 +51,10 @@ public class RedisController extends BaseController{
 
 	@ApiOperation(value = "动态修改redis的config", notes = "动态调整修改redis的config")
 	@ApiImplicitParam(name = "configMap", value = "动态修改的redis参数", required = true, paramType = "query", dataType = "Map<String, String>")
-	@PostMapping("/config")
+	@PutMapping("/config")
 	public BaseResponse updateRedisConfig(@RequestBody Map<String, String> configMap) {
 		before();
-		return proxyPost(ArgusActuatorConstant.REDIS_CONFIG, this.metadata.getId(), configMap);
+		return proxyPut(ArgusActuatorConstant.REDIS_CONFIG, this.metadata.getId(), configMap);
 	}
 
 	private void before() {

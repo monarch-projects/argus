@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.model.entities.InstanceMetadata;
 import org.titan.argus.model.response.BaseResponse;
+import org.titan.argus.model.vo.ArgusUrlMappingVO;
 import org.titan.argus.model.vo.InstanceMetadataVO;
 import org.titan.argus.model.vo.InstanceVO;
 import org.titan.argus.server.core.ArgusActuatorConstant;
@@ -92,15 +93,21 @@ public class InstanceController extends BaseController {
 	}
 
 	@ApiOperation(value = "动态修改指定服务实例的jvm参数", notes = "通过服务实例ID来动态调整jvm参数")
-	@PostMapping("/{id}/jvm")
+	@PutMapping("/{id}/jvm")
 	public BaseResponse dynamicChangeJvmArgus(@PathVariable String id, @RequestBody Map<String, String> map) {
-		return proxyPost(ArgusActuatorConstant.JVM_ARGS, id, map);
+		return proxyPut(ArgusActuatorConstant.JVM_ARGS, id, map);
 	}
 
 	@ApiOperation(value = "获取指定服务实例的url mappings信息", notes = "通过服务实例ID来获取url mappings信息")
 	@GetMapping("/{id}/urlMappings")
 	public BaseResponse getUrlMappings(@PathVariable String id) {
 		return proxyGet(ArgusActuatorConstant.URL_MAPPINGS, id);
+	}
+
+	@ApiOperation(value = "动态调整hystrix配置", notes = "动态调整hystrix配置")
+	@PutMapping("/{id}/fallback")
+	public BaseResponse fallback(@PathVariable String id,@RequestBody ArgusUrlMappingVO vo) {
+		return proxyPut(ArgusActuatorConstant.FALLBAK, id, vo);
 	}
 
 

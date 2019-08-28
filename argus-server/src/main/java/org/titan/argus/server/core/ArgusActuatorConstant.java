@@ -25,4 +25,6 @@ public class ArgusActuatorConstant {
 	public static final String REDIS_RESOURCES = "/actuator/redis/resources";
 
 	public static final String REDIS_CONFIG = "/actuator/redis/config";
+
+	public static final String FALLBAK = "/actuator/fallback";
 }
