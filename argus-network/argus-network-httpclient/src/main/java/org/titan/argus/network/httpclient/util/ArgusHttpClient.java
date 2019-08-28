@@ -12,6 +12,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.titan.argus.network.httpclient.HttpTransferException;
 
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class ArgusHttpClient {
 		CloseableHttpResponse response = this.closeableHttpClient.execute(httpGet);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != HttpStatus.SC_OK) {
-			throw new Exception("api request exception, http reponse code:" + statusCode);
+			throw new HttpTransferException("http get request error, code is " + statusCode);
 		}
 		return EntityUtils.toString(response.getEntity(), DEFAULT_CHARSET);
 	}
@@ -64,7 +65,7 @@ public class ArgusHttpClient {
 		HttpResponse httpResponse = this.doPost(url, requestParameter);
 		int statusCode = httpResponse.getCode();
 		if (statusCode != HttpStatus.SC_OK) {
-			throw new Exception("api request exception, http reponse code:" + statusCode);
+			throw new HttpTransferException("http post request error, code is " + statusCode);
 		}
 
 		T response = JSONObject.parseObject(httpResponse.getBody(), clazz);
@@ -97,7 +98,7 @@ public class ArgusHttpClient {
 		HttpResponse httpResponse = this.doPut(url, requestParameter);
 		int statusCode = httpResponse.getCode();
 		if (statusCode != HttpStatus.SC_OK) {
-			throw new Exception("api request exception, http reponse code:" + statusCode);
+			throw new HttpTransferException("http put request error, code is " + statusCode);
 		}
 
 		T response = JSONObject.parseObject(httpResponse.getBody(), clazz);
@@ -149,7 +150,7 @@ public class ArgusHttpClient {
 		CloseableHttpResponse response = this.closeableHttpClient.execute(httpDelete);
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode != HttpStatus.SC_OK) {
-			throw new Exception("api request exception, http reponse code:" + statusCode);
+			throw new HttpTransferException("http delete request error, code is " + statusCode);
 		}
 		return EntityUtils.toString(response.getEntity(), DEFAULT_CHARSET);
 	}

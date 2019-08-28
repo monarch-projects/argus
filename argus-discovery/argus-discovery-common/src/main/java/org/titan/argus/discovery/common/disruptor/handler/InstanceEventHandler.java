@@ -57,7 +57,7 @@ public class InstanceEventHandler implements EventHandler<DisruptorMessage> {
 	private void doInvoker(ArgusDiscoveryEventInfo info) {
 		this.holder.getAlarms().forEach(item -> {
 			Alarm alarm = item.getAlarm();
-			AlarmLog convert = alarm.convert();
+			AlarmLog convert = alarm.convertToAlarmLog();
 			if (alarm.getAlarmType().equalsIgnoreCase(AlarmTypeEnum.EMAIL.name())) {
 				SenderHolder senderHolder = new SenderHolder(new EmailSender(item.getSenderHelper().getEmailSender()));
 				convert.setBody(JSON.toJSONString(info));

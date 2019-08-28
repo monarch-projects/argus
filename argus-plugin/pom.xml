@@ -16,5 +16,7 @@
         <module>argus-plugin-route</module>
         <module>argus-plugin-fallback</module>
         <module>argus-plugin-mongodb</module>
+        <module>argus-plugin-ratelimit</module>
+        <module>argus-plugin-redis</module>
     </modules>
 </project>

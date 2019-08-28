@@ -1,4 +1,4 @@
-package org.titan.argus.model.vo;
+package org.titan.argus.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArgusUrlMappingVO<T> {
+public class ArgusUrlMappingRequest<T> {
 	private String methodName;
 
 	private String className;

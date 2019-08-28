@@ -1,6 +1,5 @@
 package org.titan.argus.tools.alarm.event;
 
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 import org.titan.argus.model.entities.Alarm;

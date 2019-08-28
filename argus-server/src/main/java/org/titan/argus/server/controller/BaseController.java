@@ -5,6 +5,8 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.model.entities.InstanceMetadata;
@@ -12,6 +14,7 @@ import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.network.httpclient.util.ArgusHttpClient;
 import org.titan.argus.server.core.ArgusActuatorConstant;
 import org.titan.argus.service.InstanceService;
+import org.titan.argus.service.exception.BusinessException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,9 +44,8 @@ public abstract class BaseController {
 		try {
 			entity = httpClient.doGet(url);
 		} catch (Exception ex) {
-			return BaseResponse.error(null);
+			throw new BusinessException(ex.getMessage());
 		}
-
 		return BaseResponse.success(JSON.parseObject(entity, Object.class));
 	}
 
@@ -88,7 +90,7 @@ public abstract class BaseController {
 		return prefix + suffix;
 	}
 
-	Set<InstanceMetadata> getAllInstanceMetadata() {
+	public Set<InstanceMetadata> getAllInstanceMetadata() {
 		Set<ArgusInstance> allInstanceSet = instanceService.findAll();
 		ArgusInstanceMetaOptional optional = getDifferenceSet(allInstanceSet.stream()
 				.map(item -> InstanceMetadata.builder().id(item.getId()).appName(item.getAppName())

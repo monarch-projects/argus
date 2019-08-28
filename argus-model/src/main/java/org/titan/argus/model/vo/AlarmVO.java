@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.titan.argus.model.entities.Alarm;
 
+import java.util.Date;
+
 /**
  * @author starboytae
  */
@@ -28,6 +30,7 @@ public class AlarmVO {
 
 	private String host;
 
+	private Long createTime;
 	public Alarm convert() {
 		long time = System.currentTimeMillis();
 		return Alarm.builder()

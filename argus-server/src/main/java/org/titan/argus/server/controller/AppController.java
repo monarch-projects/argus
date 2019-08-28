@@ -13,7 +13,7 @@ import org.titan.argus.service.AppService;
  * @author starboyate
  */
 @RestController
-@RequestMapping("/apps")
+@RequestMapping("/api/v1/apps")
 @Api(value = "注册中心app接口", tags = {"注册中心app接口"})
 public class AppController extends BaseController {
 	private final AppService appService;

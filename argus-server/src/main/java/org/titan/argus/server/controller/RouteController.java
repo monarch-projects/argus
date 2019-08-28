@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.entities.InstanceMetadata;
+import org.titan.argus.model.request.RouteRequest;
 import org.titan.argus.model.response.BaseResponse;
-import org.titan.argus.model.vo.RouteVO;
 import org.titan.argus.server.core.ArgusActuatorConstant;
 
 import java.util.Set;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @author starboyate
  */
 @RestController
-@RequestMapping("/route")
+@RequestMapping("/api/v1/route")
 @Api(value = "动态操作路由规则的接口", tags = {"动态操作路由规则的接口"})
 public class RouteController extends BaseController {
 	private InstanceMetadata metadata;
@@ -32,9 +32,9 @@ public class RouteController extends BaseController {
 	@ApiOperation(value = "动态修改网关的路由规则", notes = "动态修改网关的路由规则")
 	@ApiImplicitParam(name = "routeVO", value = "修改的路由信息", required = true, paramType = "query", dataType = "RouteVO")
 	@PutMapping("/{id}")
-	public BaseResponse updateRoute(@PathVariable String id, @RequestBody RouteVO routeVO) {
+	public BaseResponse updateRoute(@PathVariable String id, @RequestBody RouteRequest routeRequest) {
 		before();
-		return proxyPut(ArgusActuatorConstant.ROUTE + id, metadata.getId(), routeVO);
+		return proxyPut(ArgusActuatorConstant.ROUTE + id, metadata.getId(), routeRequest);
 	}
 
 	private void before() {

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.titan.argus.model.vo.AlarmVO;
 
 import java.io.Serializable;
 
@@ -49,7 +50,7 @@ public class Alarm implements Serializable {
 	@TableField(value = "is_deleted")
 	private Boolean isDeleted;
 
-	public AlarmLog convert() {
+	public AlarmLog convertToAlarmLog() {
 		long time = System.currentTimeMillis();
 		return AlarmLog.builder()
 				.id(this.id)
@@ -61,6 +62,20 @@ public class Alarm implements Serializable {
 				.to(this.to)
 				.createTime(time)
 				.updateTime(time)
+				.build();
+	}
+
+	public AlarmVO convertToAlarmVO() {
+		long time = System.currentTimeMillis();
+		return AlarmVO.builder()
+				.id(this.id)
+				.account(this.account)
+				.alarmType(this.alarmType)
+				.eventType(this.eventType)
+				.host(this.host)
+				.key(this.key)
+				.to(this.to)
+				.createTime(time)
 				.build();
 	}
 

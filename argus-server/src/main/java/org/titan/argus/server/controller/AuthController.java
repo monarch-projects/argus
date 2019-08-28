@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.titan.argus.service.AuthService;
 
@@ -14,6 +15,7 @@ import org.titan.argus.service.AuthService;
  */
 @RestController
 @Api(value = "认证授权操作接口", tags = {"认证授权操作接口"})
+@RequestMapping("/api/v1/auth")
 public class AuthController extends BaseController {
 	private final AuthService authService;
 
@@ -29,7 +31,7 @@ public class AuthController extends BaseController {
 			@ApiImplicitParam(name = "username", value = "账号", required = true, paramType = "query", dataType = "String"),
 			@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "String")
 	})
-	@PostMapping(value = "/auth/login")
+	@PostMapping(value = "/login")
 	public String login(String username,String password) {
 		// 登录成功会返回Token给用户
 		return authService.login(username, password);

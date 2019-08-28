@@ -5,8 +5,9 @@ spring:
     mongodb:
       uri: mongodb://192.168.1.235:27017/g08
   redis:
-    host: localhost
-    port: 6379
+    cluster:
+      nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006
+
   application:
     name: argus-example-eureka-client
 

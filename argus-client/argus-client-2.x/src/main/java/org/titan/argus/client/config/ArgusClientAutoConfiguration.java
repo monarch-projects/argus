@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.titan.argus.client.endpoint.*;
 import org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig;
 import org.titan.argus.plugin.mongodb.core.MongodbService;
+import org.titan.argus.plugin.redis.core.RedisService;
 import org.titan.argus.plugin.route.gateway.config.ArgusGatewayConfig;
 
 import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.REACTIVE;
@@ -43,10 +44,10 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusHystrixFallbackEndpoint();
 	}
 
-	@ConditionalOnClass(name = "org.springframework.data.redis.core.RedisTemplate")
+	@ConditionalOnClass(name = "org.titan.argus.plugin.redis.config.ArgusRedisAutoConfig")
 	@Bean
-	public ArgusRedisEndpoint argusRedisEndpoint() {
-		return new ArgusRedisEndpoint();
+	public ArgusRedisEndpoint argusRedisEndpoint(RedisService redisService) {
+		return new ArgusRedisEndpoint(redisService);
 	}
 
 	@ConditionalOnClass(name = "org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig")
