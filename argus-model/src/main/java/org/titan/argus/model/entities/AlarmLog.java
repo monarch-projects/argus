@@ -40,6 +40,9 @@ public class AlarmLog {
 	@TableField(value = "`host`")
 	private String host;
 
+	@TableField(value = "delay_time")
+	private Long delayTime;
+
 	@TableField(value = "subject")
 	private String subject;
 

@@ -1,6 +1,10 @@
 package org.titan.argus.plugin.redis.core;
 
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.data.redis.connection.RedisClusterNode;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnection;
+import org.springframework.data.redis.connection.lettuce.LettuceConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.RedisClientInfo;
@@ -9,6 +13,7 @@ import org.titan.argus.plugin.redis.entities.RedisNodeInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author starboyate
@@ -26,6 +31,26 @@ public class RedisService {
 	public RedisNodeInfo getRedisNodeInfo() {
 		RedisNodeInfo info = new RedisNodeInfo();
 		List<String> nodeList = null;
+		RedisConnectionFactory connectionFactory = this.template.getConnectionFactory();
+		if (connectionFactory.getClusterConnection() != null) {
+			List<RedisNode> list = new ArrayList<>();
+			connectionFactory.getClusterConnection()
+					.clusterGetNodes()
+					.forEach(item -> list.add(RedisNode.builder().host(item.getHost()).port(item.getPort()).build()));
+			info.setIsCluster(Boolean.TRUE).setNodeList(list);
+		} else if (connectionFactory.getSentinelConnection() != null) {
+			List<RedisNode> list = new ArrayList<>();
+			connectionFactory.getSentinelConnection().masters().forEach(master -> {
+				list.add(RedisNode.builder().host(master.getHost()).port(master.getPort()).build());
+				connectionFactory.getSentinelConnection().slaves(() -> master.getName()).forEach(slave -> {
+					list.add(RedisNode.builder().host(slave.getHost()).port(slave.getPort()).build());
+				});
+			});
+			info.setIsSentinel(true).setNodeList(list);
+		} else {
+		}
+		this.template.getConnectionFactory().getClusterConnection().clusterGetNodes();
+		this.template.getConnectionFactory().getSentinelConnection().masters();
 		if (this.properties.getCluster() != null) {
 			nodeList = this.properties.getCluster().getNodes();
 			info.setIsCluster(Boolean.TRUE);

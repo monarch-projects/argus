@@ -41,6 +41,9 @@ public class Alarm implements Serializable {
 	@TableField(value = "`host`")
 	private String host;
 
+	@TableField(value = "delay_time")
+	private Long delayTime;
+
 	@TableField(value = "create_time")
 	private Long createTime;
 
@@ -60,6 +63,7 @@ public class Alarm implements Serializable {
 				.host(this.host)
 				.key(this.key)
 				.to(this.to)
+				.delayTime(this.delayTime)
 				.createTime(time)
 				.updateTime(time)
 				.build();
@@ -75,6 +79,7 @@ public class Alarm implements Serializable {
 				.host(this.host)
 				.key(this.key)
 				.to(this.to)
+				.delayTime(this.delayTime)
 				.createTime(time)
 				.build();
 	}

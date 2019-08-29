@@ -30,6 +30,8 @@ public class AlarmVO {
 
 	private String host;
 
+	private Long delayTime;
+
 	private Long createTime;
 	public Alarm convert() {
 		long time = System.currentTimeMillis();
@@ -39,6 +41,7 @@ public class AlarmVO {
 				.to(this.to)
 				.host(this.host)
 				.key(this.key)
+				.delayTime(this.delayTime)
 				.createTime(time)
 				.updateTime(time)
 				.build();
