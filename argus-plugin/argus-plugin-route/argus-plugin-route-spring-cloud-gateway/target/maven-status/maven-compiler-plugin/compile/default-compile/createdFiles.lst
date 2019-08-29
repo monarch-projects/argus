@@ -1,3 +1,0 @@
-META-INF/spring-autoconfigure-metadata.properties
-org/titan/argus/plugin/route/gateway/repository/ArgusGatewayRouteRepository.class
-org/titan/argus/plugin/route/gateway/config/ArgusGatewayConfig.class
