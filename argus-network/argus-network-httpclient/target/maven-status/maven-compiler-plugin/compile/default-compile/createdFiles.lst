@@ -1,3 +1,3 @@
-org\titan\argus\network\httpclient\util\ArgusHttpClient.class
-org\titan\argus\network\httpclient\util\ArgusHttpClient$HttpResponse.class
-org\titan\argus\network\httpclient\config\HttpClientConfig.class
+org/titan/argus/network/httpclient/util/ArgusHttpClient.class
+org/titan/argus/network/httpclient/util/ArgusHttpClient$HttpResponse.class
+org/titan/argus/network/httpclient/config/HttpClientConfig.class

@@ -31,11 +31,12 @@ public class RateLimitController {
     @Autowired
     private RateLimitInfoService infoService;
 
+    private ReentrantLock lock = new ReentrantLock();
+
     @PostMapping("/client/data")
     public ObjectDataResponse<Boolean> processClientData(@RequestBody Collection<RateLimitClientDataRequest> requests) {
         if (Objects.isNull(requests))
             throw new BusinessException("参数异常");
-        ReentrantLock lock = new ReentrantLock();
         try {
             lock.lock();
             return new ObjectDataResponse<>(this.infoService.processClientData(requests));
