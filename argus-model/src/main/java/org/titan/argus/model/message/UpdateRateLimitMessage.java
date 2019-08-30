@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.titan.argus.model.dto.RateLimitConfigDTO;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Collection;
  */
 @Data
 @Accessors(chain = true)
-public class UpdateRateLimitMessage extends BaseMessage {
+public class UpdateRateLimitMessage extends BaseMessage implements Serializable {
 
     private Collection<RateLimitConfigDTO> configs;
 

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.titan.argus.model.request.RateLimitClientDataRequest;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Collection;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class RateLimiterAppStartMessage extends BaseMessage {
+public class RateLimiterAppStartMessage extends BaseMessage implements Serializable {
 
     private Collection<RateLimitClientDataRequest> data;
 

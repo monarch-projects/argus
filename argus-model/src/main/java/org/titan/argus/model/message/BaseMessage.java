@@ -3,6 +3,7 @@ package org.titan.argus.model.message;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
-public class BaseMessage {
+public class BaseMessage implements Serializable {
 
     public static final String RATE_LIMIT_MESSAGE_KEY = "argus-rate-limit";
 
