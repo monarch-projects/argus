@@ -2,7 +2,7 @@ package org.titan.argus.model.response;
 
 import lombok.Builder;
 import lombok.Data;
-import org.titan.argus.model.enums.StatusCode;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author starboyate
@@ -19,28 +19,28 @@ public class BaseResponse {
 
 	public static BaseResponse success(Object data) {
 		return BaseResponse.builder()
-				.code(StatusCode.SUCCESS.getCode())
+				.code(HttpStatus.OK.value())
 				.data(data)
-				.message(StatusCode.SUCCESS.getMessage())
+				.message(HttpStatus.OK.getReasonPhrase())
 				.build();
 	}
 
 	public static BaseResponse notFount(Object data) {
 		return BaseResponse.builder()
-				.code(StatusCode.NOT_FOUNT.getCode())
+				.code(HttpStatus.NOT_FOUND.value())
 				.data(data)
-				.message(StatusCode.NOT_FOUNT.getMessage())
+				.message(HttpStatus.NOT_FOUND.getReasonPhrase())
 				.build();
 	}
 	public static BaseResponse error(Object data, String message) {
 		return BaseResponse.builder()
-				.code(StatusCode.ERROR.getCode())
+				.code(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.data(data)
 				.message(message)
 				.build();
 	}
 	public static BaseResponse error(Object data) {
-		return error(data, StatusCode.ERROR.getMessage());
+		return error(data, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 	}
 
 	public static BaseResponse error(String message) {

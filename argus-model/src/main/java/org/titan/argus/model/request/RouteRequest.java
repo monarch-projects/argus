@@ -1,4 +1,4 @@
-package org.titan.argus.model.vo;
+package org.titan.argus.model.request;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RouteVO {
+public class RouteRequest {
 	private String id;
 
 	private String stripPrefix;

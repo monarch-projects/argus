@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.entities.InstanceMetadata;
+import org.titan.argus.model.entities.RedisNodeInfo;
 import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.server.core.ArgusActuatorConstant;
 
@@ -15,7 +16,7 @@ import java.util.Set;
  * @author starboyate
  */
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/api/v1/redis")
 @Api(value = "监控项目redis接口", tags = {"监控项目redis接口"})
 public class RedisController extends BaseController{
 	private InstanceMetadata metadata;
@@ -25,6 +26,14 @@ public class RedisController extends BaseController{
 	public BaseResponse getRedisAllInfo() {
 		before();
 		return proxyGet(ArgusActuatorConstant.REDIS_INFO, metadata.getId());
+	}
+
+	@GetMapping("/node")
+	public BaseResponse getRedisNodeInfo() {
+		before();
+		BaseResponse response = proxyGet(ArgusActuatorConstant.REDIS_NODE, metadata.getId());
+		RedisNodeInfo info = (RedisNodeInfo) response.getData();
+		return response;
 	}
 
 
@@ -51,10 +60,10 @@ public class RedisController extends BaseController{
 
 	@ApiOperation(value = "动态修改redis的config", notes = "动态调整修改redis的config")
 	@ApiImplicitParam(name = "configMap", value = "动态修改的redis参数", required = true, paramType = "query", dataType = "Map<String, String>")
-	@PostMapping("/config")
+	@PutMapping("/config")
 	public BaseResponse updateRedisConfig(@RequestBody Map<String, String> configMap) {
 		before();
-		return proxyPost(ArgusActuatorConstant.REDIS_CONFIG, this.metadata.getId(), configMap);
+		return proxyPut(ArgusActuatorConstant.REDIS_CONFIG, this.metadata.getId(), configMap);
 	}
 
 	private void before() {

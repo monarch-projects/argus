@@ -4,10 +4,7 @@ import com.sun.management.VMOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.titan.argus.client.entities.ArgusJvmInfo;
 import org.titan.argus.client.entities.ArgusThreadInfo;
 import org.titan.argus.client.entities.BaseMemoryInfo;
@@ -61,7 +58,7 @@ public class ArgusJvmEndpoint {
 				.build();
 	}
 
-	@PostMapping("/args")
+	@PutMapping("/args")
 	public Map updateJvmOption(@RequestBody Map<String, String> map) {
 		Map<String, String> responseMap = new HashMap<>(map);
 		map.forEach((k, v) -> {

@@ -1,6 +1,7 @@
 package org.titan.argus.model.entities;
 
 import lombok.*;
+import org.titan.argus.model.vo.InstanceMetadataVO;
 
 import java.util.Map;
 
@@ -36,4 +37,21 @@ public class InstanceMetadata {
 	private Boolean isUsedRedis;
 
 	private Boolean isUsedRabbitMQ;
+
+	public InstanceMetadataVO convertToInstanceMetadataVO() {
+		return InstanceMetadataVO.builder()
+				.appName(this.appName)
+				.artifactId(this.artifactId)
+				.eventMap(this.eventMap)
+				.groupId(this.groupId)
+				.id(this.id)
+				.ip(this.ip)
+				.isGateway(this.isGateway)
+				.isUsedRabbitMQ(this.isUsedRabbitMQ)
+				.isUsedRedis(this.isUsedRedis)
+				.port(this.port)
+				.status(this.status)
+				.version(this.version)
+				.build();
+	}
 }

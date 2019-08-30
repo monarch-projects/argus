@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
  * @author starboyate
  */
 @RestController
-public class DashboardController {
+public class DashboardController extends BaseController {
 }

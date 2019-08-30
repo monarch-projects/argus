@@ -5,14 +5,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.model.entities.InstanceMetadata;
+import org.titan.argus.model.request.ArgusUrlMappingRequest;
 import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.model.vo.InstanceMetadataVO;
 import org.titan.argus.model.vo.InstanceVO;
 import org.titan.argus.server.core.ArgusActuatorConstant;
+import org.titan.argus.service.exception.BusinessException;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
  * @author starboyate
  */
 @RestController
-@RequestMapping("/instances")
+@RequestMapping("/api/v1/instances")
 @Api(value = "服务实例操作接口", tags = {"服务实例操作接口"})
 public class InstanceController extends BaseController {
 
@@ -42,15 +45,21 @@ public class InstanceController extends BaseController {
 			@ApiImplicitParam(name = "appName", value = "应用名称", required = true, paramType = "query", dataType = "String")
 	})
 	public BaseResponse getInstanceByAppName(@PathVariable String appName) {
-		return BaseResponse.success(instanceService.getInstanceByAppName(appName));
+		List<InstanceVO> collect = instanceService.getInstanceByAppName(appName).stream()
+				.map(item -> InstanceVO.builder().status(item.getStatus()).id(item.getId()).appName(item.getAppName())
+						.build()).collect(Collectors.toList());
+		return BaseResponse.success(collect);
 	}
 
 	@ApiOperation(value = "获取指定服务详细信息(元数据)", notes = "通过服务实例ID来获取服务实例详细信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "id", value = "实例ID(instance id not app id)", required = true, paramType = "query", dataType = "String")
+	})
 	@GetMapping("/{id}/metadata")
 	public BaseResponse getMetadata(@PathVariable String id) {
 		InstanceMetadata instanceMetadata = this.getAllInstanceMetadata().stream().filter(metadata -> metadata.getId().equals(id))
 				.findFirst().orElse(null);
-		InstanceMetadataVO metadataVO = new InstanceMetadataVO();
+		InstanceMetadataVO metadataVO;
 		if (null == instanceMetadata) {
 			ArgusInstance instance = this.instanceService.getInstanceById(id);
 			String url = getUrl(instance.getHomePageUrl(), ArgusActuatorConstant.META_INFO);
@@ -58,7 +67,7 @@ public class InstanceController extends BaseController {
 			try {
 				entity = httpClient.doGet(url);
 			} catch (Exception ex) {
-				return BaseResponse.error(ex.getMessage());
+				throw new BusinessException(ex.getMessage());
 			}
 			metadataVO = JSON.parseObject(entity, InstanceMetadataVO.class);
 			metadataVO.setAppName(instance.getAppName());
@@ -68,7 +77,7 @@ public class InstanceController extends BaseController {
 			metadataVO.setPort(instance.getPort());
 			metadataVO.setStatus(instance.getStatus());
 		} else {
-			BeanUtils.copyProperties(instanceMetadata, metadataVO);
+			metadataVO = instanceMetadata.convertToInstanceMetadataVO();
 		}
 		return BaseResponse.success(metadataVO);
 	}
@@ -92,15 +101,21 @@ public class InstanceController extends BaseController {
 	}
 
 	@ApiOperation(value = "动态修改指定服务实例的jvm参数", notes = "通过服务实例ID来动态调整jvm参数")
-	@PostMapping("/{id}/jvm")
+	@PutMapping("/{id}/jvm")
 	public BaseResponse dynamicChangeJvmArgus(@PathVariable String id, @RequestBody Map<String, String> map) {
-		return proxyPost(ArgusActuatorConstant.JVM_ARGS, id, map);
+		return proxyPut(ArgusActuatorConstant.JVM_ARGS, id, map);
 	}
 
 	@ApiOperation(value = "获取指定服务实例的url mappings信息", notes = "通过服务实例ID来获取url mappings信息")
 	@GetMapping("/{id}/urlMappings")
 	public BaseResponse getUrlMappings(@PathVariable String id) {
 		return proxyGet(ArgusActuatorConstant.URL_MAPPINGS, id);
+	}
+
+	@ApiOperation(value = "动态调整hystrix配置", notes = "动态调整hystrix配置")
+	@PutMapping("/{id}/fallback")
+	public BaseResponse fallback(@PathVariable String id,@RequestBody ArgusUrlMappingRequest urlMappingRequest) {
+		return proxyPut(ArgusActuatorConstant.FALLBAK, id, urlMappingRequest);
 	}
 
 

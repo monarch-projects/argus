@@ -4,8 +4,8 @@ package org.titan.argus.tools.alarm.handler;
 import com.alibaba.fastjson.JSON;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.titan.argus.tools.alarm.entities.Alarm;
-import org.titan.argus.tools.alarm.entities.MailAlarm;
+import org.titan.argus.model.entities.Alarm;
+import org.titan.argus.model.entities.AlarmLog;
 
 /**
  * @author starboyate
@@ -17,13 +17,12 @@ public class EmailSender implements Sender {
 		this.sender = sender;
 	}
 	@Override
-	public void send(Alarm alarm) {
-		MailAlarm mailAlarm = (MailAlarm) alarm;
+	public void send(AlarmLog alarm) {
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(mailAlarm.getFrom());
-		message.setTo(mailAlarm.getTo());
-		message.setSubject(mailAlarm.getSubject());
-		message.setText(JSON.toJSONString(mailAlarm.getBody()));
+		message.setFrom(alarm.getAccount());
+		message.setTo(alarm.getTo());
+		message.setSubject(alarm.getSubject());
+		message.setText(alarm.getBody());
 		sender.send(message);
 	}
 }

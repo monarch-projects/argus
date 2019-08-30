@@ -89,6 +89,17 @@
             <artifactId>argus-plugin-fallback-hystrix</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-mongodb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-redis</artifactId>
+        </dependency>
+
+
 
     </dependencies>
 
