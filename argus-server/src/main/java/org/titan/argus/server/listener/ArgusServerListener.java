@@ -9,7 +9,7 @@ import org.titan.argus.service.AlarmLogService;
 /**
  * @author starboyate
  */
-@Component
+//@Component
 public class ArgusServerListener {
 	private final AlarmLogService alarmLogService;
 	public ArgusServerListener(AlarmLogService alarmLogService) {
