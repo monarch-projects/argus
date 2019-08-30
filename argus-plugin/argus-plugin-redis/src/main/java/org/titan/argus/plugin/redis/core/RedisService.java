@@ -48,34 +48,14 @@ public class RedisService {
 			});
 			info.setIsSentinel(true).setNodeList(list);
 		} else {
-		}
-		this.template.getConnectionFactory().getClusterConnection().clusterGetNodes();
-		this.template.getConnectionFactory().getSentinelConnection().masters();
-		if (this.properties.getCluster() != null) {
-			nodeList = this.properties.getCluster().getNodes();
-			info.setIsCluster(Boolean.TRUE);
-		} else if (this.properties.getSentinel() != null) {
-			nodeList = this.properties.getSentinel().getNodes();
-			info.setIsSentinel(Boolean.TRUE);
-		} else {
 			info.setNodeList(new ArrayList<RedisNode>(
-					Arrays.asList(
-							RedisNode.builder()
-									.host(this.properties.getHost())
-									.port(this.properties.getPort()).build())
+							Arrays.asList(
+									RedisNode.builder()
+											.host(this.properties.getHost())
+											.port(this.properties.getPort()).build())
 					)
 			);
-			return info;
 		}
-		info.setNodeList(nodeList.stream()
-						.map(item ->
-								RedisNode.builder()
-										.host(item.substring(0, item.lastIndexOf(":")))
-										.port(Integer.valueOf(item.substring(item.lastIndexOf(":"))))
-										.build()
-						)
-						.collect(Collectors.toList())
-		);
 		return info;
 	}
 
