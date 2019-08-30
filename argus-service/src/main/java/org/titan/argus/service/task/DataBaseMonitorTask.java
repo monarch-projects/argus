@@ -35,6 +35,8 @@ public class DataBaseMonitorTask {
     private DataBaseMonitorOriginDataRepository dataRepository;
     private static final int size = 20;
     private LambdaQueryWrapper<DataBaseMonitor> wrapper = new LambdaQueryWrapper<>();
+    @Autowired
+    private DataBaseMonitorTaskAsync taskAsync;
 
     private Map<String, JdbcTemplate> map = new HashMap<>();
 
@@ -48,7 +50,7 @@ public class DataBaseMonitorTask {
             monitors.forEach(monitor -> {
                 try {
                     JdbcTemplate template = this.getDataSource(monitor);
-                    Map<String, Object> r = template.query("show global status", rs -> {
+                    Map<String, Object> r = template.query(this.getSql(), rs -> {
                         while (rs.next()) {
                             ret.put(rs.getString("Variable_name"), rs.getObject("Value"));
                         }
@@ -58,9 +60,8 @@ public class DataBaseMonitorTask {
                     DataBaseMonitorOriginData data = new DataBaseMonitorOriginData();
                     data.setMap(r).setPort(monitor.getPort()).setDbName(monitor.getDbName()).setIp(monitor.getHost())
                             .setId(SnowFakeIdUtil.snowFakeId()).setTime(now);
-
-                    this.dataRepository.save(data);
                     ret.clear();
+                    this.taskAsync.doAsync(data);
                 } catch (Exception e) {
                     log.error("error to execute task", e);
                 }
@@ -87,8 +88,15 @@ public class DataBaseMonitorTask {
 //        System.out.println();
 //    }
 
+    private String getSql() {
+
+        return "show global status";
+    }
+
     private JdbcTemplate getDataSource(DataBaseMonitor monitor) {
-        String key = monitor.getHost() + "_" + monitor.getPort() + "_" + monitor.getDbName() + "_" + monitor.getUsername() + "_" + monitor.getPassword();
+        String key = monitor.getHost() + "_" + monitor.getPort() + "_" + monitor.getDbName() + "_" + monitor.getUsername()
+                + "_" + monitor.getPassword();
+
         JdbcTemplate template = map.get(key);
 
         if (Objects.isNull(template)) {
