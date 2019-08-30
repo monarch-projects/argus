@@ -13,8 +13,8 @@ import org.titan.argus.plugin.redis.core.RedisService;
 @ConditionalOnClass(name = "org.springframework.data.redis.core.RedisTemplate")
 @Configuration
 public class ArgusRedisAutoConfig {
-	@Bean
-	public RedisService redisService(RedisTemplate template, RedisProperties properties) {
-		return new RedisService(template, properties);
-	}
+    @Bean
+    public RedisService redisService(RedisTemplate redisTemplate, RedisProperties properties) {
+        return new RedisService(redisTemplate, properties);
+    }
 }
