@@ -11,6 +11,10 @@
     <name>argus-model</name>
     <artifactId>argus-model</artifactId>
 
+    <properties>
+        <mybatis-plus.version>3.1.2</mybatis-plus.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -27,16 +31,9 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.2.0</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-core -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-core</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-
+        
         <dependency>
             <groupId>org.titan</groupId>
             <artifactId>argus-util</artifactId>

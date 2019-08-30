@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   org.titan.argus.plugin.ratelimit.guava.LimiterCacheInitializer,\
   org.titan.argus.plugin.ratelimit.guava.proxy.RateLimitAspect,\
-  org.titan.argus.plugin.ratelimit.guava.listener.EventBusListener
+  org.titan.argus.plugin.ratelimit.guava.listener.RateLimiterBusListener

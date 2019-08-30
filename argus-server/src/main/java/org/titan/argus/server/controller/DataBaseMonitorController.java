@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.entities.DataBaseMonitor;
 import org.titan.argus.model.request.AddDataBaseMonitorRequest;
 import org.titan.argus.model.request.UpdateDataBaseMonitorRequest;
-import org.titan.argus.model.response.ObjectCollectionResponse;
-import org.titan.argus.model.response.ObjectDataResponse;
+import org.titan.argus.server.response.ObjectCollectionResponse;
+import org.titan.argus.server.response.ObjectDataResponse;
 import org.titan.argus.service.exception.BusinessException;
 import org.titan.argus.service.impl.DataBaseMonitorServiceImpl;
 

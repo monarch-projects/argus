@@ -24,11 +24,21 @@ public class RateLimiterCache {
         String key = className + "_" + methodName + "_" + cacheData.getLimit();
         RateLimiter limiter = MAP.get(key);
         if (Objects.isNull(limiter)) {
-            log.info("{} get limiter is null",key);
+            log.info("{} get limiter is null", key);
             limiter = RateLimiter.create(cacheData.getLimit());
             MAP.put(key, limiter);
         }
 
+        return limiter;
+    }
+
+
+    public static RateLimiter updateLimiter(String className, String methodName, CacheData cacheData) {
+        String tmp = className + "_" + methodName;
+        String key = tmp + "_" + cacheData.getLimit();
+        RateLimiter limiter = RateLimiter.create(cacheData.getLimit());
+        MAP.put(key, limiter);
+        MAP.entrySet().removeIf(e -> e.getKey().startsWith(tmp) && e.getKey().equals(key));
         return limiter;
     }
 
