@@ -1,11 +1,10 @@
 package org.titan.argus.model.message;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.titan.argus.model.request.RateLimitClientDataRequest;
+import org.titan.argus.util.JsonUtil;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -16,15 +15,14 @@ import java.util.Collection;
  */
 @Data
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-public class RateLimiterAppStartMessage extends BaseMessage implements Serializable {
+public class RateLimiterAppStartMessage implements ArgusMessage {
 
     private Collection<RateLimitClientDataRequest> data;
 
     private String appName;
 
-
-    public RateLimiterAppStartMessage() {
-        this.setType(BaseMessage.RATE_LIMIT_ONLINE);
+    @Override
+    public String json() {
+        return JsonUtil.encode(this);
     }
 }

@@ -3,8 +3,8 @@ package org.titan.argus.model.message;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.titan.argus.model.dto.RateLimitConfigDTO;
+import org.titan.argus.util.JsonUtil;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -15,12 +15,13 @@ import java.util.Collection;
  */
 @Data
 @Accessors(chain = true)
-public class UpdateRateLimitMessage extends BaseMessage implements Serializable {
+public class UpdateRateLimitMessage implements ArgusMessage {
 
     private Collection<RateLimitConfigDTO> configs;
 
 
-    public UpdateRateLimitMessage() {
-        this.setType(BaseMessage.RATE_LIMIT_UPDATE);
+    @Override
+    public String json() {
+        return JsonUtil.encode(this);
     }
 }

@@ -1,8 +1,8 @@
 package org.titan.argus.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.vip.vjtools.vjkit.mapper.BeanMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.titan.argus.model.entities.DataBaseMonitor;
@@ -27,7 +27,8 @@ public class DataBaseMonitorServiceImpl extends ServiceImpl<DataBaseMonitorMappe
 
     public boolean add(AddDataBaseMonitorRequest request) {
         long now = DateUtil.currentTime();
-        DataBaseMonitor monitor = BeanMapper.map(request, DataBaseMonitor.class);
+        DataBaseMonitor monitor = new DataBaseMonitor();
+        BeanUtils.copyProperties(request, monitor);
         monitor.setCreated(now).setUpdated(now);
 
         return this.save(monitor);
@@ -40,7 +41,7 @@ public class DataBaseMonitorServiceImpl extends ServiceImpl<DataBaseMonitorMappe
             throw new BusinessException("该内容不存在！");
 
         long now = DateUtil.currentTime();
-        monitor = BeanMapper.map(request, DataBaseMonitor.class);
+        BeanUtils.copyProperties(request, monitor);
         monitor.setUpdated(now);
 
         return this.updateById(monitor);

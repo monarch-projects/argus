@@ -1,21 +1,17 @@
 package org.titan.argus.plugin.ratelimit.guava.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 import org.titan.argus.model.dto.RateLimitConfigDTO;
-import org.titan.argus.model.message.BaseMessage;
+import org.titan.argus.model.message.EventBusMessage;
 import org.titan.argus.model.message.RateLimiterAppStartMessage;
 import org.titan.argus.model.message.UpdateRateLimitMessage;
 import org.titan.argus.model.request.RateLimitClientDataRequest;
+import org.titan.argus.plugin.ratelimit.commons.util.EventBusUtil;
 import org.titan.argus.plugin.ratelimit.guava.cache.CacheData;
 import org.titan.argus.plugin.ratelimit.guava.cache.RateLimitDataCache;
 import org.titan.argus.plugin.ratelimit.guava.cache.RateLimiterCache;
@@ -32,30 +28,27 @@ import java.util.stream.Collectors;
  * @Author: daozhang
  * @date: 2019/8/28
  */
-@Configuration
+
 @Slf4j
-@RabbitListener(bindings = {@QueueBinding(value = @org.springframework.amqp.rabbit.annotation.Queue,
-        key = {"argus-rate-limit"}, exchange = @Exchange(value = "argus-rate-limit"))})
+@Configuration
 public class RateLimiterBusListener implements InitializingBean {
 
     @Value("${spring.application.name}")
     private String appName;
 
-
     @Autowired
-    private AmqpTemplate template;
+    private EventBusUtil busUtil;
 
-    @RabbitHandler
-    public void process(BaseMessage message) {
 
+    public void process(EventBusMessage message) {
         log.info("收到限流消息总线通知：{}", message);
-
         switch (message.getType()) {
-            case BaseMessage.RATE_LIMIT_UPDATE:
-                this.doUpdateRateLimit(message.convert());
+            case EventBusMessage.RATE_LIMIT_UPDATE:
+                this.doUpdateRateLimit(message.convert(UpdateRateLimitMessage.class));
+            case EventBusMessage.RATE_LIMIT_CONFIGS:
+                this.doUpdateRateLimit(message.convert(UpdateRateLimitMessage.class));
             default:
-            case BaseMessage.RATE_LIMIT_CONFIGS:
-                this.doUpdateRateLimit(message.convert());
+                return;
         }
     }
 
@@ -88,14 +81,14 @@ public class RateLimiterBusListener implements InitializingBean {
         log.info("本地限流策略：{}", requests);
 
         if (requests.isEmpty()) {
-            this.template.convertAndSend(BaseMessage.RATE_LIMIT_MESSAGE_KEY, new RateLimiterAppStartMessage().setAppName(this.appName)
-                    .setData(Collections.emptyList()));
+
+            this.busUtil.sendMessage(EventBusMessage.RATE_LIMIT_ONLINE, new RateLimiterAppStartMessage().setAppName(this.appName).setData(Collections.emptyList()));
+
             log.info("推送本地限流策略完毕！");
             return;
         }
 
-        this.template.convertAndSend(BaseMessage.RATE_LIMIT_MESSAGE_KEY, new RateLimiterAppStartMessage().setData(requests)
-                .setAppName(this.appName));
+        this.busUtil.sendMessage(EventBusMessage.RATE_LIMIT_ONLINE, new RateLimiterAppStartMessage().setData(requests).setAppName(this.appName));
 
         log.info("推送本地限流策略完毕！");
     }

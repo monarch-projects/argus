@@ -33,7 +33,7 @@
             <artifactId>mybatis-plus-annotation</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.titan</groupId>
             <artifactId>argus-util</artifactId>
