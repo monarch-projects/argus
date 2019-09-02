@@ -1,5 +1,6 @@
 package org.titan.argus.server.initializer;
 
+
 /**
  * @author starboyate
  */

@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author starboyate
  */
-public abstract class AbstractArgusNodeInitializer<T> implements ArgusInitializer {
+public abstract class AbstractArgusNodeInitializer implements ArgusInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(AbstractArgusNodeInitializer.class);
 
 	 final InstanceService instanceService;

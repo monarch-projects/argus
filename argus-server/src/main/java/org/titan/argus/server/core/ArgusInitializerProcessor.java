@@ -1,26 +1,34 @@
 package org.titan.argus.server.core;
 
-import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 import org.titan.argus.server.initializer.ArgusInitializer;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author starboyate
  */
-public class ArgusInitializerProcessor {
-	private static final Logger logger = LoggerFactory.getLogger(ArgusServerInitializer.class);
+@Component
+public class ArgusInitializerProcessor implements ApplicationListener<ApplicationStartedEvent>, ApplicationContextAware {
+	private ApplicationContext applicationContext;
 
-
-	public static void loadInitializer() {
-		List<Class<ArgusInitializer>> allSubClass = Lists.newArrayList();
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Class<? extends ClassLoader> loaderClass = loader.getClass();
-//		try {
-//
-//		}
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 
+	@Override
+	public void onApplicationEvent(ApplicationStartedEvent event) {
+		init();
+	}
+
+	private void init() {
+		Collection<ArgusInitializer> values = this.applicationContext.getBeansOfType(ArgusInitializer.class).values();
+		this.applicationContext.getBeansOfType(ArgusInitializer.class).values().forEach(ArgusInitializer::init);
+	}
 }

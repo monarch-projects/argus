@@ -1,5 +1,3 @@
-server:
-  port: 8761
 
 spring:
   application:
@@ -11,3 +9,6 @@ eureka:
     fetch-registry: false
     service-url:
       dafaultZone: http://localhost:8761/eureka/
+
+server:
+  port: 8761

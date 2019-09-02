@@ -57,6 +57,12 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusMongdbEndpoint(service);
 	}
 
+	@ConditionalOnBean({ArgusGatewayConfig.class})
+	@Bean
+	public ArgusRouteEndpoint argusRouteEndpoint() {
+		return new ArgusRouteEndpoint();
+	}
+
 
 	@Configuration
 	@ConditionalOnWebApplication(type = SERVLET)
@@ -77,10 +83,6 @@ public class ArgusClientAutoConfiguration {
 	@Configuration
 	@ConditionalOnWebApplication(type = REACTIVE)
 	protected static class ArgusClientReactiveAutoConfiguration {
-		@Bean
-		public ArgusRouteEndpoint argusRouteEndpoint() {
-			return new ArgusRouteEndpoint();
-		}
 
 		@Bean
 		public ArgusReactiveUrlMappingEndpoint argusReactiveUrlMappingEndpoint() {
