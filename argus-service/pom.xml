@@ -16,10 +16,20 @@
             <groupId>org.titan</groupId>
             <artifactId>argus-storage-mysql</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-storage-es</artifactId>
+            <version>1.0.0.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.titan</groupId>
             <artifactId>argus-discovery-eureka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-util</artifactId>
+            <version>1.0.0.RELEASE</version>
         </dependency>
 
         <dependency>

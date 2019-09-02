@@ -21,8 +21,8 @@ public class ArgusServerListener {
 		this.alarmLogService.save(event.getLog());
 	}
 
-	@EventListener
-	public void register
+//	@EventListener
+//	public void register
 
 
 }

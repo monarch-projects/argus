@@ -47,13 +47,13 @@
     },
     {
       "name": "management.endpoint.url-mappings",
-      "type": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint"
     },
     {
       "name": "management.endpoint.url-mappings",
-      "type": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint"
     },
     {
       "name": "management.trace.http",
@@ -150,28 +150,28 @@
       "name": "management.endpoint.url-mappings.cache.time-to-live",
       "type": "java.time.Duration",
       "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
       "defaultValue": "0ms"
     },
     {
       "name": "management.endpoint.url-mappings.cache.time-to-live",
       "type": "java.time.Duration",
       "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
       "defaultValue": "0ms"
     },
     {
       "name": "management.endpoint.url-mappings.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the urlMappings endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
       "defaultValue": true
     },
     {
       "name": "management.endpoint.url-mappings.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the urlMappings endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusUrlMappingEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusReactiveUrlMappingEndpoint",
       "defaultValue": true
     },
     {

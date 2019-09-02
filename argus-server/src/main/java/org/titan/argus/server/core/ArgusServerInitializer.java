@@ -17,7 +17,7 @@ import org.titan.argus.network.httpclient.util.ArgusHttpClient;
 import org.titan.argus.service.AlarmService;
 import org.titan.argus.service.InstanceService;
 import org.titan.argus.tools.alarm.core.AlarmHolder;
-import org.titan.argus.tools.alarm.core.ArgusMiddleWareNodeHolder;
+import org.titan.argus.tools.alarm.core.MiddleWareNodeHolder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +76,7 @@ public class ArgusServerInitializer implements ApplicationListener<ContextRefres
 			try {
 				String entity = httpClient.doGet(url);
 				RedisNodeInfo info = JSONObject.parseObject(entity, RedisNodeInfo.class);
-				ArgusMiddleWareNodeHolder.addRedisNodeInfo(info);
+				MiddleWareNodeHolder.addRedisNodeInfo(info);
 			} catch (Exception ex) {
 				logger.error("http client get fail: {}", ex.getMessage());
 			}
@@ -90,7 +90,7 @@ public class ArgusServerInitializer implements ApplicationListener<ContextRefres
 			try {
 				String entity = httpClient.doGet(url);
 				MongodbNodeInfo info = JSONObject.parseObject(entity, MongodbNodeInfo.class);
-				ArgusMiddleWareNodeHolder.addMongodbNodeInfo(info);
+				MiddleWareNodeHolder.addMongodbNodeInfo(info);
 			} catch (Exception ex) {
 				logger.error("http client get fail: {}", ex.getMessage());
 			}
