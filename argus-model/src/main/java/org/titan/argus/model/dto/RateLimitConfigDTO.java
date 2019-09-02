@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class RateLimitConfigDTO {
+    private Long id;
     private String clzName;
     private String methodName;
     private Integer limit;

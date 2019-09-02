@@ -15,4 +15,6 @@ public class AddDataBaseMonitorRequest {
     private String dbName;
     private String username;
     private String password;
+    //默认mysql
+    private Short type = 1;
 }

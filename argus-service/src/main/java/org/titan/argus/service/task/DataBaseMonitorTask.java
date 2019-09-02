@@ -3,6 +3,7 @@ package org.titan.argus.service.task;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -28,13 +29,15 @@ import java.util.Objects;
  */
 @Component
 @Slf4j
-public class DataBaseMonitorTask {
+public class DataBaseMonitorTask implements InitializingBean {
     @Autowired
     private DataBaseMonitorServiceImpl monitorService;
     @Autowired
     private DataBaseMonitorOriginDataRepository dataRepository;
     private static final int size = 20;
-    private LambdaQueryWrapper<DataBaseMonitor> wrapper = new LambdaQueryWrapper<>();
+    private LambdaQueryWrapper<DataBaseMonitor> wrapper;
+    @Autowired
+    private DataBaseMonitorTaskAsync taskAsync;
 
     private Map<String, JdbcTemplate> map = new HashMap<>();
 
@@ -48,7 +51,7 @@ public class DataBaseMonitorTask {
             monitors.forEach(monitor -> {
                 try {
                     JdbcTemplate template = this.getDataSource(monitor);
-                    Map<String, Object> r = template.query("show global status", rs -> {
+                    Map<String, Object> r = template.query(this.getSql(monitor), rs -> {
                         while (rs.next()) {
                             ret.put(rs.getString("Variable_name"), rs.getObject("Value"));
                         }
@@ -58,9 +61,8 @@ public class DataBaseMonitorTask {
                     DataBaseMonitorOriginData data = new DataBaseMonitorOriginData();
                     data.setMap(r).setPort(monitor.getPort()).setDbName(monitor.getDbName()).setIp(monitor.getHost())
                             .setId(SnowFakeIdUtil.snowFakeId()).setTime(now);
-
-                    this.dataRepository.save(data);
                     ret.clear();
+                    this.taskAsync.doAsync(data);
                 } catch (Exception e) {
                     log.error("error to execute task", e);
                 }
@@ -69,32 +71,26 @@ public class DataBaseMonitorTask {
     }
 
 
-//    public static void main(String[] args) {
-//        Map<String, Object> map = new HashMap<>();
-//        DriverManagerDataSource source = new DriverManagerDataSource();
-//        source.setDriverClassName("com.mysql.jdbc.Driver");
-//        source.setUrl("jdbc:mysql://localhost:3306/mysql");
-//        source.setUsername("root");
-//        source.setPassword("zyp231021");
-//        JdbcTemplate template = new JdbcTemplate(source);
-//        Map<String, Object> m = template.query("show global status", rs -> {
-//            while (rs.next()) {
-//                map.put(rs.getString("Variable_name"), rs.getObject("Value"));
-//            }
-//            return map;
-//        });
-//
-//        System.out.println();
-//    }
+    private String getSql(DataBaseMonitor monitor) {
+        switch (monitor.getType()) {
+            case 1:
+                return "show global status";
+            default:
+                return "show global status";
+        }
+
+    }
 
     private JdbcTemplate getDataSource(DataBaseMonitor monitor) {
-        String key = monitor.getHost() + "_" + monitor.getPort() + "_" + monitor.getDbName() + "_" + monitor.getUsername() + "_" + monitor.getPassword();
+        String key = monitor.getHost() + "_" + monitor.getPort() + "_" + monitor.getDbName() + "_" + monitor.getUsername()
+                + "_" + monitor.getPassword();
+
         JdbcTemplate template = map.get(key);
 
         if (Objects.isNull(template)) {
             DriverManagerDataSource source = new DriverManagerDataSource();
-            source.setDriverClassName("com.mysql.jdbc.Driver");
-            source.setUrl("jdbc:mysql://" + monitor.getHost() + ":" + monitor.getPort() + "/" + monitor.getDbName());
+            source.setDriverClassName(this.getDriverClassName(monitor));
+            source.setUrl(this.buildUrl(monitor));
             source.setUsername(monitor.getUsername());
             source.setPassword(monitor.getPassword());
             try {
@@ -106,5 +102,31 @@ public class DataBaseMonitorTask {
         }
 
         return template;
+    }
+
+    private String getDriverClassName(DataBaseMonitor monitor) {
+        switch (monitor.getType()) {
+            case 1:
+                return "com.mysql.jdbc.Driver";
+            default:
+                return "com.mysql.jdbc.Driver";
+        }
+    }
+
+    private String buildUrl(DataBaseMonitor monitor) {
+        switch (monitor.getType()) {
+            case 1:
+                return "jdbc:mysql://" + monitor.getHost() + ":" + monitor.getPort() + "/" + monitor.getDbName();
+            default:
+                return "jdbc:mysql://" + monitor.getHost() + ":" + monitor.getPort() + "/" + monitor.getDbName();
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        LambdaQueryWrapper<DataBaseMonitor> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(DataBaseMonitor::getStatus, 1);
+
+        this.wrapper = wrapper;
     }
 }

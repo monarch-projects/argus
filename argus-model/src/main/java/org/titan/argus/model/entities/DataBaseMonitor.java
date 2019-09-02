@@ -27,6 +27,10 @@ public class DataBaseMonitor {
     private String password;
     private Long created;
     private Long updated;
+    //0 停止  1 运行
+    private Short status;
+    //1 mysql
+    private Short type;
     @TableLogic
     private Boolean deleted;
 }

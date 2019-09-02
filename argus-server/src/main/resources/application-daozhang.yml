@@ -15,7 +15,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/argus?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT
     username: root
-    password:
+    password: zyp231021
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
@@ -31,6 +31,17 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9300
+      cluster-name: elasticsearch
+      properties:
+        client.transport.sniff: true
 
 server:
   port: 8087
@@ -48,6 +59,9 @@ eureka:
       zone-1: http://localhost:8761/eureka/
       zone-2: http://localhost:8761/eureka/
 
-
-
-
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-not-delete-value: false
+      logic-delete-value: true
+      db-type: mysql

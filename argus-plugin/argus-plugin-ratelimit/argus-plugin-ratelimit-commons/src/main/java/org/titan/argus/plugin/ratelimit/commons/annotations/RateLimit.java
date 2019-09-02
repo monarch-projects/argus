@@ -14,5 +14,5 @@ import java.lang.annotation.*;
 public @interface RateLimit {
     int limit() default 10;
 
-    long waitTime() default 500;
+    int waitTime() default 500;
 }

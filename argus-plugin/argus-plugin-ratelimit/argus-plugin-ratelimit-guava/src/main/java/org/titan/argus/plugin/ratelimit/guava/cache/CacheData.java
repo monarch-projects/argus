@@ -16,5 +16,5 @@ import java.util.concurrent.TimeUnit;
 public class CacheData {
     private int limit;
 
-    private long waitTime;
+    private int waitTime;
 }

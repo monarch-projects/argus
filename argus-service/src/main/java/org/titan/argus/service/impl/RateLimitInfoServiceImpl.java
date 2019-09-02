@@ -58,7 +58,7 @@ public class RateLimitInfoServiceImpl extends ServiceImpl<RateLimitInfoMapper, R
         return this.list(wrapper).stream()
                 .map(info ->
                         new RateLimitConfigDTO().setClzName(info.getClzName()).setMethodName(info.getMethodName())
-                                .setLimit(info.getLimit()).setWaitTime(info.getWaitTime()))
+                                .setLimit(info.getLimit()).setWaitTime(info.getWaitTime()).setId(info.getId()))
                 .collect(Collectors.toList());
     }
 

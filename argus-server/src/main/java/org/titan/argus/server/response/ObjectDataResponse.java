@@ -1,4 +1,4 @@
-package org.titan.argus.model.response;
+package org.titan.argus.server.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

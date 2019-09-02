@@ -1,11 +1,12 @@
-package org.titan.argus.service.exception;
+package org.titan.argus.server.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.titan.argus.model.response.ObjectDataResponse;
+import org.titan.argus.server.response.ObjectDataResponse;
+import org.titan.argus.service.exception.BusinessException;
 
 /**
  * @Title: GlobalExceptionHandler
