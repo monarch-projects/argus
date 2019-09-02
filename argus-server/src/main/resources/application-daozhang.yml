@@ -36,6 +36,10 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      direct:
+        consumers-per-queue: 100
+
   data:
     elasticsearch:
       cluster-nodes: localhost:9300

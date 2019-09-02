@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.dto.RateLimitConfigDTO;
 import org.titan.argus.model.entities.RateLimitInfo;
-import org.titan.argus.model.message.BaseMessage;
+import org.titan.argus.model.message.EventBusMessage;
 import org.titan.argus.model.message.UpdateRateLimitMessage;
+import org.titan.argus.plugin.ratelimit.commons.util.EventBusUtil;
 import org.titan.argus.server.response.ObjectCollectionResponse;
 import org.titan.argus.server.response.ObjectDataResponse;
 import org.titan.argus.service.RateLimitInfoService;
@@ -19,6 +19,7 @@ import org.titan.argus.service.exception.BusinessException;
 import org.titan.argus.service.util.DateUtil;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,7 +36,7 @@ public class RateLimitController {
     @Autowired
     private RateLimitInfoService infoService;
     @Autowired
-    private AmqpTemplate template;
+    private EventBusUtil busUtil;
 
 
     @GetMapping("/appName/page")
@@ -61,10 +62,10 @@ public class RateLimitController {
         info.setUpdated(DateUtil.currentTime()).setLimit(limit).setWaitTime(waitTime);
 
         if (this.infoService.updateById(info)) {
+            List<RateLimitConfigDTO> configs = Collections.singletonList(new RateLimitConfigDTO().setClzName(info.getClzName()).setMethodName(info.getMethodName())
+                    .setLimit(info.getLimit()).setWaitTime(info.getWaitTime()));
 
-            this.template.convertAndSend(BaseMessage.RATE_LIMIT_MESSAGE_KEY, new UpdateRateLimitMessage()
-                    .setConfigs(Collections.singletonList(new RateLimitConfigDTO().setClzName(info.getClzName()).setMethodName(info.getMethodName())
-                            .setLimit(info.getLimit()).setWaitTime(info.getWaitTime()))).setType(BaseMessage.RATE_LIMIT_UPDATE));
+            this.busUtil.sendMessage(EventBusMessage.RATE_LIMIT_UPDATE, new UpdateRateLimitMessage().setConfigs(configs));
 
             return new ObjectDataResponse<>(true);
 

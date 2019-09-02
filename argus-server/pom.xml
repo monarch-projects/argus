@@ -65,8 +65,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-plugin-ratelimit-commons</artifactId>
+            <version>1.0.0.RELEASE</version>
         </dependency>
 
         <dependency>

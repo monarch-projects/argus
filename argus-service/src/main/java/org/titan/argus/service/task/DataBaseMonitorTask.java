@@ -41,33 +41,34 @@ public class DataBaseMonitorTask implements InitializingBean {
 
     private Map<String, JdbcTemplate> map = new HashMap<>();
 
-    private Map<String, Object> ret = new HashMap<>(32, 4.0F);
 
     @Scheduled(cron = "0 0/1 * * * ?")
     public void run() {
+        log.info("开始执行mysql监控任务");
         long now = DateUtil.currentTime();
         Collection<DataBaseMonitor> monitors;
         while (!(monitors = this.monitorService.page(new Page<>(1, size), wrapper).getRecords()).isEmpty()) {
+            Map<String, Object> map = new HashMap<>();
             monitors.forEach(monitor -> {
                 try {
                     JdbcTemplate template = this.getDataSource(monitor);
                     Map<String, Object> r = template.query(this.getSql(monitor), rs -> {
                         while (rs.next()) {
-                            ret.put(rs.getString("Variable_name"), rs.getObject("Value"));
+                            map.put(rs.getString("Variable_name"), rs.getObject("Value"));
                         }
-                        return ret;
+                        return map;
                     });
 
                     DataBaseMonitorOriginData data = new DataBaseMonitorOriginData();
                     data.setMap(r).setPort(monitor.getPort()).setDbName(monitor.getDbName()).setIp(monitor.getHost())
                             .setId(SnowFakeIdUtil.snowFakeId()).setTime(now);
-                    ret.clear();
                     this.taskAsync.doAsync(data);
                 } catch (Exception e) {
                     log.error("error to execute task", e);
                 }
             });
         }
+        log.info("结束执行mysql监控任务");
     }
 
 

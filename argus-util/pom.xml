@@ -22,13 +22,6 @@
             <artifactId>jackson-mapper-lgpl</artifactId>
             <version>1.7.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.vip.vjtools/vjkit -->
-        <dependency>
-            <groupId>com.vip.vjtools</groupId>
-            <artifactId>vjkit</artifactId>
-            <version>1.0.8</version>
-        </dependency>
-
 
     </dependencies>
 </project>

@@ -21,7 +21,7 @@ import java.util.Objects;
 @Slf4j
 public class ArgusControllerLoggingAdvice {
 
-    @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Around("@annotation(org.springframework.web.bind.annotation.GetMapping)")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object[] objects = point.getArgs();
 
@@ -43,6 +43,12 @@ public class ArgusControllerLoggingAdvice {
         log.info("方法 {}.{} 被调用,返回值:{}", signature.getDeclaringTypeName(), method.getName(), result.toString());
 
         return result;
+    }
+
+
+    @Around("@annotation(org.springframework.web.bind.annotation.PostMapping)")
+    public Object around1(ProceedingJoinPoint point) throws Throwable {
+        return this.around(point);
     }
 
 }
