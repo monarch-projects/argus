@@ -21,6 +21,7 @@ public class ArgusUrlMappingEndpoint {
 	@HystrixFallback
 	@ReadOperation
 	public Map getAllMappings() {
+
 		return this.argusUrlMappingsRepository.getAllUrlMappings();
 	}
 

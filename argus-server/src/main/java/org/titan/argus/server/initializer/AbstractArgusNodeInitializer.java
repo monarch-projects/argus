@@ -3,7 +3,9 @@ package org.titan.argus.server.initializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
+import org.titan.argus.model.entities.InstanceMetadata;
 import org.titan.argus.network.httpclient.util.ArgusHttpClient;
+import org.titan.argus.server.core.InstanceMetadataHolder;
 import org.titan.argus.service.InstanceService;
 
 import java.util.Set;
@@ -14,20 +16,19 @@ import java.util.Set;
 public abstract class AbstractArgusNodeInitializer implements ArgusInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(AbstractArgusNodeInitializer.class);
 
-	 final InstanceService instanceService;
 
-	 final ArgusHttpClient httpClient;
+	final InstanceMetadataHolder instanceMetadataHolder;
 
-	public AbstractArgusNodeInitializer(InstanceService instanceService, ArgusHttpClient httpClient) {
-		this.instanceService = instanceService;
-		this.httpClient = httpClient;
+
+	public AbstractArgusNodeInitializer(InstanceMetadataHolder instanceMetadataHolder) {
+		this.instanceMetadataHolder = instanceMetadataHolder;
 	}
 
-	abstract void initNode(Set<ArgusInstance> instances);
+	abstract void initNode(Set<InstanceMetadata> instances);
 
 	@Override
 	public void init() {
-		Set<ArgusInstance> instances = this.instanceService.findAll();
-		initNode(instances);
+		Set<InstanceMetadata> allInstanceMetadata = this.instanceMetadataHolder.getAllInstanceMetadata();
+		initNode(allInstanceMetadata);
 	}
 }

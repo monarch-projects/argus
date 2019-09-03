@@ -38,6 +38,8 @@ public class InstanceMetadata {
 
 	private Boolean isUsedRabbitMQ;
 
+	private Boolean isUsedMongodb;
+
 	public InstanceMetadataVO convertToInstanceMetadataVO() {
 		return InstanceMetadataVO.builder()
 				.appName(this.appName)
@@ -49,6 +51,7 @@ public class InstanceMetadata {
 				.isGateway(this.isGateway)
 				.isUsedRabbitMQ(this.isUsedRabbitMQ)
 				.isUsedRedis(this.isUsedRedis)
+				.isUsedMongodb(this.isUsedMongodb)
 				.port(this.port)
 				.status(this.status)
 				.version(this.version)

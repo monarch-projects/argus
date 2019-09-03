@@ -9,6 +9,7 @@ import org.titan.argus.model.entities.InstanceMetadata;
 import org.titan.argus.model.request.RouteRequest;
 import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.server.core.ArgusActuatorConstant;
+import org.titan.argus.server.response.ObjectDataResponse;
 
 import java.util.Set;
 
@@ -24,25 +25,15 @@ public class RouteController extends BaseController {
 
 	@ApiOperation(value = "获取网关的所有配置的路由规则", notes = "动态获取项目使用的网关的具体路由信息")
 	@GetMapping
-	public BaseResponse getAllRoutes() {
-		before();
+	public ObjectDataResponse getAllRoutes() {
 		return proxyGet(ArgusActuatorConstant.ROUTE, metadata.getId());
 	}
 
 	@ApiOperation(value = "动态修改网关的路由规则", notes = "动态修改网关的路由规则")
 	@ApiImplicitParam(name = "routeVO", value = "修改的路由信息", required = true, paramType = "query", dataType = "RouteVO")
 	@PutMapping("/{id}")
-	public BaseResponse updateRoute(@PathVariable String id, @RequestBody RouteRequest routeRequest) {
-		before();
+	public ObjectDataResponse updateRoute(@PathVariable String id, @RequestBody RouteRequest routeRequest) {
 		return proxyPut(ArgusActuatorConstant.ROUTE + id, metadata.getId(), routeRequest);
 	}
 
-	private void before() {
-		Set<InstanceMetadata> allInstanceMetadata = getAllInstanceMetadata();
-		for (InstanceMetadata metadata : allInstanceMetadata) {
-			if (metadata.getIsGateway()) {
-				this.metadata = metadata;
-			}
-		}
-	}
 }

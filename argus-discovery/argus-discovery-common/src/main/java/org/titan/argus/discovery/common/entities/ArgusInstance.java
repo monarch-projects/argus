@@ -12,7 +12,7 @@ import java.util.Map;
  */
 @Data
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"eventMap"})
 public class ArgusInstance {
 	private String id;
 

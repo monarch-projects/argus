@@ -11,6 +11,7 @@ import org.titan.argus.discovery.common.disruptor.event.ArgusInstanceRegisteredE
 import org.titan.argus.discovery.common.disruptor.event.ArgusInstanceUnknownEvent;
 import org.titan.argus.discovery.common.disruptor.producer.InstanceEventProducer;
 import org.titan.argus.discovery.common.enums.DiscoveryEventEnum;
+import org.titan.argus.discovery.common.event.InstanceUpdateEvent;
 import org.titan.argus.discovery.common.repository.InstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,7 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	public void update() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
 		loadCache(applications);
+		this.publisher.publishEvent(new InstanceUpdateEvent(this));
 	}
 
 
@@ -146,6 +148,11 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	@Override
 	public Set<ArgusInstance>  findAll() {
 		return this.ALL_INSTANCE_SET;
+	}
+
+	@Override
+	public List<ArgusInstance> page(int fromIndex, int toIndex) {
+		return new ArrayList<>(this.ALL_INSTANCE_SET).subList(fromIndex, toIndex);
 	}
 
 

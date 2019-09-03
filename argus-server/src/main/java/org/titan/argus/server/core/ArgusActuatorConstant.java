@@ -31,4 +31,18 @@ public class ArgusActuatorConstant {
 	public static final String FALLBAK = "/actuator/fallback";
 
 	public static final String MONGODB_NODE = "/actuator/mongodb/node";
+
+	public static final String MONGODB_DATABASES = "/actuator/mongodb/databases";
+
+	public static final String MONGODB_NAMESPACES = "/actuator/mongodb/namespaces";
+
+	public static final String MONGODB_OS = "/actuator/mongodb/os";
+
+	public static final String MONGODB_LOCK = "/actuator/mongodb/lock";
+
+	public static final String MONGODB_REPLICATION_STATUS = "/actuator/mongodb/replicationStatus";
+
+	public static final String MONGODB_REPLICATION_CONFIG = "/actuator/mongodb/replicationConfig";
+
+	public static final String MONGODB_COLLECTION_SYSTEM = "/actuator/mongodb/collection/system";
 }

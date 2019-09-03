@@ -2,9 +2,7 @@ package org.titan.argus.server.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.service.AppService;
 
@@ -25,7 +23,7 @@ public class AppController extends BaseController {
 
 	@GetMapping
 	@ApiOperation(value = "获取注册中心所有的app", notes = "根据使用的注册中心进行获取所有注册的application")
-	public BaseResponse findAll() {
+	public BaseResponse findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page, @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
 		return BaseResponse.success(appService.findAll());
 	}
 }

@@ -1,5 +1,6 @@
 package org.titan.argus.plugin.fallback.hystrix.repository.mvc;
 
+import com.google.common.collect.Sets;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,7 @@ public class ArgusHystrixUrlMappingsRepository implements ArgusUrlMappingsReposi
 	public void init() {
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
 		this.cache = new ConcurrentHashMap<>(map.size());
-		this.fallbackCache = new HashSet<>();
+		this.fallbackCache = Sets.newConcurrentHashSet();
 		for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
 			RequestMappingInfo info = m.getKey();
 			HandlerMethod method = m.getValue();

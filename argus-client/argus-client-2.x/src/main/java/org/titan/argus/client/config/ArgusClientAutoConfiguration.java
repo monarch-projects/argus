@@ -16,6 +16,7 @@ import org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig;
 import org.titan.argus.plugin.mongodb.core.MongodbService;
 import org.titan.argus.plugin.redis.config.ArgusRedisAutoConfig;
 import org.titan.argus.plugin.redis.core.RedisService;
+import org.titan.argus.plugin.route.core.ArgusRouteRepository;
 import org.titan.argus.plugin.route.gateway.config.ArgusGatewayConfig;
 
 import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type.REACTIVE;
@@ -57,7 +58,7 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusMongdbEndpoint(service);
 	}
 
-	@ConditionalOnBean({ArgusGatewayConfig.class})
+	@ConditionalOnBean({ArgusRouteRepository.class})
 	@Bean
 	public ArgusRouteEndpoint argusRouteEndpoint() {
 		return new ArgusRouteEndpoint();

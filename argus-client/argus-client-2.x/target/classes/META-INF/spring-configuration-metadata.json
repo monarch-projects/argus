@@ -17,13 +17,13 @@
     },
     {
       "name": "management.endpoint.meta-info",
-      "type": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint"
     },
     {
       "name": "management.endpoint.meta-info",
-      "type": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint"
+      "type": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint"
     },
     {
       "name": "management.endpoint.mongodb",
@@ -87,28 +87,28 @@
       "name": "management.endpoint.meta-info.cache.time-to-live",
       "type": "java.time.Duration",
       "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
       "defaultValue": "0ms"
     },
     {
       "name": "management.endpoint.meta-info.cache.time-to-live",
       "type": "java.time.Duration",
       "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
       "defaultValue": "0ms"
     },
     {
       "name": "management.endpoint.meta-info.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the metaInfo endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
       "defaultValue": true
     },
     {
       "name": "management.endpoint.meta-info.enabled",
       "type": "java.lang.Boolean",
       "description": "Whether to enable the metaInfo endpoint.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoMvcEndpoint",
+      "sourceType": "org.titan.argus.client.endpoint.ArgusMetaInfoReactiveEndpoint",
       "defaultValue": true
     },
     {
@@ -131,13 +131,6 @@
       "description": "Whether to enable the route endpoint.",
       "sourceType": "org.titan.argus.client.endpoint.ArgusRouteEndpoint",
       "defaultValue": true
-    },
-    {
-      "name": "management.endpoint.traces.cache.time-to-live",
-      "type": "java.time.Duration",
-      "description": "Maximum time that a response can be cached.",
-      "sourceType": "org.titan.argus.client.endpoint.ArgusHttpTraceEndpoint",
-      "defaultValue": "0ms"
     },
     {
       "name": "management.endpoint.traces.enabled",

@@ -39,4 +39,6 @@ public class InstanceMetadataVO {
 
 	private Boolean isUsedRabbitMQ;
 
+	private Boolean isUsedMongodb;
+
 }

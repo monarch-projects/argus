@@ -16,17 +16,19 @@
 
 package org.titan.argus.client.endpoint;
 
-import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.boot.actuate.trace.http.HttpTrace;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.web.trace.http.ArgusHttpTrace;
 import org.titan.argus.client.web.trace.http.ArgusHttpTraceRepository;
+import org.titan.argus.util.PageUtil;
 
 import java.util.List;
 
 
-@Endpoint(id = "traces")
+@RestControllerEndpoint(id = "traces")
 public class ArgusHttpTraceEndpoint {
 
 	private final ArgusHttpTraceRepository repository;
@@ -40,9 +42,11 @@ public class ArgusHttpTraceEndpoint {
 		this.repository = repository;
 	}
 
-	@ReadOperation
-	public HttpTraceDescriptor traces() {
-		return new HttpTraceDescriptor(this.repository.findAll());
+	@GetMapping
+	public HttpTraceDescriptor traces(
+			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		return new HttpTraceDescriptor(PageUtil.page(page, size, this.repository.findAll()));
 	}
 
 	/**

@@ -38,6 +38,9 @@ public class ArgusMetaInfoMvcEndpoint {
 			if (k.toString().contains("rabbitmq")) {
 				build.setIsUsedRabbitMQ(Boolean.TRUE);
 			}
+			if (k.toString().contains("mongodb")) {
+				build.setIsUsedMongodb(Boolean.TRUE);
+			}
 		});
 		Node node = ArgusDependencyAnalyzer.analysis();
 		build.setArtifactId(node.getArtifactId());

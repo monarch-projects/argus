@@ -33,4 +33,9 @@ public class InstanceServiceImpl implements InstanceService {
 		return this.repository.findAll();
 	}
 
+	@Override
+	public List<ArgusInstance> page(int fromIndex, int toIndex) {
+		return this.repository.page(fromIndex, toIndex);
+	}
+
 }

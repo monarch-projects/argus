@@ -16,4 +16,6 @@ public interface InstanceService {
 	 ArgusInstance getInstanceById(String id);
 
 	 Set<ArgusInstance> findAll();
+
+	 List<ArgusInstance> page(int fromIndex, int toIndex);
 }

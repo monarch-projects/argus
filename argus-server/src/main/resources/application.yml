@@ -47,7 +47,6 @@ spring:
       properties:
         client.transport.sniff: true
 
-
 eureka:
   instance:
     prefer-ip-address: true

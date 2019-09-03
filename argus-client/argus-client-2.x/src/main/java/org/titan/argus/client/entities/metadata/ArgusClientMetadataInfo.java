@@ -24,4 +24,6 @@ public class ArgusClientMetadataInfo {
 	private Boolean isUsedRedis = Boolean.FALSE;
 
 	private Boolean isUsedRabbitMQ = Boolean.FALSE;
+
+	private Boolean isUsedMongodb = Boolean.FALSE;
 }
