@@ -1,10 +1,13 @@
 package org.titan.argus.plugin.redis.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.data.redis.connection.RedisClusterNode;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.lettuce.LettuceConnection;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.RedisClientInfo;
@@ -19,6 +22,7 @@ import java.util.stream.Stream;
  * @author starboyate
  */
 public class RedisService {
+	private static final Logger logger = LoggerFactory.getLogger(RedisService.class);
 	private final RedisTemplate template;
 
 	private final RedisProperties properties;
@@ -31,32 +35,28 @@ public class RedisService {
 	public RedisNodeInfo getRedisNodeInfo() {
 		RedisNodeInfo info = new RedisNodeInfo();
 		List<String> nodeList = null;
-		RedisConnectionFactory connectionFactory = this.template.getConnectionFactory();
-		if (connectionFactory.getClusterConnection() != null) {
-			List<RedisNode> list = new ArrayList<>();
-			connectionFactory.getClusterConnection()
-					.clusterGetNodes()
-					.forEach(item -> list.add(RedisNode.builder().host(item.getHost()).port(item.getPort()).build()));
-			info.setIsCluster(Boolean.TRUE).setNodeList(list);
-		} else if (connectionFactory.getSentinelConnection() != null) {
-			List<RedisNode> list = new ArrayList<>();
-			connectionFactory.getSentinelConnection().masters().forEach(master -> {
-				list.add(RedisNode.builder().host(master.getHost()).port(master.getPort()).build());
-				connectionFactory.getSentinelConnection().slaves(() -> master.getName()).forEach(slave -> {
-					list.add(RedisNode.builder().host(slave.getHost()).port(slave.getPort()).build());
-				});
-			});
-			info.setIsSentinel(true).setNodeList(list);
+		if (null != this.properties.getCluster() && !this.properties.getCluster().getNodes().isEmpty()) {
+			List<RedisNode> collect = splitStringMapToList(this.properties.getCluster().getNodes());
+			info.setIsCluster(Boolean.TRUE).setNodeList(collect);
+			logger.info("redis mode is cluster, redisInfo is: {}", info);
+		} else if (null != this.properties.getSentinel() && !this.properties.getSentinel().getNodes().isEmpty()) {
+			List<RedisNode> collect = splitStringMapToList(this.properties.getSentinel().getNodes());
+			info.setIsSentinel(Boolean.TRUE).setNodeList(collect);
+			logger.info("redis mode is sentinel, redisInfo is: {}", info);
 		} else {
-			info.setNodeList(new ArrayList<RedisNode>(
-							Arrays.asList(
-									RedisNode.builder()
-											.host(this.properties.getHost())
-											.port(this.properties.getPort()).build())
-					)
-			);
+			info.setNodeList(Arrays.asList(RedisNode.builder().host(this.properties.getHost()).port(this.properties.getPort()).build()));
+			logger.info("redis mode is standalone, redisInfo is: {}", info);
 		}
 		return info;
+	}
+
+	private List<RedisNode> splitStringMapToList(List<String> list) {
+		return list.stream()
+				.map(item -> RedisNode.builder()
+						.host(item.substring(0, item.lastIndexOf(":")))
+						.port(Integer.valueOf(item.substring(item.lastIndexOf(":") + 1)))
+						.build())
+				.collect(Collectors.toList());
 	}
 
 	public Object getRedisAllInfo() {

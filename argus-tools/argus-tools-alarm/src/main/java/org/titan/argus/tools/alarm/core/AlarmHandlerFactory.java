@@ -5,25 +5,18 @@ import org.titan.argus.model.entities.Alarm;
 /**
  * @author starboyate
  */
-public class ArgusAlarmTask implements Runnable {
-	private Alarm alarm;
+public class AlarmHandlerFactory {
 
-	public ArgusAlarmTask(Alarm alarm) {
-		this.alarm = alarm;
-	}
-
-	@Override
-	public void run() {
-		String eventType = this.alarm.getEventType();
+	public static void handler(Alarm alarm) {
+		String eventType = alarm.getEventType();
+		AlarmHandler handler = null;
 		switch (eventType) {
 			case AlarmEventTypeConstant.REDIS:
-
+				new RedisAlarmHandler().handler(alarm);
 				break;
 			case AlarmEventTypeConstant.MONGODB:
+				new MongodbAlarmHandler().handler(alarm);
 				break;
 		}
 	}
-
-
-
 }

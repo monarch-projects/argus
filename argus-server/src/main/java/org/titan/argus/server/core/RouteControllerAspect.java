@@ -4,13 +4,18 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 import org.titan.argus.model.entities.InstanceMetadata;
+import org.titan.argus.server.controller.RedisController;
+import org.titan.argus.server.controller.RouteController;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * @author starboyate
  */
+@Component
 @Aspect
 public class RouteControllerAspect {
 	private final InstanceMetadataHolder holder;
@@ -25,6 +30,6 @@ public class RouteControllerAspect {
 		InstanceMetadata metadata =  this.holder.getAllInstanceMetadata().stream().filter(InstanceMetadata::getIsGateway).findFirst().orElse(null);
 		Field field = joinPoint.getTarget().getClass().getDeclaredField("metadata");
 		field.setAccessible(true);
-		field.set(field, metadata);
+		field.set(joinPoint.getTarget(), metadata);
 	}
 }

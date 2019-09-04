@@ -1,18 +1,16 @@
 package org.titan.argus.client.endpoint;
 
 import fr.dutra.tools.maven.deptree.core.Node;
-import org.apache.maven.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
-import org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver;
 import org.springframework.boot.actuate.endpoint.web.servlet.ControllerEndpointHandlerMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.titan.argus.client.entities.metadata.ArgusClientMetadataInfo;
-import org.titan.argus.client.pom.ArgusPomAnalyzer;
 import org.titan.argus.client.pom.dependency.ArgusDependencyAnalyzer;
-
 import java.util.Map;
 
 /**
@@ -20,8 +18,12 @@ import java.util.Map;
  */
 @Endpoint(id = "metaInfo")
 public class ArgusMetaInfoMvcEndpoint {
+	private Logger logger = LoggerFactory.getLogger(ArgusMetaInfoMvcEndpoint.class);
+
 	@Autowired
 	private ControllerEndpointHandlerMapping handlerMapping;
+
+
 
 
 	@ReadOperation
@@ -32,14 +34,11 @@ public class ArgusMetaInfoMvcEndpoint {
 			if (k.toString().contains("routes")) {
 				build.setIsGateway(Boolean.TRUE);
 			}
-			if (k.toString().contains("redis")) {
-				build.setIsUsedRedis(Boolean.TRUE);
-			}
-			if (k.toString().contains("rabbitmq")) {
-				build.setIsUsedRabbitMQ(Boolean.TRUE);
-			}
 			if (k.toString().contains("mongodb")) {
 				build.setIsUsedMongodb(Boolean.TRUE);
+			}
+			if (k.toString().contains("redis")) {
+				build.setIsUsedRedis(Boolean.TRUE);
 			}
 		});
 		Node node = ArgusDependencyAnalyzer.analysis();

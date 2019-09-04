@@ -5,16 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 /**
  * @author starboyate
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class RedisNode {
+@NoArgsConstructor
+public class Annex {
 	private String host;
 
-	private Integer port;
+	private String port;
+
+	private String userName;
+
+	private String password;
+
 }

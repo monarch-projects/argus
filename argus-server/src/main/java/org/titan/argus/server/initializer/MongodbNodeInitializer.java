@@ -36,6 +36,7 @@ public class MongodbNodeInitializer extends AbstractArgusNodeInitializer {
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);
 				MongodbNodeInfo info = JSONObject.parseObject(doGet, MongodbNodeInfo.class);
+				info.setId(item.getId());
 				MiddleWareNodeHolder.addMongodbNodeInfo(info);
 			} catch (Exception e) {
 				throw new BusinessException(e.getMessage());

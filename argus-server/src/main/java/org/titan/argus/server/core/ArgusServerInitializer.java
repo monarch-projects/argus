@@ -77,6 +77,7 @@ public class ArgusServerInitializer implements ApplicationListener<ContextRefres
 			try {
 				String entity = httpClient.doGet(url);
 				RedisNodeInfo info = JSONObject.parseObject(entity, RedisNodeInfo.class);
+				info.setId(item.getId());
 				MiddleWareNodeHolder.addRedisNodeInfo(info);
 			} catch (Exception ex) {
 				logger.error("http client get fail: {}", ex.getMessage());

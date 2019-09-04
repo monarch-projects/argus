@@ -15,6 +15,7 @@
         <module>argus-example-eureka-server</module>
         <module>argus-example-eureka-client</module>
         <module>argus-example-gateway</module>
+        <module>argus-example-redis</module>
     </modules>
 
 

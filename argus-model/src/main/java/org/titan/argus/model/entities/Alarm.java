@@ -53,6 +53,9 @@ public class Alarm implements Serializable {
 	@TableField(value = "is_deleted")
 	private Boolean isDeleted;
 
+	@TableField(value = "annex")
+	private String annex;
+
 	public AlarmLog convertToAlarmLog() {
 		long time = System.currentTimeMillis();
 		return AlarmLog.builder()

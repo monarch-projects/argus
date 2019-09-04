@@ -39,6 +39,7 @@ public class RedisNodeInitializer extends AbstractArgusNodeInitializer{
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);
 				RedisNodeInfo info = JSONObject.parseObject(doGet, RedisNodeInfo.class);
+				info.setId(item.getId());
 				MiddleWareNodeHolder.addRedisNodeInfo(info);
 			} catch (Exception e) {
 				throw new BusinessException(e.getMessage());

@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.titan.argus.model.entities.InstanceMetadata;
-import org.titan.argus.server.controller.RedisController;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -17,17 +16,17 @@ import java.util.stream.Collectors;
  */
 @Component
 @Aspect
-public class RedisControllerAspect {
+public class MongodbControllerAspect {
 	private final InstanceMetadataHolder holder;
-	public RedisControllerAspect(InstanceMetadataHolder holder) {
+	public MongodbControllerAspect(InstanceMetadataHolder holder) {
 		this.holder = holder;
 	}
-	@Pointcut("execution(public * org.titan.argus.server.controller.RedisController.*(..))")
+	@Pointcut("execution(public * org.titan.argus.server.controller.MongoController.*(..))")
 	public void before(){}
 
 	@Before("before()")
 	public void doBefore(JoinPoint joinPoint) throws Exception {
-		Set<InstanceMetadata> collect =  this.holder.getAllInstanceMetadata().stream().filter(InstanceMetadata::getIsUsedRedis)
+		Set<InstanceMetadata> collect =  this.holder.getAllInstanceMetadata().stream().filter(InstanceMetadata::getIsUsedMongodb)
 				.collect(Collectors.toSet());
 		Field field = joinPoint.getTarget().getClass().getDeclaredField("metadataSet");
 		field.setAccessible(true);

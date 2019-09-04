@@ -12,7 +12,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"isGateway", "groupId", "artifactId", "version", "isUsedRedis", "isUsedRedis"})
+@EqualsAndHashCode(exclude = {"isGateway", "groupId", "artifactId", "version", "isUsedRedis", "isUsedMongodb"})
 public class InstanceMetadata {
 	private String id;
 
@@ -36,8 +36,6 @@ public class InstanceMetadata {
 
 	private Boolean isUsedRedis;
 
-	private Boolean isUsedRabbitMQ;
-
 	private Boolean isUsedMongodb;
 
 	public InstanceMetadataVO convertToInstanceMetadataVO() {
@@ -49,7 +47,6 @@ public class InstanceMetadata {
 				.id(this.id)
 				.ip(this.ip)
 				.isGateway(this.isGateway)
-				.isUsedRabbitMQ(this.isUsedRabbitMQ)
 				.isUsedRedis(this.isUsedRedis)
 				.isUsedMongodb(this.isUsedMongodb)
 				.port(this.port)

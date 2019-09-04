@@ -18,7 +18,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/mongodb")
 public class MongoController extends BaseController {
-	private final Set<InstanceMetadata> metadataSet = Sets.newHashSet();
+	private Set<InstanceMetadata> metadataSet = Sets.newHashSet();
 
 	@GetMapping("/node")
 	public ObjectCollectionResponse getMongodbNodeInfo() {

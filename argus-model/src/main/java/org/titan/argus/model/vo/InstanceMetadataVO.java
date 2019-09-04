@@ -37,8 +37,6 @@ public class InstanceMetadataVO {
 
 	private Boolean isUsedRedis;
 
-	private Boolean isUsedRabbitMQ;
-
 	private Boolean isUsedMongodb;
 
 }

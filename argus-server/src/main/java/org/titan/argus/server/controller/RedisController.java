@@ -1,15 +1,23 @@
 package org.titan.argus.server.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.entities.InstanceMetadata;
+import org.titan.argus.model.entities.RedisNode;
+import org.titan.argus.model.entities.RedisNodeInfo;
 import org.titan.argus.server.core.ArgusActuatorConstant;
 import org.titan.argus.server.core.MiddleWareNodeHolder;
 import org.titan.argus.server.response.ObjectCollectionResponse;
 import org.titan.argus.server.response.ObjectDataResponse;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,7 +28,7 @@ import java.util.Set;
 @RequestMapping("/api/v1/redis")
 @Api(value = "监控项目redis接口", tags = {"监控项目redis接口"})
 public class RedisController extends BaseController{
-	private final Set<InstanceMetadata> metadataSet = Sets.newHashSet();
+	private Set<InstanceMetadata> metadataSet = Sets.newHashSet();
 
 
 	@ApiOperation(value = "获取redis所有的系统信息", notes = "动态获取项目使用的redis的具体系统信息")
@@ -33,7 +41,14 @@ public class RedisController extends BaseController{
 
 	@GetMapping("/node")
 	public ObjectCollectionResponse getRedisNodeInfo() {
-		return new ObjectCollectionResponse<>(MiddleWareNodeHolder.getRedisNodeInfoSet());
+		ArrayList<RedisNodeInfo> list = Lists.newArrayList();
+		metadataSet.forEach(item -> {
+			ObjectDataResponse dataResponse = proxyGet(ArgusActuatorConstant.REDIS_NODE, item.getId());
+			RedisNodeInfo redisNodeInfo = JSONObject.parseObject(JSON.toJSONString(dataResponse.getData()), RedisNodeInfo.class);
+			redisNodeInfo.setId(item.getId());
+			list.add(redisNodeInfo);
+		});
+		return new ObjectCollectionResponse<>(list);
 	}
 
 

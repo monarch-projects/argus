@@ -1,13 +1,15 @@
 server:
   port: 7777
 spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://192.168.1.235:27017/g08
-#  redis:
-#    cluster:
-#      nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006
-
+  data:
+    mongodb:
+      uri: mongodb://192.168.1.235:27017/g08
+  redis:
+    cluster:
+      nodes:
+        - 127.0.0.1:6381
+        - 127.0.0.1:6382
+        - 127.0.0.1:6383
   application:
     name: argus-example-eureka-client
 eureka:

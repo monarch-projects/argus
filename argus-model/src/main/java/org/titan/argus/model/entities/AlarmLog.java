@@ -57,4 +57,7 @@ public class AlarmLog {
 
 	@TableField(value = "is_deleted")
 	private Boolean isDeleted;
+
+	@TableField(value = "annex")
+	private String annex;
 }

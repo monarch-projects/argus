@@ -20,6 +20,8 @@ public final class AlarmHolder {
 		ALARM_SET.add(alarm);
 	}
 
+	public static void addAll(Collection<? extends Alarm> collection) {ALARM_SET.addAll(collection);}
+
 	public static void addAllAlarm(Collection<Alarm> collection) {
 		ALARM_SET.addAll(collection);
 	}

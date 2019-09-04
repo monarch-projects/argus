@@ -17,11 +17,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
 
         <dependency>
@@ -104,6 +99,7 @@
             <artifactId>argus-util</artifactId>
             <version>1.0.0.RELEASE</version>
         </dependency>
+
 
 
     </dependencies>

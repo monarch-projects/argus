@@ -3,14 +3,13 @@ package org.titan.argus.client.config;
 
 
 import org.springframework.boot.actuate.autoconfigure.trace.http.HttpTraceAutoConfiguration;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-
 import org.titan.argus.client.endpoint.*;
 import org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig;
 import org.titan.argus.plugin.mongodb.core.MongodbService;
@@ -30,7 +29,7 @@ import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebA
  * {@see spring boot issues: https://github.com/spring-projects/spring-boot/issues/17282}
  */
 @Configuration
-@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class})
+@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class, ArgusRedisAutoConfig.class, ArgusMongodbAutoConfig.class})
 @PropertySource("classpath:/client/client.properties")
 public class ArgusClientAutoConfiguration {
 
@@ -46,7 +45,7 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusHystrixFallbackEndpoint();
 	}
 
-	@ConditionalOnBean(ArgusRedisAutoConfig.class)
+	@ConditionalOnBean({ArgusRedisAutoConfig.class})
 	@Bean
 	public ArgusRedisEndpoint argusRedisEndpoint(RedisService redisService) {
 		return new ArgusRedisEndpoint(redisService);
@@ -54,8 +53,8 @@ public class ArgusClientAutoConfiguration {
 
 	@ConditionalOnBean({ArgusMongodbAutoConfig.class})
 	@Bean
-	public ArgusMongdbEndpoint mongdbEndpoint(MongodbService service) {
-		return new ArgusMongdbEndpoint(service);
+	public ArgusMongodbEndpoint mongodbEndpoint(MongodbService service) {
+		return new ArgusMongodbEndpoint(service);
 	}
 
 	@ConditionalOnBean({ArgusRouteRepository.class})
@@ -90,10 +89,12 @@ public class ArgusClientAutoConfiguration {
 			return new ArgusReactiveUrlMappingEndpoint();
 		}
 
+
 		@Bean
 		public ArgusMetaInfoReactiveEndpoint argusMetaInfoReactiveEndpoint() {
 			return new ArgusMetaInfoReactiveEndpoint();
 		}
+
 	}
 
 

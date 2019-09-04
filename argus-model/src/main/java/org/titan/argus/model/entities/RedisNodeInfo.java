@@ -11,6 +11,8 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class RedisNodeInfo {
+	private String id;
+
 	private Boolean isCluster = false;
 
 	private Boolean isSentinel = false;

@@ -9,10 +9,10 @@ import org.titan.argus.plugin.mongodb.core.MongodbService;
  * @author starboyate
  */
 @RestControllerEndpoint(id = "mongodb")
-public class ArgusMongdbEndpoint {
+public class ArgusMongodbEndpoint {
 	private final MongodbService service;
 
-	public ArgusMongdbEndpoint(MongodbService service) {
+	public ArgusMongodbEndpoint(MongodbService service) {
 		this.service = service;
 	}
 	@GetMapping("/node")
