@@ -3,17 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>argus</artifactId>
+        <artifactId>argus-tools</artifactId>
         <groupId>org.titan</groupId>
         <version>1.0.0.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>argus-tools</artifactId>
+    <artifactId>argus-tools-monitor</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>argus-tools-alarm</module>
-        <module>argus-tools-monitor</module>
+        <module>argus-tools-monitor-redis</module>
+        <module>argus-tools-monitor-mongodb</module>
     </modules>
 
 

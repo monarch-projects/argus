@@ -73,6 +73,16 @@
             </dependency>
             <dependency>
                 <groupId>org.titan</groupId>
+                <artifactId>argus-tools-monitor-redis</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-tools-monitor-mongodb</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
                 <artifactId>argus-tools-alarm</artifactId>
                 <version>${argus.version}</version>
             </dependency>
