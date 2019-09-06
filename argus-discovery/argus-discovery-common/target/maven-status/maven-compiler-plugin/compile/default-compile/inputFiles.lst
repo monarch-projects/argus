@@ -6,6 +6,7 @@ D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\ar
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\enums\DiscoveryEventEnum.java
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\repository\InstanceRepository.java
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\event\AlarmLogEvent.java
+D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\event\InstanceUpdateEvent.java
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\entities\ArgusServiceApp.java
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\disruptor\event\ArgusInstanceOfflineEvent.java
 D:\titan\argus\argus-discovery\argus-discovery-common\src\main\java\org\titan\argus\discovery\common\listener\ArgusDiscoveryListener.java

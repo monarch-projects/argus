@@ -4,11 +4,11 @@ org\titan\argus\client\endpoint\ArgusRedisEndpoint.class
 org\titan\argus\client\entities\dependency\PomDependency.class
 org\titan\argus\client\entities\heap\ArgusOldGenInfo.class
 fr\dutra\tools\maven\deptree\core\InputType$1.class
+org\titan\argus\client\mongodb\MongodbNode$MongodbNodeBuilder.class
 org\titan\argus\client\config\ArgusHttpTraceEndpointAutoConfiguration.class
 org\titan\argus\client\entities\metadata\ArgusClientMetadataInfo$ArgusClientMetadataInfoBuilder.class
 org\titan\argus\client\web\reactive\ServerWebExchangeTraceableRequest.class
 org\titan\argus\client\endpoint\ArgusHystrixFallbackEndpoint.class
-org\titan\argus\client\endpoint\ArgusMongdbEndpoint.class
 META-INF\spring-configuration-metadata.json
 org\titan\argus\client\config\ArgusClientAutoConfiguration.class
 org\titan\argus\client\entities\nonheap\ArgusMetaSpaceInfo.class
@@ -20,6 +20,7 @@ org\titan\argus\client\web\trace\http\ArgusHttpExchangeTracer$FilteredTraceableR
 org\titan\argus\client\annotation\TestTool.class
 org\titan\argus\client\entities\heap\ArgusSurvivorSpaceInfo.class
 org\titan\argus\client\entities\nonheap\ArgusCodeCacheInfo.class
+org\titan\argus\client\config\ArgusRedisAutoConfiguration.class
 org\titan\argus\client\pom\ArgusPomAnalyzer.class
 org\titan\argus\client\web\trace\http\ArgusHttpExchangeTracer$1.class
 org\titan\argus\client\entities\args\ArgusJvmArgsInfo$ArgusJvmArgsInfoBuilder.class
@@ -37,12 +38,16 @@ org\titan\argus\client\web\trace\http\ArgusHttpExchangeTracer$FilteredTraceableR
 org\titan\argus\client\web\trace\http\ArgusHttpTrace$Request.class
 fr\dutra\tools\maven\deptree\core\Parser.class
 org\titan\argus\client\endpoint\ArgusMetaInfoMvcEndpoint.class
+org\titan\argus\client\redis\RedisRepository.class
 org\titan\argus\client\entities\ArgusJvmInfo$ArgusJvmInfoBuilder.class
+org\titan\argus\client\config\ArgusMongodbAutoConfiguration.class
+org\titan\argus\client\endpoint\ArgusNodeEndpoint.class
 org\titan\argus\client\entities\nonheap\ArgusCompressedClassSpaceInfo.class
 org\titan\argus\client\config\ArgusClientAutoConfiguration$ArgusClientReactiveAutoConfiguration.class
 org\titan\argus\client\web\servlet\ArgusHttpTraceWebMvcFilter$CustomStatusResponseWrapper.class
 fr\dutra\tools\maven\deptree\core\Node.class
 fr\dutra\tools\maven\deptree\core\TextParser.class
+org\titan\argus\client\mongodb\MongodbRepository.class
 org\titan\argus\client\web\servlet\ArgusHttpTraceWebMvcFilter.class
 org\titan\argus\client\entities\ArgusVersion.class
 org\titan\argus\client\web\reactive\ArgusHttpTraceWebReactiveFilter.class
@@ -57,6 +62,7 @@ fr\dutra\tools\maven\deptree\core\AbstractParser.class
 org\titan\argus\client\config\ArgusHttpTraceAutoConfiguration.class
 org\titan\argus\client\endpoint\ArgusUrlMappingEndpoint.class
 fr\dutra\tools\maven\deptree\core\ParseException.class
+org\titan\argus\client\mongodb\MongodbNode.class
 org\titan\argus\client\web\servlet\TraceableHttpServletResponse.class
 org\titan\argus\client\web\trace\http\ArgusHttpTrace$Session.class
 org\titan\argus\client\web\trace\http\ArgusHttpTraceRepository.class
@@ -64,6 +70,7 @@ org\titan\argus\client\endpoint\ArgusHttpTraceEndpoint.class
 org\titan\argus\client\config\ArgusHttpTraceAutoConfiguration$ServletTraceFilterConfiguration.class
 org\titan\argus\client\entities\heap\ArgusEdenSpaceInfo.class
 org\titan\argus\client\config\ArgusHttpTraceProperties.class
+org\titan\argus\client\endpoint\ArgusMongodbEndpoint.class
 org\titan\argus\client\web\servlet\TraceableHttpServletRequest.class
 org\titan\argus\client\entities\ArgusJvmInfo.class
 fr\dutra\tools\maven\deptree\core\AbstractLineBasedParser.class
@@ -79,5 +86,7 @@ org\titan\argus\client\endpoint\ArgusHttpTraceEndpoint$1.class
 fr\dutra\tools\maven\deptree\core\InputType.class
 org\titan\argus\client\web\trace\http\ArgusTraceableResponse.class
 org\titan\argus\client\test\TestArgusDependencyHelper.class
+org\titan\argus\client\redis\RedisNode$RedisNodeBuilder.class
+org\titan\argus\client\redis\RedisNode.class
 org\titan\argus\client\entities\dependency\PomInfo.class
 org\titan\argus\client\web\trace\http\ArgusHttpTrace$Response.class

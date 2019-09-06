@@ -1,7 +1,6 @@
-org\argus\example\eureka\client\TestController$ApplicationMappings.class
 org\argus\example\eureka\client\MongoController.class
-org\argus\example\eureka\client\TestController$ContextMappings.class
-org\argus\example\eureka\client\TestController$1.class
 org\argus\example\eureka\client\TestController.class
 org\argus\example\eureka\client\ArgusEurekaClientApp.class
+META-INF\spring-autoconfigure-metadata.properties
 org\argus\example\eureka\client\HelloController.class
+org\argus\example\eureka\client\RedisClusterConfiguration.class

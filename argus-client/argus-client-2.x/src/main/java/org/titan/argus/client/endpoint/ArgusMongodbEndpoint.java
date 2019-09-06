@@ -4,7 +4,6 @@ import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEn
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.mongodb.MongodbRepository;
-import org.titan.argus.plugin.mongodb.core.MongodbService;
 
 /**
  * @author starboyate

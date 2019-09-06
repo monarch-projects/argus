@@ -258,21 +258,12 @@
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <failsOnError>true</failsOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
+<!--                <configuration>-->
+<!--                    <encoding>UTF-8</encoding>-->
+<!--                    <consoleOutput>true</consoleOutput>-->
+<!--                    <includeTestSourceDirectory>true</includeTestSourceDirectory>-->
+<!--                    <failsOnError>true</failsOnError>-->
+<!--                </configuration>-->
             </plugin>
         </plugins>
     </build>

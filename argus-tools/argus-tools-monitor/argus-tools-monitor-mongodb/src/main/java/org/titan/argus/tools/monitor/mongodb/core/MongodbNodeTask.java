@@ -7,7 +7,7 @@ import org.titan.argus.storage.es.domain.MongodbMonitorNodeInfo;
 import org.titan.argus.storage.es.service.MongodbMonitorNodeInfoService;
 import org.titan.argus.tools.monitor.mongodb.domain.MongodbNode;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -22,7 +22,7 @@ public class MongodbNodeTask {
 	private ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 	@Scheduled(fixedRate = 1000 * 60, initialDelay = 1000 * 60 * 2)
 	public void monitor() {
-		Set<MongodbNode> mongodbNodes = MongodbNodeHolder.get();
+		Collection<MongodbNode> mongodbNodes = MongodbNodeHolder.getAll();
 		mongodbNodes.forEach(item -> executorService.submit(() -> {
 			MongodbMonitorNodeInfo monitorNodeInfo = MongodbRepository.getMonitorNodeInfo(item);
 			this.mongodbMonitorNodeInfoService.save(monitorNodeInfo);

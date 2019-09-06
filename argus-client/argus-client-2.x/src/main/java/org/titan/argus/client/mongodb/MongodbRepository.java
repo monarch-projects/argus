@@ -2,7 +2,6 @@ package org.titan.argus.client.mongodb;
 
 
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
-import org.titan.argus.plugin.mongodb.entities.MongodbNode;
 
 
 /**

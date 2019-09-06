@@ -13,10 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.titan.argus.client.endpoint.*;
 import org.titan.argus.client.mongodb.MongodbRepository;
 import org.titan.argus.client.redis.RedisRepository;
-import org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig;
-import org.titan.argus.plugin.mongodb.core.MongodbService;
-import org.titan.argus.plugin.redis.config.ArgusRedisAutoConfig;
-import org.titan.argus.plugin.redis.core.RedisService;
 import org.titan.argus.plugin.route.core.ArgusRouteRepository;
 import org.titan.argus.plugin.route.gateway.config.ArgusGatewayConfig;
 
@@ -31,7 +27,7 @@ import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebA
  * {@see spring boot issues: https://github.com/spring-projects/spring-boot/issues/17282}
  */
 @Configuration
-@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class, ArgusRedisAutoConfig.class, ArgusMongodbAutoConfig.class})
+@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class})
 @PropertySource("classpath:/client/client.properties")
 public class ArgusClientAutoConfiguration {
 
