@@ -35,6 +35,8 @@
         <disruptor.version>3.4.2</disruptor.version>
         <common-io.version>2.6</common-io.version>
         <jedis.version>3.1.0</jedis.version>
+        <checkstyle.version>6.18</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -251,6 +253,26 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <showWarnings>true</showWarnings>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
