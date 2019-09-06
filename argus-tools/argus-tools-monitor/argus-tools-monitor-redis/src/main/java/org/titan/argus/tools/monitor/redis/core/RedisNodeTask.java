@@ -7,6 +7,7 @@ import org.titan.argus.storage.es.domain.RedisMonitorNodeInfo;
 import org.titan.argus.storage.es.service.RedisMonitorNodeInfoService;
 import org.titan.argus.tools.monitor.redis.domain.RedisNode;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -23,9 +24,9 @@ public class RedisNodeTask {
 	private ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
 	@Scheduled(fixedRate = 1000 * 60, initialDelay = 1000 * 60 * 2)
 	public void monitor() {
-		Set<RedisNode> redisNodes = RedisNodeHolder.get();
+		Collection<RedisNode> redisNodes = RedisNodeHolder.getAll();
 		redisNodes.forEach(item -> executorService.submit(() -> {
-			List<RedisMonitorNodeInfo> redisMonitorNodeInfoList = RedisUtil.getRedisMonitor(item);
+			List<RedisMonitorNodeInfo> redisMonitorNodeInfoList = RedisRepository.getRedisMonitor(item);
 			this.redisMonitorNodeInfoService.saveAll(redisMonitorNodeInfoList);
 		}));
 	}

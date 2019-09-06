@@ -25,113 +25,123 @@ public class RedisMonitorNodeInfo implements Serializable {
 	@NonNull
 	private Long id;
 
-
-	@Field(type = FieldType.Long)
-	private Long connectedClients;
-
-	@Field(type = FieldType.Long)
-	private Long blockedClients;
-
-	@Field(type = FieldType.Long)
-	@NonNull
-	private Long totalKeys;
-
 	@Field(type = FieldType.Keyword)
 	private String ip;
 
+	/**
+	 * 响应时间，单位毫秒
+	 */
 	@Field(type = FieldType.Long)
 	@NonNull
 	private Long responseTime;
 
+	/**
+	 * 已连接客户端数量
+	 */
+	@Field(type = FieldType.Long)
+	private Long connectedClients;
+
+	/**
+	 * 阻塞客户端连接总数
+	 */
+	@Field(type = FieldType.Long)
+	private Long blockedClients;
+
+	@Field(type = FieldType.Long)
+	private Long usedMemory;
+
+	/**
+	 * 操作系统分配给redis的总内存
+	 */
 	@Field(type = FieldType.Long)
 	private long usedMemoryRss;
 
+	/**
+	 * 内存消耗峰值
+	 */
 	@Field(type = FieldType.Long)
 	private long usedMemoryPeak;
 
+	/**
+	 * used_memory_rss和used_memory之间的比率
+	 */
 	@Field(type = FieldType.Long)
 	private float memFragmentationRatio;
 
-	@Field(type = FieldType.Long)
-	private long aofEnabled;
-
+	/**
+	 * 服务器接受的连接总数
+	 */
 	@Field(type = FieldType.Long)
 	private long totalConnectionsReceived;
 
+	/**
+	 * 服务器处理的命令总数
+	 */
 	@Field(type = FieldType.Long)
 	private long totalCommandsProcessed;
 
+	/**
+	 * 每秒处理的命令数
+	 */
 	@Field(type = FieldType.Long)
 	private long instantaneousOpsPerSec;
 
+	/**
+	 * 从网络读取的总字节数
+	 */
 	@Field(type = FieldType.Long)
 	private long totalNetInputBytes;
 
+	/**
+	 * 写入网络的总字节数
+	 */
 	@Field(type = FieldType.Long)
 	private long totalNetOutputBytes;
 
-	@Field(type = FieldType.Long)
-	private float instantaneousInputKbps;
+	/**
+	 * 网络的每秒读取速率，以KB /秒为单位
+	 */
+	@Field(type = FieldType.Float)
+	private Float instantaneousInputKbps;
 
-	@Field(type = FieldType.Long)
-	private float instantaneousOutputKbps;
+	/**
+	 * 网络的每秒写入速率，以KB /秒为单位
+	 */
+	@Field(type = FieldType.Float)
+	private Float instantaneousOutputKbps;
 
+	/**
+	 * 由于maxclients限制而拒绝的连接数
+	 */
 	@Field(type = FieldType.Long)
 	private long rejectedConnections;
 
-	@Field(type = FieldType.Long)
-	private long syncFull;
+	/**
+	 * Redis服务器消耗的系统CPU
+	 */
+	@Field(type = FieldType.Float)
+	private Float usedCpuSys;
 
-	@Field(type = FieldType.Long)
-	private long syncPartialOk;
+	/**
+	 * Redis服务器消耗的用户CPU
+	 */
+	@Field(type = FieldType.Float)
+	private Float usedCpuUser;
 
-	@Field(type = FieldType.Long)
-	private long syncPartialErr;
+	/**
+	 * 后台进程占用的系统CPU
+	 */
+	@Field(type = FieldType.Float)
+	private Float usedCpuSysChildren;
 
-	@Field(type = FieldType.Long)
-	private long expiredKeys;
+	/**
+	 * 后台进程占用的用户CPU
+	 */
+	@Field(type = FieldType.Float)
+	private Float usedCpuUserChildren;
 
-	@Field(type = FieldType.Long)
-	private long evictedKeys;
-
-	@Field(type = FieldType.Long)
-	private long keyspaceHits;
-
-	@Field(type = FieldType.Long)
-	private long keyspaceMisses;
-
-	@Field(type = FieldType.Long)
-	private long pubsubChannels;
-
-	@Field(type = FieldType.Long)
-	private long pubsubPatterns;
-
-	@Field(type = FieldType.Long)
-	private long latestForkUsec;
-
-	@Field(type = FieldType.Long)
-	private long migrateCachedSockets;
-
-	@Field(type = FieldType.Long)
-	private float usedCpuSys;
-
-	@Field(type = FieldType.Long)
-	private float usedCpuUser;
-
-	@Field(type = FieldType.Long)
-	private float usedCpuSysChildren;
-
-	@Field(type = FieldType.Long)
-	private float usedCpuUserChildren;
-
-	@Field(type = FieldType.Long)
-	private long usedMemory;
-
-	@Field(type = FieldType.Long)
-	private long expires;
-
-	@Field(type = FieldType.Long)
-	private long avgTtl;
+	@Field(type = FieldType.Integer)
+	private Integer totalKeys;
 
 	@Field(type = FieldType.Long)
 	private Long createTime;

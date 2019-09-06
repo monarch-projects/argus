@@ -32,11 +32,6 @@ public class ArgusServerListener implements ApplicationContextAware {
 		this.alarmLogService.save(event.getLog());
 	}
 
-	@EventListener
-	public void reloadInstanceMetadata(InstanceUpdateEvent event) {
-		Collection<ArgusInitializer> values = this.context.getBeansOfType(ArgusInitializer.class).values();
-		this.context.getBeansOfType(ArgusInitializer.class).values().forEach(ArgusInitializer::init);
-	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

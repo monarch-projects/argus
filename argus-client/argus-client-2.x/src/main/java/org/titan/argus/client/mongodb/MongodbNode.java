@@ -1,18 +1,15 @@
-package org.titan.argus.model.entities;
+package org.titan.argus.client.mongodb;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author starboyate
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MongodbNodeInfo {
-	private String id;
-
+public class MongodbNode {
 	private String host;
 
 	private Integer port;

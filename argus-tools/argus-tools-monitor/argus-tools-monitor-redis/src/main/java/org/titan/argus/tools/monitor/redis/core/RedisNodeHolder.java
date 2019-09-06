@@ -1,18 +1,26 @@
 package org.titan.argus.tools.monitor.redis.core;
 
+import org.apache.commons.lang3.Validate;
 import org.titan.argus.tools.monitor.redis.domain.RedisNode;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author starboyate
  */
 public class RedisNodeHolder {
-	private static final Set<RedisNode> REDIS_NODE_CACHE = new HashSet<>();
+	private static final Map<Long, RedisNode> REDIS_NODE_CACHE = new ConcurrentHashMap<>();
 
 	public static void add(RedisNode node) {
-		REDIS_NODE_CACHE.add(node);
+		Validate.notNull(node.getId());
+		REDIS_NODE_CACHE.put(node.getId(), node);
 	}
-	public static Set<RedisNode> get() {return REDIS_NODE_CACHE;}
+	public static RedisNode get(Long id) {
+		return REDIS_NODE_CACHE.get(id);
+	}
+
+	public static Collection<RedisNode> getAll() {
+		return REDIS_NODE_CACHE.values();
+	}
 }

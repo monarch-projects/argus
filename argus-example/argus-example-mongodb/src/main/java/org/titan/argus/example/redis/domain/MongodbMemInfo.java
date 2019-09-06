@@ -1,8 +1,18 @@
 package org.titan.argus.example.redis.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author starboyate
+ * mongdb内存信息指标
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MongodbMemInfo {
 	/**
 	 * 目前为止总共使用的物理内存,单位是MB
@@ -16,19 +26,4 @@ public class MongodbMemInfo {
 	 * 如果使用journal,大约是2倍的map值
 	 */
 	private Long virtual;
-
-	/**
-	 * Mongodb使所有数据都映射到内存中，所以这个值可以看似整个数据量的值
-	 */
-	private Long mapped;
-
-	/**
-	 * 机器位数
-	 */
-	private Integer bits;
-
-	/**
-	 * 本机是否支持内存扩展
-	 */
-	private Boolean supported;
 }

@@ -1,4 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.titan.argus.client.config.ArgusClientAutoConfiguration, \
 org.titan.argus.client.config.ArgusHttpTraceAutoConfiguration, \
-org.titan.argus.client.config.ArgusHttpTraceEndpointAutoConfiguration
+org.titan.argus.client.config.ArgusHttpTraceEndpointAutoConfiguration, \
+org.titan.argus.client.config.ArgusRedisAutoConfiguration, \
+org.titan.argus.client.config.ArgusMongodbAutoConfiguration

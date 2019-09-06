@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.titan.argus.discovery.common.event.InstanceUpdateEvent;
 import org.titan.argus.server.initializer.ArgusInitializer;
 
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.Collection;
  * @author starboyate
  */
 @Component
-public class ArgusInitializerProcessor implements ApplicationListener<InstanceRegisteredEvent>, ApplicationContextAware {
+public class ArgusInitializerProcessor implements ApplicationListener<InstanceUpdateEvent>, ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	@Override
@@ -30,7 +31,7 @@ public class ArgusInitializerProcessor implements ApplicationListener<InstanceRe
 	}
 
 	@Override
-	public void onApplicationEvent(InstanceRegisteredEvent event) {
+	public void onApplicationEvent(InstanceUpdateEvent event) {
 		init();
 	}
 }

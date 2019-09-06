@@ -85,13 +85,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.titan</groupId>
-            <artifactId>argus-plugin-mongodb</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.titan</groupId>
-            <artifactId>argus-plugin-redis</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

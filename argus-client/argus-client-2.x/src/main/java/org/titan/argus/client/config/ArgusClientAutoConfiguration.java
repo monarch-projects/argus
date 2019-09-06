@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.titan.argus.client.endpoint.*;
+import org.titan.argus.client.mongodb.MongodbRepository;
+import org.titan.argus.client.redis.RedisRepository;
 import org.titan.argus.plugin.mongodb.config.ArgusMongodbAutoConfig;
 import org.titan.argus.plugin.mongodb.core.MongodbService;
 import org.titan.argus.plugin.redis.config.ArgusRedisAutoConfig;
@@ -45,16 +47,16 @@ public class ArgusClientAutoConfiguration {
 		return new ArgusHystrixFallbackEndpoint();
 	}
 
-	@ConditionalOnBean({ArgusRedisAutoConfig.class})
+	@ConditionalOnBean({ArgusRedisAutoConfiguration.class})
 	@Bean
-	public ArgusRedisEndpoint argusRedisEndpoint(RedisService redisService) {
-		return new ArgusRedisEndpoint(redisService);
+	public ArgusRedisEndpoint argusRedisEndpoint(RedisRepository redisRepository) {
+		return new ArgusRedisEndpoint(redisRepository);
 	}
 
-	@ConditionalOnBean({ArgusMongodbAutoConfig.class})
+	@ConditionalOnBean({ArgusMongodbAutoConfiguration.class})
 	@Bean
-	public ArgusMongodbEndpoint mongodbEndpoint(MongodbService service) {
-		return new ArgusMongodbEndpoint(service);
+	public ArgusMongodbEndpoint mongodbEndpoint(MongodbRepository mongodbRepository) {
+		return new ArgusMongodbEndpoint(mongodbRepository);
 	}
 
 	@ConditionalOnBean({ArgusRouteRepository.class})

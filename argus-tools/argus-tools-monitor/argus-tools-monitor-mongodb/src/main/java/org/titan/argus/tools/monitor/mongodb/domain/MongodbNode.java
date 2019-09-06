@@ -15,6 +15,8 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 public class MongodbNode {
+	private Long id;
+
 	private String host;
 
 	private Integer port;
@@ -22,4 +24,5 @@ public class MongodbNode {
 	private String userName;
 
 	private String password;
+
 }

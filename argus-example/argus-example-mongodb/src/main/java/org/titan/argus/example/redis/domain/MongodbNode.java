@@ -22,4 +22,5 @@ public class MongodbNode {
 	private String userName;
 
 	private String password;
+
 }

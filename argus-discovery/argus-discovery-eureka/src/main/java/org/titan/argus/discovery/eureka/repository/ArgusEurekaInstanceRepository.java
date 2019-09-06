@@ -69,7 +69,10 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 						.host(item.getIPAddr()).homePageUrl(item.getHomePageUrl()).port(item.getPort()).status(item.getStatus().name()).eventMap(temp)
 						.build();
 				argusEurekaInstances.add(build);
-				this.ALL_INSTANCE_SET.add(build);
+				boolean add = this.ALL_INSTANCE_SET.add(build);
+				if (add) {
+					this.publisher.publishEvent(new InstanceUpdateEvent(this));
+				}
 			});
 			this.ALL_INSTANCES.put(application.getName(), argusEurekaInstances);
 		});
@@ -79,7 +82,6 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 	public void update() {
 		List<Application> applications = eurekaClient.getApplications().getRegisteredApplications();
 		loadCache(applications);
-		this.publisher.publishEvent(new InstanceUpdateEvent(this));
 	}
 
 

@@ -12,7 +12,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.model.entities.Alarm;
 import org.titan.argus.model.entities.InstanceMetadata;
-import org.titan.argus.model.entities.MongodbNodeInfo;
+import org.titan.argus.model.entities.MongodbNode;
 import org.titan.argus.model.entities.RedisNodeInfo;
 import org.titan.argus.network.httpclient.util.ArgusHttpClient;
 import org.titan.argus.service.AlarmService;
@@ -91,7 +91,7 @@ public class ArgusServerInitializer implements ApplicationListener<ContextRefres
 			String url = item.getHomePageUrl() + ArgusActuatorConstant.MONGODB_NODE;
 			try {
 				String entity = httpClient.doGet(url);
-				MongodbNodeInfo info = JSONObject.parseObject(entity, MongodbNodeInfo.class);
+				MongodbNode info = JSONObject.parseObject(entity, MongodbNode.class);
 				MiddleWareNodeHolder.addMongodbNodeInfo(info);
 			} catch (Exception ex) {
 				logger.error("http client get fail: {}", ex.getMessage());

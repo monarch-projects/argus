@@ -1,8 +1,18 @@
 package org.titan.argus.example.redis.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author starboyate
+ * mongdb命令数指标
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MongodbOpcountersInfo {
 	/**
 	 * 自实例启动以来，执行insert次数

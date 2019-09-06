@@ -19,4 +19,6 @@ public class RedisNodeMetadataInfo {
 
 	private String slot;
 
+	private String mode;
+
 }

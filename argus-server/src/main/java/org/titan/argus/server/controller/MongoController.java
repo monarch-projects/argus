@@ -1,16 +1,13 @@
 package org.titan.argus.server.controller;
 
-import com.google.common.collect.Sets;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.titan.argus.model.entities.InstanceMetadata;
-import org.titan.argus.server.core.ArgusActuatorConstant;
-import org.titan.argus.server.core.MiddleWareNodeHolder;
 import org.titan.argus.server.response.ObjectCollectionResponse;
 import org.titan.argus.server.response.ObjectDataResponse;
+import org.titan.argus.service.MongodbService;
+import org.titan.argus.tools.monitor.mongodb.core.MongodbNodeHolder;
+import org.titan.argus.tools.monitor.mongodb.domain.MongodbNode;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author starboyate
@@ -18,62 +15,58 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/mongodb")
 public class MongoController extends BaseController {
-	private Set<InstanceMetadata> metadataSet = Sets.newHashSet();
+	@Autowired
+	private MongodbService mongodbService;
 
 	@GetMapping("/node")
 	public ObjectCollectionResponse getMongodbNodeInfo() {
-		return new ObjectCollectionResponse<>(MiddleWareNodeHolder.getMongodbNodeInfoSet());
+		return new ObjectCollectionResponse<>(mongodbService.getAllMongodbNodeList());
 	}
 
-	@GetMapping("/{id}/databases")
-	public ObjectDataResponse getAllDataBaseInfo(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_DATABASES, metadata.getId());
+	@GetMapping("/{id}/metric")
+	public ObjectDataResponse getMongodbMetric(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbMetricInfo(mongodbNode));
 	}
 
-	@GetMapping("/{id}/namespaces")
-	public ObjectDataResponse getAllNamespaces(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_NAMESPACES, metadata.getId());
+	@GetMapping("/{id}/globalLock")
+	public ObjectDataResponse getMongodbGlobalLockInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbGlobalLockInfo(mongodbNode));
+	}
+
+	@GetMapping("/{id}/session")
+	public ObjectDataResponse getMongodbSessionInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbSessionInfo(mongodbNode));
+	}
+	@GetMapping("/{id}/repl")
+	public ObjectDataResponse getMongodbReplInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbReplInfo(mongodbNode));
+	}
+
+	@GetMapping("/{id}/storageEngineInfo")
+	public ObjectDataResponse getMongodbStorageEngineInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbStorageEngineInfo(mongodbNode));
 	}
 
 	@GetMapping("/{id}/os")
-	public ObjectDataResponse getOsInfo(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_OS, metadata.getId());
+	public ObjectDataResponse getOsInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getMongodbOSInfo(mongodbNode));
 	}
 
-	@GetMapping("/{id}/lock")
-	public ObjectDataResponse getMongodbLockInfo(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_LOCK, metadata.getId());
+	@GetMapping("/{id}/databases")
+	public ObjectDataResponse getAllDataBaseInfo(@PathVariable Long id) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getAllDataBaseInfo(mongodbNode));
 	}
 
-	@GetMapping("/{id}/replicationStatus")
-	public ObjectDataResponse getMongodbReplicationStatusInfo(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_REPLICATION_STATUS, metadata.getId());
-	}
-
-	@GetMapping("/{id}/replicationConfig")
-	public ObjectDataResponse getMongodbReplicationConfig(@PathVariable String id) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		return proxyGet(ArgusActuatorConstant.MONGODB_REPLICATION_CONFIG, metadata.getId());
-	}
-
-	@GetMapping("/{id}/collection/system")
-	public ObjectDataResponse getCollectionSystemInfo(@PathVariable String id, @RequestParam("dataBase") String dataBase, @RequestParam("collectionName") String collectionName) {
-		InstanceMetadata metadata = this.metadataSet.stream().filter(item -> item.getId().equals(id)).findFirst()
-				.orElse(null);
-		Map<String, Object> map = new HashMap<>();
-		map.put("dataBase", dataBase);
-		map.put("collectionName", collectionName);
-		return proxyGet(ArgusActuatorConstant.MONGODB_COLLECTION_SYSTEM, metadata.getId(), map);
+	@GetMapping("/{id}/{database}/{collectionName}/systemInfo")
+	public ObjectDataResponse getCollectionSystemInfo(@PathVariable Long id, @PathVariable String dataBase, @PathVariable String collectionName) {
+		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
+		return new ObjectDataResponse<>(mongodbService.getCollectionSystemInfo(mongodbNode, dataBase, collectionName));
 	}
 }

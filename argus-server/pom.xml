@@ -75,7 +75,15 @@
             <artifactId>junit</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-tools-monitor-redis</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.titan</groupId>
+            <artifactId>argus-tools-monitor-mongodb</artifactId>
+        </dependency>
 
 
     </dependencies>

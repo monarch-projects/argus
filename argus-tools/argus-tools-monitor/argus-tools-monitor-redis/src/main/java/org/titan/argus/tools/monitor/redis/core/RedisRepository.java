@@ -3,29 +3,52 @@ package org.titan.argus.tools.monitor.redis.core;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalNotification;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
 import org.titan.argus.storage.es.domain.RedisMonitorNodeInfo;
-import org.titan.argus.tools.monitor.redis.domain.RedisModeEnum;
-import org.titan.argus.tools.monitor.redis.domain.RedisNode;
-import org.titan.argus.tools.monitor.redis.domain.RedisNodeMetadataInfo;
-import org.titan.argus.tools.monitor.redis.domain.RedisNodeSimpleInfo;
+import org.titan.argus.tools.monitor.redis.domain.*;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Protocol;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * @author starboyate
  */
-public class RedisUtil {
+public class RedisRepository {
+	private static final Logger logger = LoggerFactory.getLogger(RedisRepository.class);
+
+	private static final Cache<String, Jedis> REDIS_CLIENT_CACHE;
+
+	private static final Integer MAX_SIZE = 50;
+
+	private static final Integer EXPIRE_TIME = 10;
+
+	static {
+		REDIS_CLIENT_CACHE = CacheBuilder.newBuilder()
+				.maximumSize(MAX_SIZE)
+				.expireAfterAccess(EXPIRE_TIME, TimeUnit.MINUTES)
+				.removalListener((RemovalNotification<String, Jedis> notification) -> {
+					notification.getValue().close();
+					logger.info("jedis close, key is " + notification.getKey());
+				})
+				.build();
+	}
+
 	public static Jedis create(String host, Integer port, String password) {
-		Jedis jedis = new Jedis(host, port);
-		if (StringUtils.isNotBlank(password)) {
-			jedis.auth(password);
+		Jedis jedis = REDIS_CLIENT_CACHE.getIfPresent(host + ":" + port);
+		if (null == jedis) {
+			jedis = new Jedis(host, port);
+			if (StringUtils.isNotBlank(password)) {
+				jedis.auth(password);
+			}
 		}
 		return jedis;
 	}
@@ -58,26 +81,38 @@ public class RedisUtil {
 		return getInfo(jedis, null);
 	}
 
-	public static RedisNodeSimpleInfo nodeInfo(RedisNode node) {
+	public static Object getRedisConfig(RedisNode node) {
 		Jedis jedis = create(node.getHost(), node.getPort(), node.getPassword());
-		String name = getRedisModeCode(jedis);
+		return jedis.configGet("*");
+	}
+
+	public static Map<String, String> setRedisConfig(RedisNode node, Map<String, String> parms) {
+		Jedis jedis = create(node.getHost(), node.getPort(), node.getPassword());
+		Map<String, String> tempMap = new HashMap<>();
+		parms.forEach((k, v) -> {
+			try {
+				jedis.configSet(k, v);
+				tempMap.put(k, v);
+			} catch (Exception ex) {
+				logger.error("set config error, error msg: ", ex);
+			}
+		});
+		return tempMap;
+	}
+
+	public static RedisNodeSimpleInfo getSimpleNodeInfo(RedisNode node) {
+		Jedis jedis = create(node.getHost(), node.getPort(), node.getPassword());
+		String modeName = getRedisModeCode(jedis);
+		List<RedisNodeMetadataInfo> nodeList = getNodeList(node);
+		List<RedisNode> nodes = nodeList.stream()
+				.map(item -> RedisNode.builder().host(item.getHost()).port(item.getPort()).build())
+				.collect(Collectors.toList());
 		RedisNodeSimpleInfo simpleInfo = new RedisNodeSimpleInfo();
 		Map<String, String> map = getInfo(jedis);
-		if (RedisModeEnum.CLUSTER.getName().equals(name)) {
-			String[] strings = jedis.clusterNodes().split("\n");
-			simpleInfo.setNodeSize(strings.length).setRole(
-					Arrays.stream(strings)
-							.filter(item -> item.contains(String.valueOf(node.getPort())))
-							.map(item -> item.contains("master") ? "master" : "slave")
-							.findFirst()
-							.orElse(null)
-			);
-		} else {
-			simpleInfo.setMode(name).setNodeSize(1).setRole(map.get("role"));
-		}
-		simpleInfo.setHost(node.getHost()).setVersion(map.get("redis_version")).setPort(Integer.valueOf(map.get("tcp_port")));
+		simpleInfo.setNodes(nodes).setVersion(map.get("redis_version")).setMode(modeName).setNodeSize(nodes.size());
 		return simpleInfo;
 	}
+
 
 	public static List<RedisNodeMetadataInfo> getNodeList(RedisNode node) {
 		Jedis jedis = create(node.getHost(), node.getPort(), node.getPassword());
@@ -118,27 +153,44 @@ public class RedisUtil {
 		return list;
 	}
 
-	public static RedisNodeMetadataInfo metadataInfo(RedisNode info) {
-		return null;
+	public static RedisMetricInfo getRedisMetricInfo(RedisNode redisNode) {
+		Jedis jedis = create(redisNode.getHost(), redisNode.getPort(), redisNode.getPassword());
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		RedisMetricInfo redisInfo = getRedisInfo(jedis, RedisMetricInfo.class);
+		stopWatch.stop();
+		redisInfo.setResponseTime(stopWatch.getTotalTimeMillis());
+		redisInfo.setTotalKeys(jedis.keys("*").size());
+		return redisInfo;
+	}
+
+	private static<T> T getRedisInfo(Jedis jedis, Class<T> clazz) {
+		Map<String, String> info = getInfo(jedis);
+		return JSONObject.parseObject(JSON.toJSONString(info), clazz);
 	}
 
 	public static List<RedisMonitorNodeInfo> getRedisMonitor(RedisNode nodeInfo) {
 		ArrayList<RedisMonitorNodeInfo> list = new ArrayList<>();
 		getNodeList(nodeInfo).forEach(item -> {
+			Jedis jedis = create(item.getHost(), item.getPort(), nodeInfo.getPassword());
 			StopWatch watch = new StopWatch();
 			watch.start();
-			Jedis jedis = create(item.getHost(), item.getPort(), nodeInfo.getPassword());
-			Map<String, String> info = getInfo(jedis);
+			RedisMonitorNodeInfo redisMonitor = getRedisInfo(jedis, RedisMonitorNodeInfo.class);
 			watch.stop();
 			long responseTime = watch.getTotalTimeMillis();
 			long currentTime = System.currentTimeMillis();
-			RedisMonitorNodeInfo redisMonitor = JSONObject.parseObject(JSON.toJSONString(info), RedisMonitorNodeInfo.class);
 			redisMonitor.setResponseTime(responseTime);
 			redisMonitor.setCreateTime(currentTime);
 			redisMonitor.setIp(item.getHost() + ":" + item.getPort());
+			redisMonitor.setTotalKeys(jedis.keys("*").size());
 			list.add(redisMonitor);
 		});
 		return list;
+	}
+
+	public static void main(String[] args) {
+		Jedis jedis = create("127.0.0.1", 6379);
+		String info = jedis.info();
 	}
 
 

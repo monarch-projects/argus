@@ -11,6 +11,7 @@ public class MongodbAssertsInfo {
 
 	/**
 	 * 自实例启动以来,断言警告的次数
+	 * 从MongoDB 4.0开始，该字段返回零0
 	 */
 	private Integer warn;
 

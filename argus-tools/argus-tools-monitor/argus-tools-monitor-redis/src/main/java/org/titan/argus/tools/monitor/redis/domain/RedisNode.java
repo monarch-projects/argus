@@ -15,6 +15,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Builder
 public class RedisNode {
+	private Long id;
+
 	private String host;
 
 	private Integer port;

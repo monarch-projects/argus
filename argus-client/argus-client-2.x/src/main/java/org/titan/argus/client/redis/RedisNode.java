@@ -1,4 +1,4 @@
-package org.titan.argus.model.entities;
+package org.titan.argus.client.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class RedisNode {
 	private String host;
 
 	private Integer port;
+
+	private String password;
 }
