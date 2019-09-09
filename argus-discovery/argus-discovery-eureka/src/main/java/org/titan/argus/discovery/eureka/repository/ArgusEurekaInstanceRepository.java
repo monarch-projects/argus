@@ -71,7 +71,7 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 				argusEurekaInstances.add(build);
 				boolean add = this.ALL_INSTANCE_SET.add(build);
 				if (add) {
-					this.publisher.publishEvent(new InstanceUpdateEvent(this));
+					this.publisher.publishEvent(new InstanceUpdateEvent(this, build));
 				}
 			});
 			this.ALL_INSTANCES.put(application.getName(), argusEurekaInstances);

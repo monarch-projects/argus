@@ -59,22 +59,7 @@ public class InstanceMetadataHolder {
 	}
 
 	private void addInstanceMeta(Set<InstanceMetadata> set) {
-		set.forEach(instance -> {
-			String url = instance.getIp() + ArgusActuatorConstant.META_INFO;
-			try {
-				String entity = httpClient.doGet(url);
-				InstanceMetadata metadata = JSON.parseObject(entity, InstanceMetadata.class);
-				metadata.setAppName(instance.getAppName());
-				metadata.setEventMap(instance.getEventMap());
-				metadata.setId(instance.getId());
-				metadata.setIp(instance.getIp());
-				metadata.setPort(instance.getPort());
-				metadata.setStatus(instance.getStatus());
-				this.allInstanceMetadata.add(metadata);
-			} catch (Exception ex) {
-				logger.error("http client get fail: {}", ex.getMessage());
-			}
-		});
+		set.forEach(this::add);
 	}
 
 	private ArgusInstanceMetaOptional getDifferenceSet(Set<InstanceMetadata> source, Set<InstanceMetadata> target) {
@@ -94,6 +79,32 @@ public class InstanceMetadataHolder {
 			return ArgusInstanceMetaOptional.REMOVE;
 		}
 		return ArgusInstanceMetaOptional.NOTHING;
+	}
+
+	private InstanceMetadata add(InstanceMetadata instance) {
+		String url = instance.getIp()+ ArgusActuatorConstant.META_INFO;
+		InstanceMetadata metadata = null;
+		try {
+			String entity = httpClient.doGet(url);
+			metadata = JSON.parseObject(entity, InstanceMetadata.class);
+			metadata.setAppName(instance.getAppName());
+			metadata.setEventMap(instance.getEventMap());
+			metadata.setId(instance.getId());
+			metadata.setIp(instance.getIp());
+			metadata.setPort(instance.getPort());
+			metadata.setStatus(instance.getStatus());
+			this.allInstanceMetadata.add(metadata);
+		} catch (Exception ex) {
+			logger.error("http client get fail: {}", ex.getMessage());
+		}
+		this.allInstanceMetadata.add(metadata);
+		return metadata;
+	}
+
+	public InstanceMetadata add(ArgusInstance instance) {
+		return add(InstanceMetadata.builder().id(instance.getId()).appName(instance.getAppName())
+				.ip(instance.getHomePageUrl()).status(instance.getStatus()).eventMap(instance.getEventMap())
+				.port(instance.getPort()).build());
 	}
 
 

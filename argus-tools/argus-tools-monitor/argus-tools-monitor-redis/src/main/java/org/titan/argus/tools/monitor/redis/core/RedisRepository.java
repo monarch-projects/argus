@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
 import org.titan.argus.storage.es.domain.RedisMonitorNodeInfo;
 import org.titan.argus.tools.monitor.redis.domain.*;
+import org.titan.argus.util.SnowFakeIdUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 
@@ -183,6 +184,7 @@ public class RedisRepository {
 			redisMonitor.setCreateTime(currentTime);
 			redisMonitor.setIp(item.getHost() + ":" + item.getPort());
 			redisMonitor.setTotalKeys(jedis.keys("*").size());
+			redisMonitor.setId(SnowFakeIdUtil.snowFakeId());
 			list.add(redisMonitor);
 		});
 		return list;

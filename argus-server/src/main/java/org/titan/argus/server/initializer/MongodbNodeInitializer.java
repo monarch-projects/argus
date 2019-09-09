@@ -12,7 +12,6 @@ import org.titan.argus.tools.monitor.mongodb.core.MongodbNodeHolder;
 import org.titan.argus.tools.monitor.mongodb.domain.MongodbNode;
 import org.titan.argus.util.SnowFakeIdUtil;
 
-import java.util.Set;
 
 /**
  * @author starboyate
@@ -27,9 +26,9 @@ public class MongodbNodeInitializer extends AbstractArgusNodeInitializer {
 
 
 	@Override
-	void initNode(Set<InstanceMetadata> instances) {
-		instances.stream().filter(InstanceMetadata::getIsUsedMongodb).forEach(item -> {
-			String url  = item.getIp() + ArgusActuatorConstant.MONGODB_NODE;
+	void initNode(InstanceMetadata instanceMetadata) {
+		if (instanceMetadata.getIsUsedMongodb()) {
+			String url  = instanceMetadata.getIp() + ArgusActuatorConstant.MONGODB_NODE;
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);
 				MongodbNode info = JSONObject.parseObject(doGet, MongodbNode.class);
@@ -38,7 +37,7 @@ public class MongodbNodeInitializer extends AbstractArgusNodeInitializer {
 			} catch (Exception e) {
 				throw new BusinessException(e.getMessage());
 			}
-		});
+		}
 	}
 
 

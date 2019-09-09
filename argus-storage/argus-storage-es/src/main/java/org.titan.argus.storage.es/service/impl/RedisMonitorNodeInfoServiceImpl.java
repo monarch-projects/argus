@@ -1,14 +1,18 @@
 package org.titan.argus.storage.es.service.impl;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.Validate;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.titan.argus.storage.es.domain.RedisMonitorNodeInfo;
 import org.titan.argus.storage.es.repo.RedisMonitorNodeInfoRepository;
+import org.titan.argus.storage.es.service.BaseMonitorService;
 import org.titan.argus.storage.es.service.RedisMonitorNodeInfoService;
 
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.List;
  * @author starboyate
  */
 @Service
-public class RedisMonitorNodeInfoServiceImpl implements RedisMonitorNodeInfoService {
+public class RedisMonitorNodeInfoServiceImpl extends BaseMonitorService implements RedisMonitorNodeInfoService {
 	@Autowired
 	private RedisMonitorNodeInfoRepository redisMonitorRepository;
 
@@ -41,27 +45,27 @@ public class RedisMonitorNodeInfoServiceImpl implements RedisMonitorNodeInfoServ
 
 
 	@Override
-	public List<RedisMonitorNodeInfo> findAll() {
-		return Lists.newArrayList(redisMonitorRepository.findAll());
+	public List<RedisMonitorNodeInfo> findAll(Integer page, Integer size) {
+		return Lists.newArrayList(redisMonitorRepository.search(QueryBuilders.boolQuery(), PageRequest.of(page, size)));
 	}
 
 	@Override
-	public List<RedisMonitorNodeInfo> findByIp(String ip) {
-		return Lists.newArrayList(redisMonitorRepository.search(new MatchQueryBuilder("ip", ip)));
+	public List<RedisMonitorNodeInfo> findByIp(String ip, Integer page, Integer size) {
+		return Lists.newArrayList(redisMonitorRepository.search(new MatchQueryBuilder("ip", ip), PageRequest.of(page, size)));
 	}
 
 	@Override
-	public List<RedisMonitorNodeInfo> findByTime(Long startTime, Long endTime) {
-		return Lists.newArrayList(redisMonitorRepository.search(QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime)));
+	public List<RedisMonitorNodeInfo> findByTime(Long startTime, Long endTime, Integer page, Integer size) {
+		return Lists.newArrayList(redisMonitorRepository.search(getRangerBuilder(startTime, endTime), PageRequest.of(page, size)));
 	}
 
+
 	@Override
-	public List<RedisMonitorNodeInfo> findByTimeAndIp(String ip, Long startTime, Long endTime) {
-		RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime);
+	public List<RedisMonitorNodeInfo> findByTimeAndIp(String ip, Long startTime, Long endTime, Integer page, Integer size) {
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-				.must(QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime))
+				.must(getRangerBuilder(startTime, endTime))
 				.must(QueryBuilders.matchQuery("ip", ip));
-		return Lists.newArrayList(redisMonitorRepository.search(boolQueryBuilder));
+		return Lists.newArrayList(redisMonitorRepository.search(boolQueryBuilder, PageRequest.of(page, size)));
 	}
 
 	@Override

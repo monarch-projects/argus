@@ -24,11 +24,11 @@ public abstract class AbstractArgusNodeInitializer implements ArgusInitializer {
 		this.instanceMetadataHolder = instanceMetadataHolder;
 	}
 
-	abstract void initNode(Set<InstanceMetadata> instances);
+	abstract void initNode(InstanceMetadata instanceMetadata);
 
 	@Override
-	public void init() {
-		Set<InstanceMetadata> allInstanceMetadata = this.instanceMetadataHolder.getAllInstanceMetadata();
-		initNode(allInstanceMetadata);
+	public void init(ArgusInstance instance) {
+		InstanceMetadata metadata = this.instanceMetadataHolder.add(instance);
+		initNode(metadata);
 	}
 }

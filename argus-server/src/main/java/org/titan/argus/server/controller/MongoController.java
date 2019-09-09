@@ -46,7 +46,7 @@ public class MongoController extends BaseController {
 		return new ObjectDataResponse<>(mongodbService.getMongodbReplInfo(mongodbNode));
 	}
 
-	@GetMapping("/{id}/storageEngineInfo")
+	@GetMapping("/{id}/storageEngine")
 	public ObjectDataResponse getMongodbStorageEngineInfo(@PathVariable Long id) {
 		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
 		return new ObjectDataResponse<>(mongodbService.getMongodbStorageEngineInfo(mongodbNode));
@@ -65,7 +65,7 @@ public class MongoController extends BaseController {
 	}
 
 	@GetMapping("/{id}/{database}/{collectionName}/systemInfo")
-	public ObjectDataResponse getCollectionSystemInfo(@PathVariable Long id, @PathVariable String dataBase, @PathVariable String collectionName) {
+	public ObjectDataResponse getCollectionSystemInfo(@PathVariable("id") Long id, @PathVariable("database") String dataBase, @PathVariable("collectionName") String collectionName) {
 		MongodbNode mongodbNode = MongodbNodeHolder.get(id);
 		return new ObjectDataResponse<>(mongodbService.getCollectionSystemInfo(mongodbNode, dataBase, collectionName));
 	}

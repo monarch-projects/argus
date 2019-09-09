@@ -1,5 +1,7 @@
 package org.titan.argus.tools.monitor.mongodb.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import java.util.concurrent.Executors;
  */
 @Component
 public class MongodbNodeTask {
+	private Logger logger = LoggerFactory.getLogger(MongodbNodeTask.class);
+
 	@Autowired
 	private MongodbMonitorNodeInfoService mongodbMonitorNodeInfoService;
 
@@ -26,6 +30,7 @@ public class MongodbNodeTask {
 		mongodbNodes.forEach(item -> executorService.submit(() -> {
 			MongodbMonitorNodeInfo monitorNodeInfo = MongodbRepository.getMonitorNodeInfo(item);
 			this.mongodbMonitorNodeInfoService.save(monitorNodeInfo);
+			logger.info("save mongodb monitor info to es");
 		}));
 	}
 }

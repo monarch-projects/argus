@@ -3,6 +3,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.client.discovery.event.HeartbeatEvent;
+import org.springframework.cloud.client.discovery.event.InstanceRegisteredEvent;
 import org.springframework.cloud.client.discovery.event.ParentHeartbeatEvent;
 import org.springframework.context.event.EventListener;
 import org.titan.argus.discovery.common.disruptor.event.InstanceEventNotify;
@@ -20,7 +21,7 @@ public class ArgusDiscoveryListener {
 
 
 	@EventListener
-	public void onApplicationReady(ApplicationReadyEvent event) {
+	public void onApplicationReady(InstanceRegisteredEvent event) {
 		eventNotify.register();
 	}
 

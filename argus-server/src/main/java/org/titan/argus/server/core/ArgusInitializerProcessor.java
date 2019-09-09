@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.discovery.common.event.InstanceUpdateEvent;
 import org.titan.argus.server.initializer.ArgusInitializer;
 
@@ -25,13 +26,13 @@ public class ArgusInitializerProcessor implements ApplicationListener<InstanceUp
 	}
 
 
-	private void init() {
+	private void init(ArgusInstance instance) {
 		Collection<ArgusInitializer> values = this.applicationContext.getBeansOfType(ArgusInitializer.class).values();
-		this.applicationContext.getBeansOfType(ArgusInitializer.class).values().forEach(ArgusInitializer::init);
+		this.applicationContext.getBeansOfType(ArgusInitializer.class).values().forEach(item -> item.init(instance));
 	}
 
 	@Override
 	public void onApplicationEvent(InstanceUpdateEvent event) {
-		init();
+		init(event.getInstance());
 	}
 }

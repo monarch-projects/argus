@@ -29,9 +29,9 @@ public class RedisNodeInitializer extends AbstractArgusNodeInitializer{
 
 
 	@Override
-	void initNode(Set<InstanceMetadata> instances) {
-		instances.stream().filter(InstanceMetadata::getIsUsedRedis).forEach(item -> {
-			String url  = item.getIp() + ArgusActuatorConstant.REDIS_NODE;
+	void initNode(InstanceMetadata instanceMetadata) {
+		if (instanceMetadata.getIsUsedRedis()) {
+			String url  = instanceMetadata.getIp() + ArgusActuatorConstant.REDIS_NODE;
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);
 				RedisNode info = JSONObject.parseObject(doGet, RedisNode.class);
@@ -40,6 +40,6 @@ public class RedisNodeInitializer extends AbstractArgusNodeInitializer{
 			} catch (Exception e) {
 				throw new BusinessException(e.getMessage());
 			}
-		});
+		}
 	}
 }

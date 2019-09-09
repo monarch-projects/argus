@@ -16,13 +16,13 @@ public interface RedisMonitorNodeInfoService {
 
 	boolean delete(RedisMonitorNodeInfo redisMonitor);
 
-	List<RedisMonitorNodeInfo> findAll();
+	List<RedisMonitorNodeInfo> findAll(Integer page, Integer size);
 
-	List<RedisMonitorNodeInfo> findByIp(String ip);
+	List<RedisMonitorNodeInfo> findByIp(String ip, Integer page, Integer size);
 
-	List<RedisMonitorNodeInfo> findByTime(Long startTime, Long endTime);
+	List<RedisMonitorNodeInfo> findByTime(Long startTime, Long endTime, Integer page, Integer size);
 
-	List<RedisMonitorNodeInfo> findByTimeAndIp(String ip, Long startTime, Long endTime);
+	List<RedisMonitorNodeInfo> findByTimeAndIp(String ip, Long startTime, Long endTime, Integer page, Integer size);
 
 	List<RedisMonitorNodeInfo> saveAll(List<RedisMonitorNodeInfo> list);
 

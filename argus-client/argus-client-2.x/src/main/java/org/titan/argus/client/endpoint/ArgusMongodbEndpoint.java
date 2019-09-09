@@ -2,7 +2,6 @@ package org.titan.argus.client.endpoint;
 
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.mongodb.MongodbRepository;
 
 /**

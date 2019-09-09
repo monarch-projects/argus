@@ -27,7 +27,7 @@ import static org.springframework.boot.autoconfigure.condition.ConditionalOnWebA
  * {@see spring boot issues: https://github.com/spring-projects/spring-boot/issues/17282}
  */
 @Configuration
-@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class})
+@AutoConfigureAfter({ArgusGatewayConfig.class, HttpTraceAutoConfiguration.class, ArgusRedisAutoConfiguration.class, ArgusMongodbAutoConfiguration.class})
 @PropertySource("classpath:/client/client.properties")
 public class ArgusClientAutoConfiguration {
 

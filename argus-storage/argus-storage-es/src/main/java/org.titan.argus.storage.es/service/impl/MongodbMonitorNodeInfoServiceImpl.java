@@ -11,6 +11,7 @@ import org.titan.argus.storage.es.domain.MongodbMonitorNodeInfo;
 import org.titan.argus.storage.es.domain.RedisMonitorNodeInfo;
 import org.titan.argus.storage.es.repo.MongodbMonitorNodeInfoRepository;
 import org.titan.argus.storage.es.repo.RedisMonitorNodeInfoRepository;
+import org.titan.argus.storage.es.service.BaseMonitorService;
 import org.titan.argus.storage.es.service.MongodbMonitorNodeInfoService;
 import org.titan.argus.storage.es.service.RedisMonitorNodeInfoService;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @author starboyate
  */
 @Service
-public class MongodbMonitorNodeInfoServiceImpl implements MongodbMonitorNodeInfoService {
+public class MongodbMonitorNodeInfoServiceImpl extends BaseMonitorService implements MongodbMonitorNodeInfoService {
 	@Autowired
 	private MongodbMonitorNodeInfoRepository mongodbMonitorNodeInfoRepository;
 
@@ -55,14 +56,14 @@ public class MongodbMonitorNodeInfoServiceImpl implements MongodbMonitorNodeInfo
 
 	@Override
 	public List<MongodbMonitorNodeInfo> findByTime(Long startTime, Long endTime) {
-		return Lists.newArrayList(mongodbMonitorNodeInfoRepository.search(QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime)));
+		return Lists.newArrayList(mongodbMonitorNodeInfoRepository.search(getRangerBuilder(startTime, endTime)));
 	}
 
 	@Override
 	public List<MongodbMonitorNodeInfo> findByTimeAndIp(String ip, Long startTime, Long endTime) {
 		RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime);
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-				.must(QueryBuilders.rangeQuery("createTime").gte(startTime).lte(endTime))
+				.must(getRangerBuilder(startTime, endTime))
 				.must(QueryBuilders.matchQuery("ip", ip));
 		return Lists.newArrayList(mongodbMonitorNodeInfoRepository.search(boolQueryBuilder));
 	}
