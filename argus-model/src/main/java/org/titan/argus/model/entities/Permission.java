@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 
@@ -12,16 +11,28 @@ import java.io.Serializable;
  * @author starboyate
  */
 @Data
-@TableName("role")
-public class Role implements Serializable {
+@TableName("permission")
+public class Permission implements Serializable {
 	@TableId
 	private Long id;
 
-	@TableField("name")
-	private String name;
+	@TableField("parent_id")
+	private Long parentId;
 
-	@TableField("description")
-	private String description;
+	@TableField("url")
+	private String url;
+
+	@TableField("keyword")
+	private String keyword;
+
+	@TableField("type")
+	private Integer type;
+
+	@TableField("order")
+	private Integer order;
+
+	@TableField("extra")
+	private String extra;
 
 	@TableField("create_time")
 	private Long createTime;

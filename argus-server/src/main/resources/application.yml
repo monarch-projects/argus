@@ -13,7 +13,7 @@ spring:
   application:
     name: argus-server
   datasource:
-    url: jdbc:mysql://localhost:3306/argus?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT
+    url: jdbc:mysql://47.100.238.207:3306/argus?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver

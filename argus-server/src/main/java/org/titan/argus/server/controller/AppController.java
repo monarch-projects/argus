@@ -1,10 +1,16 @@
 package org.titan.argus.server.controller;
 
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-import org.titan.argus.model.response.BaseResponse;
+import org.titan.argus.model.vo.AppVO;
+import org.titan.argus.server.response.ObjectCollectionResponse;
 import org.titan.argus.service.AppService;
+
+import java.util.ArrayList;
 
 
 /**
@@ -23,7 +29,10 @@ public class AppController extends BaseController {
 
 	@GetMapping
 	@ApiOperation(value = "获取注册中心所有的app", notes = "根据使用的注册中心进行获取所有注册的application")
-	public BaseResponse findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page, @RequestParam(value = "size", required = false, defaultValue = "20") int size) {
-		return BaseResponse.success(appService.findAll());
+	public ObjectCollectionResponse<AppVO> findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page, @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		ArrayList<AppVO> list = Lists.newArrayList();
+		ModelMapper modelMapper = new ModelMapper();
+		appService.findAll().forEach(item -> list.add(modelMapper.map(item, AppVO.class)));
+		return new ObjectCollectionResponse<>(list);
 	}
 }

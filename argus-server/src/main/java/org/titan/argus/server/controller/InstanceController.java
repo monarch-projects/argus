@@ -34,7 +34,7 @@ public class InstanceController extends BaseController {
 
 	@ApiOperation(value = "获取所有的服务实例进行分页", notes = "从注册中心上分页查询服务实例信息")
 	@GetMapping
-	public ObjectCollectionResponse findAll(
+	public ObjectCollectionResponse<InstanceVO> findAll(
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
 		Set<InstanceMetadata> allInstanceMetadata = this.holder.getAllInstanceMetadata();
@@ -46,10 +46,7 @@ public class InstanceController extends BaseController {
 
 	@GetMapping("/{appName}")
 	@ApiOperation(value = "获取某个app下的所有服务实例", notes = "通过应用名称获取该应用下的所有服务实例信息")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "appName", value = "应用名称", required = true, paramType = "query", dataType = "String")
-	})
-	public ObjectCollectionResponse getInstanceByAppName(
+	public ObjectCollectionResponse<InstanceVO> getInstanceByAppName(
 			@PathVariable String appName,
 			@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(value = "size", required = false, defaultValue = "10") int size) {
@@ -64,7 +61,7 @@ public class InstanceController extends BaseController {
 			@ApiImplicitParam(name = "id", value = "实例ID(instance id not app id)", required = true, paramType = "query", dataType = "String")
 	})
 	@GetMapping("/{id}/metadata")
-	public ObjectDataResponse getMetadata(@PathVariable String id) {
+	public ObjectDataResponse<InstanceMetadataVO> getMetadata(@PathVariable String id) {
 		InstanceMetadata instanceMetadata = this.holder.getAllInstanceMetadata().stream().filter(metadata -> metadata.getId().equals(id))
 				.findFirst().orElse(null);
 		InstanceMetadataVO metadataVO;

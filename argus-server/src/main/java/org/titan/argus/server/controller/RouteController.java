@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.titan.argus.model.entities.InstanceMetadata;
 import org.titan.argus.model.request.RouteRequest;
-import org.titan.argus.model.response.BaseResponse;
 import org.titan.argus.server.core.ArgusActuatorConstant;
 import org.titan.argus.server.response.ObjectDataResponse;
 

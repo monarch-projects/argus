@@ -1,4 +1,7 @@
 package org.titan.argus.model.entities;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,50 +12,38 @@ import java.util.List;
  * @author starboyate
  */
 @Data
-public class User implements UserDetails, Serializable {
+@TableName("user")
+public class User implements Serializable {
+
+	@TableId
 	private Long id;
-	private String username;
+
+	@TableField("user_name")
+	private String userName;
+
+	@TableField("password")
 	private String password;
-	private List<Role> authorities;
 
-	@Override
-	public List<Role> getAuthorities() {
-		return authorities;
-	}
+	@TableField("email")
+	private String email;
 
-	public void setAuthorities(List<Role> authorities) {
-		this.authorities = authorities;
-	}
+	@TableField("phone")
+	private String phone;
 
-	/**
-	 * 用户账号是否过期
-	 */
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+	@TableField("status")
+	private Integer status;
 
-	/**
-	 * 用户账号是否被锁定
-	 */
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+	@TableField("dept_id")
+	private Long deptId;
 
-	/**
-	 * 用户密码是否过期
-	 */
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+	private String deptName;
 
-	/**
-	 * 用户是否可用
-	 */
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+	@TableField("create_time")
+	private Long createTime;
+
+	@TableField("update_time")
+	private Long updateTime;
+
+	@TableField("last_login_time")
+	private Long lastLoginTime;
 }

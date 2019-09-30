@@ -11,6 +11,4 @@ import org.titan.argus.model.entities.User;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-	@Select( "select id , username , password from user where username = #{username}" )
-	User loadUserByUsername(@Param("username") String username);
 }

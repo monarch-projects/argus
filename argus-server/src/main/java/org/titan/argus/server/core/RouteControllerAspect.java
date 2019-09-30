@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.titan.argus.model.entities.InstanceMetadata;
 import org.titan.argus.server.controller.RedisController;
 import org.titan.argus.server.controller.RouteController;
+import org.titan.argus.service.exception.BusinessException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -28,6 +29,9 @@ public class RouteControllerAspect {
 	@Before("before()")
 	public void doBefore(JoinPoint joinPoint) throws Exception {
 		InstanceMetadata metadata =  this.holder.getAllInstanceMetadata().stream().filter(InstanceMetadata::getIsGateway).findFirst().orElse(null);
+		if (null == metadata) {
+			throw new BusinessException("gateway not found");
+		}
 		Field field = joinPoint.getTarget().getClass().getDeclaredField("metadata");
 		field.setAccessible(true);
 		field.set(joinPoint.getTarget(), metadata);

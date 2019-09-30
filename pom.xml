@@ -37,6 +37,7 @@
         <jedis.version>3.1.0</jedis.version>
         <checkstyle.version>6.18</checkstyle.version>
         <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+        <modelmapper.version>2.3.0</modelmapper.version>
     </properties>
 
     <dependencyManagement>
@@ -55,6 +56,11 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+               <version>${modelmapper.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.cloud</groupId>

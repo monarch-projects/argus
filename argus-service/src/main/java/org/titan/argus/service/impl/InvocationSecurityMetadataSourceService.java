@@ -7,7 +7,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Service;
-import org.titan.argus.model.entities.RolePermisson;
+import org.titan.argus.model.entities.RolePermission;
 import org.titan.argus.storage.mysql.PermissionMapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,10 +62,10 @@ public class InvocationSecurityMetadataSourceService implements FilterInvocation
 	public void loadResourceDefine() {
 		map = new HashMap<>(16);
 		//权限资源 和 角色对应的表  也就是 角色权限 中间表
-		List<RolePermisson> rolePermissons = permissionMapper.getRolePermissions();
+		List<RolePermission> rolePermissons = permissionMapper.getRolePermissions();
 
 		//某个资源 可以被哪些角色访问
-		for (RolePermisson rolePermisson : rolePermissons) {
+		for (RolePermission rolePermisson : rolePermissons) {
 
 			String url = rolePermisson.getUrl();
 			String roleName = rolePermisson.getRoleName();
@@ -75,8 +75,8 @@ public class InvocationSecurityMetadataSourceService implements FilterInvocation
 				map.get(url).add(role);
 			}else{
 				List<ConfigAttribute> list =  new ArrayList<>();
-				list.add( role );
-				map.put( url , list );
+				list.add(role);
+				map.put(url, list);
 			}
 		}
 	}
