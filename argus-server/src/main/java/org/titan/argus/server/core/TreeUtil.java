@@ -13,25 +13,27 @@ import java.util.stream.Collectors;
  */
 public class TreeUtil {
 
-	public static void generateTree(List<Dept> nodes) {
+	public static List<DeptVO> generateTree(List<Dept> nodes) {
 		if (null == nodes || nodes.isEmpty()) {
 		}
 		List<DeptVO> deptVOList = nodes.stream().map(Dept::convertToDeptVO).collect(Collectors.toList());
 
-		List<DeptVO> result = new ArrayList<>(nodes.size());
+		List<DeptVO> result = new ArrayList<>();
 		deptVOList.forEach(item -> {
 			Long parentId = item.getParentId();
 			if (null == parentId || parentId.equals(0L)) {
-				deptVOList.add(item);
+				result.add(item);
+				return;
 			}
-			deptVOList.forEach(node -> {
+			for (DeptVO node : deptVOList) {
 				Long id = node.getId();
 				if (id != null && id.equals(parentId)) {
 					item.getChildren().add(node);
 					return;
 				}
-			});
+			}
 		});
+		return result;
 
 	}
 

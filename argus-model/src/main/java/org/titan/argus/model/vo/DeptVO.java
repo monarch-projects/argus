@@ -2,6 +2,7 @@ package org.titan.argus.model.vo;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author starboyate
  */
 @Data
-@Builder
+@Accessors(chain = true)
 public class DeptVO implements Serializable {
 	private Long id;
 

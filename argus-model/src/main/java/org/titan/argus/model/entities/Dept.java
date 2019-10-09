@@ -7,6 +7,7 @@ import lombok.Data;
 import org.titan.argus.model.vo.DeptVO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author starboyate
@@ -20,19 +21,19 @@ public class Dept implements Serializable {
 	@TableField("parent_id")
 	private Long parentId;
 
-	@TableField("name")
+	@TableField("`name`")
 	private String name;
 
-	@TableField("order")
+	@TableField("`order`")
 	private Integer order;
 
 	@TableField("create_time")
-	private Long createTime;
+	private Date createTime;
 
 	@TableField("update_time")
-	private Long updateTime;
+	private Date updateTime;
 
 	public DeptVO convertToDeptVO() {
-		return DeptVO.builder().id(this.id).parentId(this.parentId).name(this.name).build();
+		return new DeptVO().setId(this.id).setParentId(this.parentId).setName(this.name);
 	}
 }
