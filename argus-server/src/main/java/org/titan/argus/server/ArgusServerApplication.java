@@ -9,13 +9,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
 @ComponentScan("org.titan.argus.*")
-@MapperScan("org.titan.argus.storage.mysql")
+@MapperScan(basePackages = {"org.titan.argus.storage.mysql", "org.titan.argus.auth.mapper"})
 @EnableScheduling
 @EnableAsync
 @EnableElasticsearchRepositories(basePackages = {"org.titan.argus.storage.es.repo"})
+@EnableResourceServer
 public class ArgusServerApplication {
 
     public static void main(String[] args) {

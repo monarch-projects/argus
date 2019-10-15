@@ -27,7 +27,7 @@ public class MongodbNodeInitializer extends AbstractArgusNodeInitializer {
 
 	@Override
 	void initNode(InstanceMetadata instanceMetadata) {
-		if (instanceMetadata.getIsUsedMongodb()) {
+		if (instanceMetadata.getIsGateway() != null && instanceMetadata.getIsUsedMongodb()) {
 			String url  = instanceMetadata.getIp() + ArgusActuatorConstant.MONGODB_NODE;
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);

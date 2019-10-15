@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.titan.argus.common.utils.ArgusVisitsUtil;
 import org.titan.argus.discovery.common.entities.ArgusInstance;
 import org.titan.argus.model.vo.InstanceAnalysisVO;
 import org.titan.argus.model.vo.ViewsAnalysisVO;
-import org.titan.argus.util.ArgusVisitsUtil;
 import org.titan.argus.server.response.ObjectDataResponse;
 import org.titan.argus.service.InstanceService;
 

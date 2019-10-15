@@ -1,4 +1,15 @@
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 10000
+    timeout: 0
   mail:
     host: smtp.qq.com
     username: 3135205134
@@ -62,6 +73,14 @@ mybatis-plus:
       logic-not-delete-value: false
       logic-delete-value: true
       db-type: mysql
+      id-type: auto
+    banner: false
 
 server:
   port: 7878
+
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      user-info-uri: http://localhost:8989/user

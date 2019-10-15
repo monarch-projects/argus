@@ -44,8 +44,7 @@
 
         <dependency>
             <groupId>org.titan</groupId>
-            <artifactId>argus-util</artifactId>
-            <version>1.0.0.RELEASE</version>
+            <artifactId>argus-common</artifactId>
         </dependency>
 
         <dependency>

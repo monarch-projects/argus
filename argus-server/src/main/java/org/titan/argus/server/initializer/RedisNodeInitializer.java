@@ -30,7 +30,7 @@ public class RedisNodeInitializer extends AbstractArgusNodeInitializer{
 
 	@Override
 	void initNode(InstanceMetadata instanceMetadata) {
-		if (instanceMetadata.getIsUsedRedis()) {
+		if (instanceMetadata.getIsUsedRedis() != null && instanceMetadata.getIsUsedRedis()) {
 			String url  = instanceMetadata.getIp() + ArgusActuatorConstant.REDIS_NODE;
 			try {
 				String doGet = this.instanceMetadataHolder.httpClient.doGet(url);

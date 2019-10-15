@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.titan.argus.client.web.trace.http.ArgusHttpTrace;
 import org.titan.argus.client.web.trace.http.ArgusHttpTraceRepository;
-import org.titan.argus.util.PageUtil;
+import org.titan.argus.common.utils.PageUtil;
 
 import java.util.List;
 

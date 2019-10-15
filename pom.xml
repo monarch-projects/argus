@@ -63,6 +63,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-common</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
@@ -225,6 +231,11 @@
                 <version>${lombok.version}</version>
                 <optional>true</optional>
             </dependency>
+            <dependency>
+                <groupId>org.titan</groupId>
+                <artifactId>argus-auth</artifactId>
+                <version>${argus.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -291,10 +302,11 @@
         <module>argus-discovery</module>
         <module>argus-plugin</module>
         <module>argus-storage</module>
-        <module>argus-util</module>
         <module>argus-example</module>
         <module>argus-network</module>
         <module>argus-tools</module>
+        <module>argus-auth</module>
+        <module>argus-common</module>
     </modules>
 
 
