@@ -1,4 +1,4 @@
-package org.titan.argus.auth.util;
+package org.titan.argus.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
 

@@ -68,4 +68,9 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
 		}).collect(Collectors.toList());
 		return TreeUtil.build(deptVOList);
 	}
+
+	@Override
+	public List<Dept> findDeptsByUserName(String username) {
+		return this.baseMapper.findDeptListByUsername(username);
+	}
 }

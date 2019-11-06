@@ -26,7 +26,7 @@ public class UserDept implements Serializable {
 	@TableField("user_id")
 	private Long userId;
 
-	@TableField("user_id")
+	@TableField("dept_id")
 	private Long deptId;
 
 	@TableField("create_time")

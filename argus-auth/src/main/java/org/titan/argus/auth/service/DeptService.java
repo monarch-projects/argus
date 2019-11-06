@@ -23,4 +23,6 @@ public interface DeptService extends IService<Dept> {
 	void updateDept(Dept dept);
 
 	List<? extends Tree> findDeptsTree();
+
+	List<Dept> findDeptsByUserName(String username);
 }

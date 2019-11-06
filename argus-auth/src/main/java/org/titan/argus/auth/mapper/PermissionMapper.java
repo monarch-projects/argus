@@ -13,14 +13,18 @@ import java.util.List;
  */
 @Mapper
 public interface PermissionMapper extends BaseMapper<Permission> {
-	@Select( "SELECT p.point FROM role r "
-			+ "        LEFT JOIN user_role ur ON (r.id = ur.role_id)"
-			+ "        LEFT JOIN user u ON (u.id = ur.user_id)"
-			+ "        LEFT JOIN role_permission rp ON (rp.role_id = r.id)"
-			+ "        LEFT JOIN permission p ON (p.id = rp.id)"
-			+ "        WHERE u.user_name = #{username} "
-			+ "        AND p.point is not null"
-			+ "        AND p.point <> ''" )
+	@Select("<script> "
+			+ "SELECT p.point FROM role r "
+			+ "LEFT JOIN user_role ur ON (r.id = ur.role_id) "
+			+ "LEFT JOIN user u ON (u.id = ur.user_id) "
+			+ "LEFT JOIN role_permission rp ON (rp.role_id = r.id) "
+			+ "LEFT JOIN permission p ON (p.id = rp.id) "
+			+ "where 1=1 "
+			+ "<if test ='username != null'>"
+			+ "  AND u.user_name = #{username} "
+			+ "</if> "
+			+ "AND p.point is not null "
+			+ "</script>" )
 	List<String> findUserPointByUserName(@Param("username") String username);
 
 	@Select( "SELECT p.* FROM role r "
@@ -28,7 +32,6 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 			+ "        LEFT JOIN user u ON (u.id = ur.user_id)"
 			+ "        LEFT JOIN role_permission rp ON (rp.role_id = r.id)"
 			+ "        LEFT JOIN permission p ON (p.id = rp.id)"
-			+ "        WHERE u.user_name = #{username} "
-			+ "        AND p.type = 0")
-	List<Permission> findUserMenuByUserName(@Param("username") String username);
+			+ "        WHERE u.user_name = #{username}")
+	List<Permission> findUserPermissionByUserName(@Param("username") String username);
 }

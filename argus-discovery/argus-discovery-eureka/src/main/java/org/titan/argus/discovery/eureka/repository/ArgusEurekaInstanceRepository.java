@@ -157,6 +157,11 @@ public class ArgusEurekaInstanceRepository extends InstanceRepository {
 		return new ArrayList<>(this.ALL_INSTANCE_SET).subList(fromIndex, toIndex);
 	}
 
+	@Override
+	public void addRegisterCenter(String serviceUrl) {
+
+	}
+
 
 	/**
 	 * remove instance

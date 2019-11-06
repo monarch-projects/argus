@@ -15,8 +15,7 @@ import org.titan.argus.auth.vo.PermissionVO;
 import org.titan.argus.auth.vo.Tree;
 import org.titan.argus.auth.vo.UserPermissionVO;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,39 +25,22 @@ import java.util.stream.Collectors;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
 	@Override
-	public List<String> findUserPointByUserName(String userName) {
-		return this.baseMapper.findUserPointByUserName(userName);
-	}
-
-	@Override
-	public List<Permission> findUserMenuByUserName(String userName) {
-		return this.baseMapper.findUserMenuByUserName(userName);
+	public List<String> findUserPointByUserName(String username) {
+		return this.baseMapper.findUserPointByUserName(username);
 	}
 
 	@Override
 	@Transactional
 	public UserPermissionVO findPermissionsByUserName(String username) {
-		List<String> points = this.findUserPointByUserName(username);
-		List<Permission> menus = this.findUserMenuByUserName(username);
-		return convertToUserPermissionVO(points, menus);
+		List<Permission> permissions = this.baseMapper.findUserPermissionByUserName(username);
+		return convertToUserPermissionVO(permissions);
 	}
 
 	@Override
 	@Transactional
 	public UserPermissionVO findAllPermission() {
 		List<Permission> permissions = this.baseMapper.selectList(new QueryWrapper<Permission>().orderByAsc("`order`"));
-		List<String> points = new ArrayList<>(permissions.size());
-		List<Permission> menus = new ArrayList<>(permissions.size());
-		permissions.forEach(item -> {
-			if (item.getType().equals(0)) {
-				menus.add(item);
-			} else {
-				if (StringUtils.isNotBlank(item.getPoint())){
-					points.add(item.getPoint());
-				}
-			}
-		});
-		return convertToUserPermissionVO(points, menus);
+		return convertToUserPermissionVO(permissions);
 	}
 
 	@Override
@@ -76,17 +58,34 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 		return TreeUtil.build(permissionVOList);
 	}
 
-	private UserPermissionVO convertToUserPermissionVO(List<String> points, List<Permission> menus) {
+	private UserPermissionVO convertToUserPermissionVO(List<Permission> permissions) {
+		Map<Long, List<String>> pointMap = new HashMap<>();
+		List<Permission> menus = new ArrayList<>(permissions.size());
+		permissions.forEach(item -> {
+			if (item.getType().equals(0)) {
+				menus.add(item);
+			} else {
+				if (StringUtils.isNotBlank(item.getPoint())){
+					if (pointMap.get(item.getParentId()) != null) {
+						pointMap.get(item.getParentId()).add(item.getPoint());
+					} else {
+						List<String> points = new ArrayList<>();
+						points.add(item.getPoint());
+						pointMap.put(item.getParentId(), points);
+					}
+				}
+			}
+		});
 		List<UserPermissionVO.Menu> menuList = menus.stream().map(item -> {
 			UserPermissionVO.Menu menu = new UserPermissionVO.Menu();
 			menu.setName(item.getName());
 			menu.setOrder(item.getOrder());
 			menu.setId(item.getId());
 			menu.setParentId(item.getParentId());
+			menu.setPoints(pointMap.get(item.getId()) == null ? new ArrayList<>() : pointMap.get(item.getId()));
 			return menu;
 		}).collect(Collectors.toList());
 		UserPermissionVO userPermissionVO = new UserPermissionVO();
-		userPermissionVO.setPoints(points);
 		userPermissionVO.setMenus(TreeUtil.buildMenu(menuList));
 		return userPermissionVO;
 	}

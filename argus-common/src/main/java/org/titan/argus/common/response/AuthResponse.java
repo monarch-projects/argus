@@ -1,4 +1,4 @@
-package org.titan.argus.auth.response;
+package org.titan.argus.common.response;
 
 import lombok.Data;
 

@@ -13,15 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.titan.argus.auth.constant.ArgusAuthConstant;
 import org.titan.argus.auth.enums.UserStatus;
 import org.titan.argus.auth.mapper.UserMapper;
-import org.titan.argus.auth.model.TimeQuery;
-import org.titan.argus.auth.model.User;
-import org.titan.argus.auth.model.UserDept;
-import org.titan.argus.auth.model.UserRole;
+import org.titan.argus.auth.model.*;
 import org.titan.argus.auth.request.AddUserRequest;
 import org.titan.argus.auth.request.UpdateUserRequest;
-import org.titan.argus.auth.service.UserDeptService;
-import org.titan.argus.auth.service.UserRoleService;
-import org.titan.argus.auth.service.UserService;
+import org.titan.argus.auth.service.*;
 import org.titan.argus.common.exception.AccountPresenceException;
 import org.titan.argus.common.exception.BusinessException;
 
@@ -44,8 +39,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 	@Autowired
 	private UserDeptService userDeptService;
 
+	@Autowired
+	private RoleService roleService;
+
+	@Autowired
+	private DeptService deptService;
+
 	@Override
+	@Transactional
 	public User findByName(String userName) {
+		User user = this.baseMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
+		List<Role> roleList = this.roleService.findRoleByUserName(userName);
+		List<Dept> deptList = this.deptService.findDeptsByUserName(userName);
+		user.setRoleList(roleList);
+		user.setDeptList(deptList);
 		return this.baseMapper.selectOne(new QueryWrapper<User>().eq("user_name", userName));
 	}
 
@@ -69,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 		if (CollectionUtils.isNotEmpty(request.getDepts())) {
 			List<UserDept> userDepts = request.getDepts().stream().map(item -> UserDept.builder().deptId(item).userId(user.getId()).build())
 					.collect(Collectors.toList());
-			this.userDeptService.saveBatch(userDepts);
+			this.userDeptService.addUserDepts(userDepts);
 		}
 
 	}

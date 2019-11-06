@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface UserDeptService extends IService<UserDept> {
 	void updateDeptsByUserId(Long userId, List<Long> deptIds);
+
+	void addUserDepts(List<UserDept> userDepts);
 }

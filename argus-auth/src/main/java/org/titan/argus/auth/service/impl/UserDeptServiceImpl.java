@@ -24,4 +24,11 @@ public class UserDeptServiceImpl extends ServiceImpl<UserDeptMapper, UserDept> i
 			this.baseMapper.update(null, new UpdateWrapper<UserDept>().set("dept_id", item).eq("user_id", userId));
 		});
 	}
+
+	@Override
+	public void addUserDepts(List<UserDept> userDepts) {
+		userDepts.forEach(item -> {
+			this.baseMapper.insert(item);
+		});
+	}
 }

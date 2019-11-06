@@ -39,20 +39,25 @@ public class ArgusUserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		User user = this.userService.findByName(s);
 		if (user != null) {
-			List<String> permissions = this.permissionService.findUserPointByUserName(user.getUsername());
+			List<Role> roleList = this.roleService.findRoleByUserName(user.getUsername());
+			boolean isAdmin = false;
+			for (Role role : roleList) {
+				if (role.getName().equalsIgnoreCase("admin")) {
+					isAdmin = true;
+				}
+			}
+			List<String> permissions = null;
+			if (isAdmin) {
+				permissions = this.permissionService.findUserPointByUserName(null);
+			} else {
+				permissions = this.permissionService.findUserPointByUserName(user.getUsername());
+			}
 			boolean notLocked = false;
 			if (UserStatus.AVAILABLE.getCode().equals(user.getStatus())) {
 				notLocked = true;
 			}
-			List<Role> roleList = this.roleService.findRoleByUserName(user.getUsername());
 			List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 					.commaSeparatedStringToAuthorityList(StringUtils.join(permissions, ","));
-			roleList.forEach(item -> {
-				if (item.getName().equalsIgnoreCase("admin")) {
-					grantedAuthorities.clear();
-					grantedAuthorities.add(new SimpleGrantedAuthority("*"));
-				}
-			});
 			AuthUser authUser = new AuthUser(user.getUsername(), user.getPassword(), true, true, true, notLocked,
 					grantedAuthorities);
 			ModelMapper modelMapper = new ModelMapper();

@@ -16,6 +16,7 @@ public abstract class InstanceRepository implements InstanceEventNotify {
 	public abstract ArgusInstance getInstanceById(String id);
 	public abstract Set<ArgusInstance> findAll();
 	public abstract List<ArgusInstance> page(int fromIndex, int toIndex);
+	public abstract void addRegisterCenter(String serviceUrl);
 	public abstract void init();
 
 	@Override

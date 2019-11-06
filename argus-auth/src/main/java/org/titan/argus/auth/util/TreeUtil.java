@@ -1,6 +1,6 @@
 package org.titan.argus.auth.util;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import org.springframework.util.CollectionUtils;
 import org.titan.argus.auth.vo.DeptVO;
 import org.titan.argus.auth.vo.Tree;
 import org.titan.argus.auth.vo.UserPermissionVO;

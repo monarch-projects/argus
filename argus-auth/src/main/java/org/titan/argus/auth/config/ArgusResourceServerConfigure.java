@@ -1,13 +1,15 @@
 package org.titan.argus.auth.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.titan.argus.auth.handler.ArgusAccessDeniedHandler;
-import org.titan.argus.auth.handler.ArgusAuthExceptionEntryPoint;
+import org.titan.argus.auth.constant.ArgusAuthConstant;
+import org.titan.argus.common.handler.ArgusAccessDeniedHandler;
+import org.titan.argus.common.handler.ArgusAuthExceptionEntryPoint;
 
 /**
  * @author starboyate
@@ -34,7 +36,7 @@ public class ArgusResourceServerConfigure extends ResourceServerConfigurerAdapte
 				.requestMatchers().antMatchers("/**")
 				.and()
 				.authorizeRequests()
-				.antMatchers("/actuator/**").permitAll()
+				.antMatchers(StringUtils.splitByWholeSeparatorPreserveAllTokens(ArgusAuthConstant.ANNO_URL, ",")).permitAll()
 				.antMatchers("/**")
 				.authenticated();
 	}

@@ -7,10 +7,11 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.stereotype.Component;
-import org.titan.argus.auth.response.AuthResponse;
+import org.titan.argus.common.response.AuthResponse;
 
 /**
  * @author starboyate
+ * 认证异常翻译
  */
 @Component
 public class ArgusAuthWebResponseExceptionTranslator implements WebResponseExceptionTranslator{

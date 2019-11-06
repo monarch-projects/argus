@@ -17,7 +17,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableScheduling
 @EnableAsync
 @EnableElasticsearchRepositories(basePackages = {"org.titan.argus.storage.es.repo"})
-@EnableResourceServer
 public class ArgusServerApplication {
 
     public static void main(String[] args) {

@@ -1,5 +1,6 @@
 package org.titan.argus.auth.vo;
 
+import lombok.Data;
 import org.titan.argus.auth.model.Dept;
 import org.titan.argus.auth.model.Role;
 
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * @author starboytae
  */
+@Data
 public class UserVO implements Serializable {
 	private String username;
 
